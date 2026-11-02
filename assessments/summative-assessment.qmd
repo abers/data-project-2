@@ -1,0 +1,61 @@
+---
+title: "Summative Portfolio"
+---
+
+::: {.surface-assessments title="Word Count and Deadline"}
+Word count: 2,400 words (±10%). Three equally weighted components, with a recommended word count of 800 words each.
+
+Deadline: 12 noon, 9th December 2026
+:::
+
+The portfolio provides an opportunity to explore an analysis focus of your choice, using analyses of selected digital data to answer analysis questions. 'Analysis focus' here refers to a broad research problem, area for exploration, intellectual puzzle, or similar.
+
+Component 1 sets out the overall analysis focus, data selection and management, analysis approaches used, and reflections appropriate to these.
+
+Components 2 and 3 present two distinct write-ups of findings and reflections, and, taken together, should incorporate both qualitative and quantitative analysis.
+
+Across the course, you will have opportunity to undertake different forms of analysis with different qualitative and quantitative datasets. You can select which elements from these to develop and write-up. It is also permitted to use analysis approaches and data beyond what is directly covered on the course. If considering the latter, please confirm choices with staff during the labs, via email, or at Office Hours.
+
+### Component 1: Analysis Design
+
+Provide a succinct analysis design that covers the key data and analysis decisions which informed the findings presented in components 2 and 3.
+
+Your analysis design must include the following:
+
+Analysis Focus (~150 words): Briefly introduce your analysis focus through 3-5 references to relevant theoretical and empirical sources.
+
+Data Selection and Preparation (~150 words): Explain and justify your selection of digital data; how you collected it; and, how you organised and prepared it for analysis.
+
+Analysis Approaches (~300 words): Set out the analysis approaches used and explain their suitability for your analysis focus and selected digital data.
+
+Reflections (~200 words): Discuss relevant ethical and reflexive considerations for your data and analysis decisions.
+
+Important for the analysis design is demonstrating alignment across these sections. For example, it should be clear to a reader how the analysis focus informed data and analysis decisions made.
+
+### Component 2 & 3: Analysis Findings
+
+Present two distinct write-ups of analysis findings.
+
+Begin each component with approximately 200 words to set out the analysis question it seeks to answer and considerations of the data analysed. The latter should draw on relevant concepts, theory, and/or methods texts to consider how the digital data was produced, what it records or represents, and how this shaped your analysis and interpretation of findings.
+
+Then use approximately 600 words to present and interpret selected findings that contribute towards answering the analysis question. Alongside these findings, reflect on your exploration of the data. For example, any unexpected findings, limitations encountered, or what the analysis suggests about the value of the data and analysis approach for investigating your analysis focus.
+
+#### Choosing and presenting your analyses
+
+The findings should demonstrate range in analysis approach and not reuse the same approaches. Combined, they must also include findings from quantitative and qualitative approaches. However, there remains flexibility in how to achieve this, with valid combinations including:
+
+- one component quantitative and the other qualitative
+- one component quantitative or qualitative and the other mixed methods
+- both components providing mix of quantitative and qualitative analysis findings
+
+**However, please note: If you have been asked by the Scottish Graduate School to focus particularly on quantitative or qualitative approaches, both components can be quantitative or qualitative.**
+
+Your analysis findings may use the same digital data for both or work with different sources of data.
+
+You should cite relevant theoretical or empirical literature to contextualise your findings.
+
+Given word counts, analysis findings should contribute towards answering the analysis questions, but it is not expected that they will answer them in full.
+
+To support and evidence your analysis findings, write-ups must include any figures and text excerpts relevant for presenting findings for your chosen analysis approaches. Figures and excerpts will not be included in word counts, but all figures and excerpts presented must be sufficiently discussed within the main text.
+
+Code is not assessed as part of the portfolio and should not be included as part of the portfolio.

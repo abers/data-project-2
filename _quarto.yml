@@ -1,0 +1,63 @@
+project:
+  type: website
+  post-render:
+    - python3 _extensions/abers/constellate/scripts/render-slides.py --post-render
+
+website:
+  title: "Working With Digital Data"
+  sidebar:
+    style: docked
+    contents:
+      - course-info.qmd
+      - welcome.qmd
+      - r-refresher.qmd
+      - text: "---"
+      - section: "Week Test"
+        contents:
+          - week-test.qmd
+      - text: "---"
+      - section: "[Slides]{.constell-group-green}"
+        contents:
+          - text: "Example slides"
+            href: slides-example.qmd
+      - text: "---"
+      - section: "[Assessments]{.constell-group-mauve}"
+        contents:
+          - assessments/summative-assessment.qmd
+          - assessments/formative-assessment.qmd
+          - assessments/assessments-faq.qmd
+      - text: "---"
+      - section: "[Reference]{.constell-group-yellow}"
+        contents:
+          - reference/dont-panic.qmd
+      - text: "---"
+      - section: "[GenAI]{.constell-group-red}"
+        contents:
+          - genai/beware-bull.qmd
+          - genai/rstudio-helper.qmd
+
+  page-footer:
+    left: "Made with [{{< fa brands r-project label='R' >}}](https://www.r-project.org/){.linked-icon} and ![Quarto](/_extensions/abers/constellate/assets/quarto-logo.svg){height=1em} [Quarto](https://quarto.org)"
+    center: "{{< cc-by-sa >}}"
+    right: "Colour scheme ![Catppuccin](/_extensions/abers/constellate/assets/cat-logo.png){height=1em} [Catppuccin](https://catppuccin.com/)"
+
+  page-navigation: true
+
+metadata-files:
+  - _course.yml
+  - _surfaces.yml
+
+format:
+  constellate-html:
+    code-link: true
+    code-overflow: wrap
+    link-citations: true
+
+constellate:
+  layout:
+    light-surround: true
+  sidebar:
+    grouped: true
+    hero-colour: true
+
+slides-follow-theme: true

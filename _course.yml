@@ -1,0 +1,14 @@
+course:
+  title: Working With Digital Data
+  subtitle: Data Project 2
+  code: SPS5072
+  moodle: https://moodle.gla.ac.uk/course/view.php?id=53425
+  staff:
+    abe:
+      name: Alasdair Stewart
+      role: Course convenor
+      email: "<alasdair.stewart@glasgow.ac.uk>"
+    erdem:
+      name: Erdem Avsar
+      role: Lecturer
+      email: "<erdem.avsar@glasgow.ac.uk>"

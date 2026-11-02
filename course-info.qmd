@@ -1,0 +1,43 @@
+---
+title: "Course Info"
+---
+
+In data project 2, students will be introduced to digital data and guided
+through the process of sourcing data that critically engages with standards of
+sampling and representation to produce new and useful datasets. Drawing from
+'Understanding Data', students will be encouraged to work with theory to
+determine the value of different data for capturing reality as they engage with
+data management and analysis.
+
+## Course Aims
+
+The aim of the course is to provide students on the MSc Social Science Research
+Methods with a second opportunity to work through a 'whole project' while
+introducing students to messy data that will require advanced data management
+skills. The focus on digital data allows us to critically explore how sampling
+must be managed in order to make robust claims around representation. Digital
+data includes information available in digital spaces (such as industry
+websites, social media) as well as data produced in a digital space (such as
+remote interviews). This course will explore concepts such as truth and how
+authenticity can be determined when using data that exists in digital spaces.
+
+Students will continue to be guided through this second project but will have
+more autonomy as they choose what data to work with, and what themes the data
+might illuminate. All students will work with numbers and words/narrative and
+will be encouraged to use digital ethnography strategies and/or use imagery to
+draw conclusions about the culture/society constructed, including how well it
+reflects broader cultures/society. Assessments will again, allow students to
+build data literacy while focusing on skills they are most keen to develop,
+supported by interactive and weekly formative 'quizzes' and activities.
+
+## Intended Learning Outcomes
+
+By the end of this course students will be able to:
+
+- Recognise the role played by theory for social constructions of reality in the
+  context of digital data.
+- Demonstrate data management skills for collecting, storing and preparing
+  digital data for data for analysis.
+- Complete an analysis of collected digital data.
+- Assess the value of data management, analysis approaches within their
+  disciplinary context.

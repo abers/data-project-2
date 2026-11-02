@@ -1,0 +1,5 @@
+surfaces:
+  assessments:
+    colour: mauve
+    title: Assessments
+    icon: "{{< fa clipboard-check >}}"

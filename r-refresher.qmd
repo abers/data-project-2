@@ -1,0 +1,61 @@
+---
+title: "R Refresher"
+engine: knitr
+filters: [live]
+ojs-engine: true
+css: /_extensions/abers/constellate/assets/exams2forms/webex.css
+webr:
+  packages:
+    - readxl
+---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
+
+{{< include /_extensions/abers/constellate/assets/exams2forms/webex.js >}}
+
+::: {.callout-caution title="work-in-progress"}
+This page is work-in-progress and will provide a short refresher of the R covered in Data Project 1.
+:::
+
+## Installing packages
+
+```{r}
+#| echo: false
+#| results: asis
+
+exams2forms::exams2forms("_questions/install-readxl.Rmd")
+```
+
+## Fix the error
+
+This code should load the package for reading Excel files - but is returning an
+error when run. Run it, read the error message, and correct the code.
+
+```{webr}
+#| exercise: load-readxl
+library(read_excel)
+```
+
+::: {.hint exercise="load-readxl"}
+::::: {.callout-tip title="Hint"}
+Which package provides functions for working with Excel files? `read_excel()` is
+a function provided by the package we need, but `library()` needs the name of
+the package we installed.
+:::::
+:::
+
+::: {.solution exercise="load-readxl"}
+```r
+library(readxl)
+```
+:::
+
+```{webr}
+#| exercise: load-readxl
+#| check: true
+
+if (is.character(.result) && "readxl" %in% .result) {
+  list(correct = TRUE, message = "Correct - readxl is the package we need.")
+}
+
+```

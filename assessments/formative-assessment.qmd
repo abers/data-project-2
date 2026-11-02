@@ -1,0 +1,17 @@
+---
+title: "Formative Assessment"
+---
+
+::: {.surface-assessments title="Word Count and Deadline"}
+Word count: 300-400 words.
+
+Deadline: 18th November 2026
+:::
+
+This optional formative assessment is an opportunity to receive feedback on your planned analyses for the summative portfolio.
+
+Provide an outline with an overarching analysis focus and then for each analysis component: the analysis question it explores, the digital data using for the analysis, and the analytical approach that will be used.
+
+Alongside this outline, include any relevant R code and/or descriptive account of manual methods using to collect, prepare, and analysis digital data. These can be work-in-progress and do not need to cover all preparation or analysis.
+
+Feedback will focus on how well your analysis questions, digital data using, and analytical approaches align; whether your data management and analysis plans support the intended analyses; and, how you might develop these for the summative portfolio.

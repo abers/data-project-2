@@ -1,0 +1,12 @@
+/.quarto/
+/_site/
+/slides-export/
+*_files/
+/.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+**/*.quarto_ipynb
+*.otter.R
+*.otter.html

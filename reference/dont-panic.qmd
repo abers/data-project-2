@@ -1,0 +1,60 @@
+---
+title: "Don't Panic!"
+---
+
+> "Don't Panic. It's the first helpful or intelligible thing anybody's said to
+> me all day."
+>
+> - **Arthur Dent** in Douglas Adams' *The Hitchhiker's Guide to the
+>   Galaxy*
+
+([The Hitchhiker's Guide to the
+Galaxy](https://en.wikipedia.org/wiki/The_Hitchhiker's_Guide_to_the_Galaxy) is a
+truly remakable book - and absolutely essential reading, though not for this course.)
+
+::: {.callout-note title="About these pages"}
+These initial reference pages are being created through reworking content from the [Quantitative Methods Lab workbook](https://ugquants.github.io/quants_workbook/) - which is a good resource if wanting some more indepth beginner friendly content on R and quantitative analysis specifcally.
+
+I'll continuing reworking these pages and expanding them with further information about data collection and management - including overviews of the packages we cover - as the course progresses. Please let me know if any information is unclear or if there is something we covered in class that you want further info on that isn't in these reference pages yet. Similarly, please drop me an email if you are wishing to work with data we do not directly cover on the course and are encountering any issues or uncertainties with it.
+:::
+
+## Why learn R?
+
+You may be wondering why you need to bother learning R.
+
+R can be applied in a wide variety of fields and subjects, including not only those in the social sciences (e.g. sociology, politics, or policy research), but also in the humanities (e.g. history, digital humanities), natural and physical sciences (e.g. biology, chemistry, or geography), health (e.g. medical studies, public health, epidemiology), business and management (e.g. finance, economics, marketing), among many others.
+
+The broad application of R is due to its flexibility which allows it to perform a range of tasks related to data. These cover tasks at initial stages, such as downloading and importing data. But it is also useful to manipulate, edit, transform, and organise information. Furthermore, and most important for us, there are a set of tools that allow us to collection, transform, analyse, and visualise data using a range of data analysis techniques.
+
+`R` is powerful to communicate and share information and documents. There are several extensions (called **packages** in R) that can help to produce static and interactive plots/charts, maps, written reports, interactive applications, or even entire books! These webpages themselves are written in Quarto, which is very similar to R Markdown which we will use for our labs.
+
+R being free and open-source software, with a large community contributing to and extending it, is behind its rapid adoption within the social sciences, and academia and data analysis more broadly. However, compared to expensive closed source software where most analysis could be done through menus and mouse-clicks, using R requires learning how to code.
+
+This is not the disadvantage it may at first seem. It does add an additional hurdle at the very start, but it also provides a far more powerful and flexible way to do data analysis. Most people will be more familiar with software where everything can be done through menus rather than code. This does make things accessible - at first - for beginners compared to code. However, as the complexity of tasks builds, menus become confusing and frustrating to endlesly navigate. A graph that can be created with very few lines of code in R may require going through multiple menus and dialogue boxes with 20+ mouse-clicks.
+
+As you build up your R skills you will also find it much quicker - and more intuitive - to explore your data using code. So, despite the initial hurdle, once you become more confident with code you will find it is incredibly powerful.
+
+Don't worry where things don't immediately make full sense. With coding and data analysis, there are 'spikes' in difficulty - getting to grips with the basics of R code is one, moving to linear regression is another, and same again with moving to working with different types of data - and you are definitely not alone in any difficulty experienced getting to grips with them.
+
+Each of the 'spikes' though follows a similar pattern. Just as getting to grips with the basics of R code may initially feel difficult - or even impossible - and then, bit by bit, becomes easier to understand, the same happens with each later spike: you won't experience that same level of difficulty again each time you come back to it.
+
+Don't forget, it is normal to copy and tweak existing code - which is another thing that makes it so powerful compared to traditional menu based software. A lot of learning to code involves going through working examples and tweaking them to work with what you are trying to achieve. Unlike writing an essay or an exam, you don't actually need to know and write code "off the cuff" or have all necessary code syntax and functions memorised. Despite my years working with code, whenever I start anything new I persistently am turning to my notes, prior code, documentation, and online resources. So, don't worry if you feel like you are just making minor changes to existing code, that's how it's supposed to work. The crucial thing is learning how the code works, so you know where you can find relevant resources, understand how to read code examples, and know what to tweak for your analysis.
+
+An underlying cause of many issues people run into is believing more code needs to be written than is actually required. Common analysis tasks need only a few lines a table of descriptive statistics can be a single line with `sumtable()`, and a plot 3 - on rare occasions 4 - lines with `ggplot`. In rare cases, a basic plot may need *one* additional line of code to fix an issue, like overlapping text labels. So, if you find yourself writing dozens of lines of code for basic analysis tasks with common standard forms of data, you are likely doing more than is actually necessary.
+
+You don't have to memorise or remember all the functions and their options. Instead, this is why it is important to learn how to find and read package/function documentation. Indeed, one thing that is very commonly used by R data scientists are R cheat sheets! They are extremely handy when you try to create something from scratch, such as a visualisation.
+
+Code also may look intimidating if you have never worked with it before, but it is usually fairly simple once you break it down and learn its 'vocabularly' and 'grammar'. It can be invaluable to curate your own notes containing working code examples with comments for future reference. R Markdown files let you write text and run code in the same document, which when learning R makes them great for making notes alongside the code, and comments inside your code can record the 'why' behind it, so future-you can quickly read and understand it.
+
+Coding is also *all* about **trial and error**, so it's completely normal to write some code, then get an error message, and basically for your code to not work. As a dyslexic, a significant chunk of my time coding is spent trying to find which function or variable I misspelled. Keep chipping at it, which for more complex coding tasks-beyond what we will cover on the module - sometimes can take hours until you can get it to work. That's a normal process even for professional data analysts and researchers! Troubleshooting your code is part of the work, in addition to making your own choices in the analysis and reporting.
+
+When working in R Markdown files, a good rule of thumb when code that was previously working suddenly returns unexpected results or an error message is to run your code from the top-down. This restores each object to the value it would have if each line had only been run once, top to bottom. This helps to figure out whether the issue stems from your current code, accidental changes you made, or code you previously ran but now removed.
+
+Most important of all. Please don't suffer in silence - and get in touch if you are experiencing any issues. We are here to help and such questions also help us know what additional content to prioritising adding to these pages!
+
+When asking someone for help with an issue it is vital to provide sufficient context to enable others to help find a solution. This includes:
+
+- The full text of any error message that you are receiving.
+- Any relevant code that is producing the error.
+
+Error messages when knitting will often flag the relevant code chunk where the error occurred, so you would include the code within that chunk.
