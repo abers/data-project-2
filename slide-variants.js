@@ -1,1 +1,1 @@
-window.quartoSlideVariants = [{"source": "slides-example.qmd", "dark": "slides-example.html", "light": "slides-example-light.html"}];
+window.quartoSlideVariants = [{"source": "slides/week7-social-life-digital-data.qmd", "dark": "slides/week7-social-life-digital-data.html", "light": "slides/week7-social-life-digital-data-light.html"}, {"source": "slides-example.qmd", "dark": "slides-example.html", "light": "slides-example-light.html"}];

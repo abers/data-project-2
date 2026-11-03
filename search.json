@@ -114,6 +114,314 @@
     "text": "About this site"
   },
   {
+    "objectID": "slides/week7-social-life-digital-data.html#course-content",
+    "href": "slides/week7-social-life-digital-data.html#course-content",
+    "title": "The Social Life of Digital Data",
+    "section": "Course Content",
+    "text": "Course Content\n\nWeek 7: The Social Life of Digital Data\nWeek 8: Data Genres and Contexts\nWeek 9: Emotions in Digital Data\nWeek 10: Data Links\nWeek 11: Data Otherwise",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#aims",
+    "href": "slides/week7-social-life-digital-data.html#aims",
+    "title": "The Social Life of Digital Data",
+    "section": "Aims",
+    "text": "Aims\nSome of the core aims of the course:\n\nWorking with ‘messy data’\nProducing new and useful datasets\nDeveloping advanced data management skills\nDiversity of data in digital spaces\nCritical considerations around sampling & representation and notions of truth & authenticity",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#quick-warm-up-discussion",
+    "href": "slides/week7-social-life-digital-data.html#quick-warm-up-discussion",
+    "title": "The Social Life of Digital Data",
+    "section": "Quick Warm-Up Discussion",
+    "text": "Quick Warm-Up Discussion\nWhat comes to mind when you hear the phrases:\n\nDigital data\nData management\nMessy data\nDigital spaces",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#ilos",
+    "href": "slides/week7-social-life-digital-data.html#ilos",
+    "title": "The Social Life of Digital Data",
+    "section": "ILOs",
+    "text": "ILOs\n\nRecognise the role played by theory for social constructions of reality in the context of digital data.\nDemonstrate data management skills for collecting, storing and preparing digital data for analysis.\nAssess the value of data management, analysis approaches within their disciplinary context.\nComplete an analysis of collected digital data.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#data-project",
+    "href": "slides/week7-social-life-digital-data.html#data-project",
+    "title": "The Social Life of Digital Data",
+    "section": "‘Data Project’",
+    "text": "‘Data Project’\nThe other core aims of the course:\n\nWorking through a ‘whole project’.\nAutonomy in choosing what data to work with.\nSpace to focus on the skills you are most keen to develop.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#importantly",
+    "href": "slides/week7-social-life-digital-data.html#importantly",
+    "title": "The Social Life of Digital Data",
+    "section": "Importantly",
+    "text": "Importantly\nYou are free to use data we directly cover on the course or your own choice of digital data.\nThis includes secondary data available through the UK Data Archive.\nOnly real limitation is it cannot be data that requires ethics permission to collect and analyse. (Feel free to drop me an email if unsure!)\nWe are also using a broad definition of ‘data project’ where main thing looking for is a sensible justified ‘analysis focus’.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#summative-portfolio",
+    "href": "slides/week7-social-life-digital-data.html#summative-portfolio",
+    "title": "The Social Life of Digital Data",
+    "section": "Summative Portfolio",
+    "text": "Summative Portfolio\nWord count: 2,400 words (±10%). Three equally weighted components, with a recommended word count of 800 words each.\nDeadline: 12 noon, 9th December 2026\nThe portfolio provides an opportunity to explore an analysis focus of your choice, using analyses of selected digital data to answer analysis questions. ‘Analysis focus’ here refers to a broad research problem, area for exploration, intellectual puzzle, or similar.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#formative-assessment",
+    "href": "slides/week7-social-life-digital-data.html#formative-assessment",
+    "title": "The Social Life of Digital Data",
+    "section": "Formative Assessment",
+    "text": "Formative Assessment\nWord count: 300-400 words.\nDeadline: 18th November 2026\nThis optional formative assessment is an opportunity to receive feedback on your planned analyses for the summative portfolio.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#questions-about-the-assessments",
+    "href": "slides/week7-social-life-digital-data.html#questions-about-the-assessments",
+    "title": "The Social Life of Digital Data",
+    "section": "Questions about the assessments?",
+    "text": "Questions about the assessments?",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#resources",
+    "href": "slides/week7-social-life-digital-data.html#resources",
+    "title": "The Social Life of Digital Data",
+    "section": "Resources",
+    "text": "Resources\nI am currently developing some general reference materials on basics of R, R Markdown, and a few key packages.\nI will keep chipping away at this as we go - expanding it with additional content that we cover over the next five weeks.\nPlease let me know if there is anything you are experiencing issues with - including if trying to work with data not directly covered on the module.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#learning-r",
+    "href": "slides/week7-social-life-digital-data.html#learning-r",
+    "title": "The Social Life of Digital Data",
+    "section": "Learning R",
+    "text": "Learning R\nWhilst ? / help() are great for quickly accessing documentation not all documentation is that accessible for beginners until you build some initial familarity with code.\nHowever, the open source / open knowledge communities around R are phenomenal!\nFor most things you plan to do with R, there is a strong likelihood there is open access content someone has created for it. Just take a look at The Big Book of R.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#learn-little-tips-and-tricks",
+    "href": "slides/week7-social-life-digital-data.html#learn-little-tips-and-tricks",
+    "title": "The Social Life of Digital Data",
+    "section": "Learn little tips and tricks",
+    "text": "Learn little tips and tricks\nWhen typing in an R Markdown file or in the Console, if you pause at any point, RStudio will pop-up an auto-completion list using objects available in your R environment. You can then use up/down arrows to navigate through the list.\n\nAuto-completion menu in RStudio showing variables for starwars2 dataframe",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#let-r-help-you",
+    "href": "slides/week7-social-life-digital-data.html#let-r-help-you",
+    "title": "The Social Life of Digital Data",
+    "section": "Let R Help You",
+    "text": "Let R Help You\n\n\nThere are packages that act as ‘Addins’ for RStudio that can do things like flag potential errors / enforce a coding ‘style’…\ninstall.packages(\"lintr\")\n… and auto-format your code to match a particular style.\ninstall.packages(\"styler\")\nLinters are great to help spot issues that cause errors. Formatters help make your code tidy and consistent as you go.\n\n\n\n\nShort GIF from Styler’s GitHub page showing Styler auto-formating code in RStudio.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#key-skills",
+    "href": "slides/week7-social-life-digital-data.html#key-skills",
+    "title": "The Social Life of Digital Data",
+    "section": "Key Skills",
+    "text": "Key Skills\n\nAs a beginner, knowing how to read and modify code is a more useful than memorising code.\nEven when become an expert, most coding boils down to searching out the right resources and trying different things until it works.\n\n\n\n\n\nParody of O’Reilly programming books with title “Googling the Error Message”\n\n\n\n\n\n\nParody of O’Reilly programming books with title “Trying Stuff Until it Works”",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#coding-patterns",
+    "href": "slides/week7-social-life-digital-data.html#coding-patterns",
+    "title": "The Social Life of Digital Data",
+    "section": "Coding patterns",
+    "text": "Coding patterns\nIt may appear monsterous at first, but code is powerful!\nggplot2 provides a ‘grammar of graphics’ where many basic plots can be described with just 3-4 lines of code.\n\n1DATA_FRAME |&gt; ggplot(aes(x = VARIABLE1, ...)) +\n2  geom_...() +\n3  labs(title = \"Title text\", x = \"Label for x-axis\", ...)\n\n\n1\n\nWe pass the DATA_FRAME we wish to create a plot with to ggplot() with the aesthetic mapping - aes() - of the VARIABLES(s) we wish to use.\n\n2\n\nWe use geom...() to specify which type of plot we want, such as geom_boxplot() or geom_histogram().\n\n3\n\nWe specify any text labels to use - labs().",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#coding-patterns-2",
+    "href": "slides/week7-social-life-digital-data.html#coding-patterns-2",
+    "title": "The Social Life of Digital Data",
+    "section": "Coding patterns 2",
+    "text": "Coding patterns 2\n\nBEPS |&gt; ggplot(aes(x = vote, fill = vote)) +\n  geom_bar() +\n  scale_fill_manual(values = c(\"Conservative\" = \"blue\", \"Labour\" = \"red\", \"Liberal Democrat\" = \"orange\")) +\n  labs(title = \"Reported vote in the 2001 general election\",\n     x = \"Party voted for\", y = \"Number of respondents\", fill = \"Party\")",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#real-because-its-constructed",
+    "href": "slides/week7-social-life-digital-data.html#real-because-its-constructed",
+    "title": "The Social Life of Digital Data",
+    "section": "Real because its constructed",
+    "text": "Real because its constructed\n\n\nStatistical tools allow the discovery or creation of entities that support our descriptions of the world and the way we act on it. Of these objects, we may say both that they are real and that they have been constructed, once they have been repeated in other assemblages and circulated as such, cut off from their origins—which is after all the fate of numerous products.\n\n— Alain Desrosières 1998, The Politics of Large Numbers, page 3",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#the-social-production-of-data",
+    "href": "slides/week7-social-life-digital-data.html#the-social-production-of-data",
+    "title": "The Social Life of Digital Data",
+    "section": "The social production of data",
+    "text": "The social production of data\nTo butcher an (in)famous phrase of Derrida’s: “there is no outside social”.\nAll data is socially produced and mediated - and, in turn, the ‘datafication’ of society shapes and mediates knowledge production.\nTo say something is constructed is not necessarily to say it is not ‘real’. Instead, it is important to consider how data is produced and the implications and effects of that - both for the data itself and society.\nFor instance, Fourcade and Healy argue that digital capitalism with its pervarsive - and ever widening and penetrating - scoring and ranking systems means we now line in an “ordinal society” (2024).",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#naïve-positivists",
+    "href": "slides/week7-social-life-digital-data.html#naïve-positivists",
+    "title": "The Social Life of Digital Data",
+    "section": "Naïve positivists?",
+    "text": "Naïve positivists?\nWhilst quantitative methods texts do not always engage in onto-epistemology in same way as qualitative methods, quantitative researchers are always grappling with questions about knowledge and reality:\n\nArguments over how to define, measure, and count phenomena\nVariables as proxy measures and ‘latent’ variables\nAssumptions in selecting more appropriate quantitative methods for a research question\n‘Falsify’ rather than ‘prove’ a capital ‘T’ ‘Truth’\nSurvey design to reduce bias in response (including research into how best to design questions)\nRecognition and discussions of limitations",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#the-god-trick-and-strong-objectivity-haraway-and-harding",
+    "href": "slides/week7-social-life-digital-data.html#the-god-trick-and-strong-objectivity-haraway-and-harding",
+    "title": "The Social Life of Digital Data",
+    "section": "The ‘God Trick’ and ‘Strong Objectivity’ (Haraway and Harding)",
+    "text": "The ‘God Trick’ and ‘Strong Objectivity’ (Haraway and Harding)\n\nIllusion of objectivity used to present information as neutral and universal ‘view from nowhere’, hiding positionality and biases.\nAll knowledge, including data, is ‘situated’, it is produced under specific conditions by people in specific positions that influences what they see and know.\nSituated knowledge does not reject ‘objectivity’, but look to ‘maximise objectivity’ – embracing and being transparent that knowledge is always partial, contingent, and context-dependent\n‘Strong objectivity’ critique also engages with understandings and transparency of method and analysis",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#making-sense-of-the-mess",
+    "href": "slides/week7-social-life-digital-data.html#making-sense-of-the-mess",
+    "title": "The Social Life of Digital Data",
+    "section": "Making sense of the mess",
+    "text": "Making sense of the mess\n\n\none should never speak of ‘data’ – what is given – but rather of sublata, that is, of ‘achievements’\n\n— Latour 1999, Pandora’s Hope, page 42\n\nWhen we speak of ‘messy data’ in the narrow practical sense, it largely is in context of data collection and ‘cleaning’ to produce data that can work with.\nHowever, we can also think more critically about ‘messy data’ in the broader sense, the inherently in inextricably ‘messiness’ of all data production - which from ‘strong objectivity’ influenced perspective is not something to remove but engage with.\nImportantly - as social phenomena, data production and analysis exist and take part within social struggles…",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#the-open-definition",
+    "href": "slides/week7-social-life-digital-data.html#the-open-definition",
+    "title": "The Social Life of Digital Data",
+    "section": "The Open Definition",
+    "text": "The Open Definition\n\n\nOpen means anyone can freely access, use, modify, and share for any purpose - subject, at most, to requirements that preserve provenance and openness.\n\n— Open Knowledge Foundation\n\nFree (as in freedoms) and open software arose in the 1980s and 90s in debates about softwaare - mixing academic and programming cultures. Since then it has expanded to encompass open knowledge, open data, open science, and more.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#social-life-of-r",
+    "href": "slides/week7-social-life-digital-data.html#social-life-of-r",
+    "title": "The Social Life of Digital Data",
+    "section": "Social Life of R",
+    "text": "Social Life of R\nR is free and open source - released under the GPL license, meaning any changes to it must also be released as free and open source software.\nCore to the four foundamental freedoms of free software - use, study, share, and improve - is not just individual freedoms but “so the whole community benefits”.\nLiterally thousands of people contribute to R and its wider ecosystem - with 25,611 (and counting) R packages available via CRAN.\nBefore R became the predominant option for data analysis within academia, universities were paying for expensive proprietary software nowhere near as powerful.\nGoing further back, companies using proprietary formats could mean sharing analysis projects required others needed to also pay / subscribe for the software.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#discussion",
+    "href": "slides/week7-social-life-digital-data.html#discussion",
+    "title": "The Social Life of Digital Data",
+    "section": "Discussion",
+    "text": "Discussion\nHave a brief skim of Wikipedia’s Policies and guidelines.\nConsider:\n\nImplications these have for knowledge production\nThe importance placed on community and what that means in practice\nNotions of knowledge and ‘neutral point of view’\nConsiderations of ‘representation’ (Both in narrow and broad senses)",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#digital-traces",
+    "href": "slides/week7-social-life-digital-data.html#digital-traces",
+    "title": "The Social Life of Digital Data",
+    "section": "Digital Traces",
+    "text": "Digital Traces\nWikipedia’s openness provides us with rare opportunity to see a form of knowledge production in detail. Among the various ‘digital traces’ available to view are ‘talk’ pages - where the community debates changes.\nExamples:\n\nRenaming Kiev to Kyiv\nRenaming Israel-Gaza War to Gaza war\nFAQ over the naming of the current Derry page\nDecisions to delete and restore page for Clarice Phelps",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#wokepedia",
+    "href": "slides/week7-social-life-digital-data.html#wokepedia",
+    "title": "The Social Life of Digital Data",
+    "section": "‘Wokepedia’?",
+    "text": "‘Wokepedia’?\nOver the years Wikipedia has been accused on having a liberal or left wing political bias - with various competing alternatives setup. One latest such endevour is Elon Musk’s Grokipedia, created using his genAI chatbot Grok.\nFind an article in your area of research interest on Grokipedia and compare it to an equivalent article from Wikipedia. What differences can you find in how they approach the topic?\nWARNING: Alongside various misinformation and psuedo-science, Grokipedia does contain discriminatory views, including white nationalist conspiracy theories. It is perfectly OK if you prefer to read articles / reports about Grokipedia instead. Wikipedia itself has a page on Grokipedia.",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#neutrality-in-llms",
+    "href": "slides/week7-social-life-digital-data.html#neutrality-in-llms",
+    "title": "The Social Life of Digital Data",
+    "section": "‘Neutrality’ in LLMs",
+    "text": "‘Neutrality’ in LLMs\n\n\nChatGPT shouldn’t have political bias in any direction.\n\n— OpenAI, 9th October 2025\n\nTake a look at OpenAI’s Defining and evaluating political bias in LLMs.\nRead the “Defining measurable axes of bias” section.\nSelect one of the ‘biased’ and ‘reference’ response pairs from the “Examples of grader outputs” section.\nConsider:\n\nWhat is being marked-up as ‘bias’ and differences between the ‘biased’ and ‘reference’ responses?\nWould you consider the ‘reference’ response more ‘neutral’ and ‘objective’?",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
+    "objectID": "slides/week7-social-life-digital-data.html#hate",
+    "href": "slides/week7-social-life-digital-data.html#hate",
+    "title": "The Social Life of Digital Data",
+    "section": "Hate?",
+    "text": "Hate?",
+    "crumbs": [
+      "[Slides]{.constell-group-green}",
+      "Week 7"
+    ]
+  },
+  {
     "objectID": "welcome.html",
     "href": "welcome.html",
     "title": "Welcome!",
@@ -138,21 +446,24 @@
     "href": "welcome.html#protect-your-eyes",
     "title": "Welcome!",
     "section": "Protect Your Eyes",
-    "text": "Protect Your Eyes\nThe site is setup to follow your system theme. However, on most university computers that will mean light mode. If you prefer dark mode, there is a toggle in the top-left of the page in the sidebar after the course title.\n\n\nThe light/dark mode toggle after the course title at the top of the side-bar.",
+    "text": "Protect Your Eyes\nThe site is setup to follow your system theme. However, on most university computers that will mean light mode. If you prefer dark mode, there is a toggle in the top-left of the page in the sidebar after the course title.\n\n\nThe light/dark mode toggle after the course title at the top of the side-bar.\n\n\n\n\n\n\n\nTip\n\n\n\nThe pages are set-up so that the links for the slides also follow the light/dark mode toggle. So, whatever mode you have set in the toggle, the version of the slides you open will match.\n\n\n\n\n\n\n\n\nNote\n\n\n\nI hate Microslop Office so all slides are created using Quarto’s support for Revealjs. All slides should work with existing browser accessibility features/extensions including screenreaders and high-contrast mode viewers. However, please let me know if you encounter any issues and I can investigate further.",
     "crumbs": [
       "Welcome!"
     ]
+  },
+  {
+    "objectID": "week7/preamble.html",
+    "href": "week7/preamble.html",
+    "title": "The Social Life of Digital Data",
+    "section": "",
+    "text": "fedjklfjsdklaf jlsdkfj lkdfjkla djf kl jklfsdj kldjsfkl"
   },
   {
     "objectID": "slides-example.html#assessments",
     "href": "slides-example.html#assessments",
     "title": "Working With Digital Data",
     "section": "Assessments",
-    "text": "Assessments\nLorem ipsum. Temporibus eligendi incidunt omnis et qui architecto aut. Molestiae quibusdam minima iusto animi nam iusto. Reiciendis aperiam sequi qui eum alias aut. Molestias architecto hic sapiente voluptas unde nostrum repellendus necessitatibus. Enim voluptatem deleniti dolorem est quo.",
-    "crumbs": [
-      "[Slides]{.constell-group-green}",
-      "Example slides"
-    ]
+    "text": "Assessments\nLorem ipsum. Temporibus eligendi incidunt omnis et qui architecto aut. Molestiae quibusdam minima iusto animi nam iusto. Reiciendis aperiam sequi qui eum alias aut. Molestias architecto hic sapiente voluptas unde nostrum repellendus necessitatibus. Enim voluptatem deleniti dolorem est quo."
   },
   {
     "objectID": "course-info.html",
