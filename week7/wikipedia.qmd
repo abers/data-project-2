@@ -1,0 +1,317 @@
+---
+title: "Working with Wikipedia and WikiData"
+execute:
+  warning: false
+  message: false
+---
+
+## Museums in Scotland
+
+Let's say we are interested in museums in Scotland. Wikipedia has a [list of museums in Scotland](https://en.wikipedia.org/w/index.php?title=List_of_museums_in_Scotland). There are a number of different ways we can analyse such information from Wikipedia, but let's initially focus on which of those listed have an accompanying Wikipedia page or not.
+
+As very first step some critical considerations:
+
+- How is 'museum' being defined here?
+- What about different 'types' of museum?
+- Can we tell how up-to-date and comprehensive this page is?
+- Any potential issues / limitations with the page?
+
+::: {.callout-tip appearance="simple"}
+**Hint**: You can find a mix of information for the above between the main page and the Talk page.
+:::
+
+Turning to R, first we need to install the packages we will be using.
+
+```{r, filename="Run in Console"}
+#| eval: false
+
+install.packages(c("tidyverse", "httr2", "janitor", "modelsummary"))
+```
+
+- The `c()` function let's use combine our values as a list of packages to install rather than needing to write three lines of code for `install.packages()`.
+- We run `install.packages()` in the Console as we only need to run it once and only for the packages we do not have installed already.
+
+Packages are installed into our device's storage. In contrast, when we 'load' libraries we are adding them to the current active R environment. This means we need to load them each time we start a new R environment. Even when working in the same project over time we may want or need to restart our R environment, requiring us to load the packages again.
+
+So, rather than loading them via the console, it's better to do so at the start of every R script / R Markdown file to make it easier to rerun the code as needed.
+
+```{r}
+library(httr2)
+library(tidyverse)
+library(rvest)
+library(janitor)
+library(modelsummary)
+```
+
+- As a reminder you can click on the names of each of the packages above to go to their documentation pages.
+- We are using `httr2` to make requests to websites. It can also be used for workign with web APIs - [application programming interfaces](https://en.wikipedia.org/wiki/API).
+- The `tidyverse` is a 'meta-pacakge', a collection of packages that follow a common design philosophy and provide functions for a lot of common data analysis tasks. They can be installed together and most are loaded together too.
+- `rvest` is a tidyverse package for working with web scraping tasks. As not all forms of analysis need these features it is not loaded by default when loading the tidyverse, so needs to be loaded separately.
+- `janitor` for some reason does not link above to the [homepage for its documentation](https://sfirke.github.io/janitor/), but it is a 'tidyverse-friendly' package providing functions for data cleaning.
+- `modelsummary` is a good package for creating nicely formatted tables. It can produce descriptive statistics, cross-tabulations, and tables of statistical models, including regression results.
+
+Feel free to continue using the same R project folder that you started in Data Project 1.
+
+If starting in a new project folder, then we also need to create a `data` folder to have a shared consistent location to store the data we will be using:
+
+```{r, filename="Run in Console"}
+#| eval: false
+
+dir.create("data", showWarnings = FALSE)
+```
+
+- Note, if you were writing a file to share with others, where they would need to setup the same folders and files on their side, you would want to include it in a script too.
+- We are using `showWarnings = FALSE` as this will silence the warning that will get raised if the `data` folder already exists.
+
+Now we can download a copy of the list of Scottish museums.
+
+This is the general template for downloading a webpage:
+
+```{r, filename="Template"}
+#| eval: false
+
+request("WEBSITE_URL") |>
+  req_user_agent("CLIENT_NAME/VERSION (EMAIL)") |>
+  req_perform(path = "data/FILENAME.html")
+```
+
+- `request()` comes from the `httr2` package.
+- `|>` is the syntax for a [pipe](https://magrittr.tidyverse.org/reference/pipe.html) when let's you 'chain' functions together and is commonly used with the tidyverse and tidyverse-friendly package.
+- we specify a 'user agent' (information that identifies us - which some websites require and is just general politeness and good practice) using `req_user_agent()`. (See [Wikimedia Foundation  User-Agent Policy](https://foundation.wikimedia.org/wiki/Policy%3AWikimedia_Foundation_User-Agent_Policy))
+- The `CLIENT_NAME` identifies the software being use - for a short data analysis script we can just give a descriptive name for it - and an optional version number, e.g `1.0`, and then your email address  in brackets. (Different sites can have different policies but this is the general format Wikimedia advises.)
+- We then use `req_perform()` to run the `request()` call we have setup and choose where to save it's response (i.e. a downloaded copy of the webpage).
+
+**IMPORTANT**: Add this to its own code chunk, but do not repeatedly run it. It is good practice to limit how often making requests and to avoid making needless requests. We keep this in the file rather than Console in case need to run it again in future - e.g. to download latest version of the page.
+
+So for our example:
+
+```{r}
+#| eval: false
+
+request("https://en.wikipedia.org/w/index.php?title=List_of_museums_in_Scotland") |>
+  req_user_agent("ScottishMuseaumExercise (alasdair.stewart@glasgow.ac.uk)") |>
+  req_perform(path = "data/museums_scotland.html")
+
+```
+
+- (Obviously change my email address to your own.)
+
+Next, we can read the HTML and create a dataframe.
+
+```{r}
+page <- read_html("data/museums_scotland.html")
+
+museums <- page |>
+  html_element("table.wikitable") |>
+  html_table() |>
+  clean_names()
+```
+
+- We use `read_html` to read in the HTML file we downloaded.
+- We then use `html_element()` to specify what content from the HTML file we are interested.
+- As this element is the table we can see on the page, we can use `html_table()` to turn it into a data frame.
+- Finally, we use the janitor package's `clean_names()` to do fix the column names for us.
+
+On the original webpage columns have names like `Council area`. If we wanted to access that column with R we would have to refer to it as `museums$'Council area'`. `clean_names()` lowercases letters and replaces spaces with `_`, meaning we can now access the column much more simply with `museums$council_area`.
+
+Whilst none of the functions used below raise an error without doing, we should also 'co-erce'relevant variables to factors:
+
+```{r}
+museums <- museums |>
+  mutate(across(c(town_city, council_area, region, type), as.factor))
+```
+
+- The use of `museums <- museums ...` may seen weird but R's design philosophy means most functions return output but do not change the underlying object unless `dataframe <- ...`
+- Here we  use `dplyr`'s `mutate()` and `across()` functions to specify the columns we wish to change.
+
+Now that we have it loaded and done basic cleaning, how about we quickly get a count of the different type of museaums:
+
+```{r}
+museums |>
+  count(type, sort = TRUE) |>
+  print(n = Inf)
+```
+
+- We can do this nice and easy with `dplyr`'s - part of the Tidyverse - `count()`.
+- We pipe museums to `count()` specify we are interested in the `type` column and (optionally) set sort to true to sort by highest to lowest.
+- R's output is limited by default which we can override with `print()`
+
+**Note**: A common pattern in the Tidyverse is to pass a dataframe to a function, then list the columns interested in. But notice something interesting with this? We just had to provide `type` rather than `museums$type`. Tidyverse functions that are passed a dataframe assume by default any named columns are for that dataframe.
+
+Notice any other issues with the data?
+
+```{r}
+museums <- museums |>
+  mutate(type = str_to_sentence(type))
+```
+
+```{r}
+museums |>
+  count(type, sort = TRUE) |>
+  print(n = Inf)
+```
+
+OK, now what about something that looks a bit nicer?
+
+We can with the power of `ggplot2`. As covered in the lecture, most basic graphs can be created with just 3-4 lines of code -
+
+```{r, filename="Template"}
+#| echo: true
+#| eval: false
+
+DATA_FRAME |> ggplot(aes(x = VARIABLE1, ...)) +
+  geom_...() +
+  labs(title = "Title text", x = "Label for x-axis", ...)
+```
+
+1. We pass the DATA_FRAME we wish to create a plot with to `ggplot()` with the aesthetic mapping - `aes()` - of the VARIABLES(s) we wish to use.
+2. We use `geom...()` to specify which type of plot we want, such as `geom_boxplot()` or `geom_histogram()`.
+3. We specify any text labels to use - `labs()`.
+
+So for us -
+
+```{r}
+#| renderings: [light, dark]
+
+ggplot(museums, aes(y = type)) +
+  geom_bar() +
+  labs(x = "Number of museums", y = "Museum type"
+  )
+```
+
+Ahhh, wait that isn't the beautiful graph we were promised.
+
+In practice there are different ways for handling this, but for simplicity sake let's create a new column where all types with count less than ten are lumped together into "Other".
+
+```{r}
+museums <- museums |>
+  mutate(type_other = fct_lump_min(type, min = 10))
+
+museums |>
+  count(type_other, sort = TRUE) |>
+  print(n = Inf)
+```
+
+- This time we are combining good old `dplyr`'s `mutate()` but this time using `forcats`' `fct_lump_min()`. `forcasts` is a tidyverse package with additional functions specifically for working with categorical data.
+
+```{r}
+#| renderings: [light, dark]
+
+ggplot(museums, aes(y = type_other, fill = type_other)) +
+  geom_bar(show.legend = FALSE) +
+  labs(x = "Number of museums", y = "Museum type"
+  )
+```
+
+A few new additions too:
+- `fill = type_other` adds some colour
+- `show.legend = FALSE` added into geom_bar() to remove a superfluous legend that would be added now we are using a fill.
+
+One thing you may have noticed is some items on the original page have a red link - this is for items which don't have a Wikipedia page (yet!).
+
+What if we were interested in exploring which pages had links or not -
+
+```{r}
+museum_links <- page |>
+  html_element("table.wikitable") |>
+  html_elements("tr > td:first-child") |>
+  html_element("a") |>
+  html_attr("href")
+```
+
+Here we rely again on series of `rvest` functions to get the nested item we are interested in:
+
+- `html_element()` to select the main table element
+- `html_elments()` to get the tablerow - `tr` - and the child - `>` - table data cell - `td` - of it, specially the first one - `first-child`.
+- `html_element()` to get the link from the cell `a`
+- `html_attr()` to get the actual text attribute, the text link for the page the link refers to - `href`.
+
+Don't worry if the above seems a bit confusing. These are elements of HTML/CSS and will vary across websites. But once you find the pattern to seleect the specific things you want - the code will largely be reuseable across other parts of the website when working with similar content.
+
+After extracting the links we can create a new column for whether each row item has a Wikipedia page or not.
+
+```{r}
+museums <- museums |>
+  mutate(
+    page_status = case_when(
+      is.na(museum_links) ~ "Not linked",
+      str_detect(museum_links, "redlink=1") ~ "Red link",
+      TRUE ~ "Has page"
+    )
+  )
+
+```
+
+- We use `mutate()` again to add a new column, page_status, to our existing dataframe.
+- `case_when()` allows us to assign different values based on a series of conditions.
+- `is.na(museum_links)` checks whether a link is missing. If so, we classify the museum as "Not linked".
+- `str_detect()` checks whether the link contains "redlink=1", which Wikipedia uses for links to pages that do not yet exist.
+- Finally, `TRUE ~ "Has page"` assigns "Has page" to any remaining entries.
+
+Important: What questions about sampling and representation might there be for how we are approaching this?
+
+Now we know which museums have existing Wikipedia links, we can investigate whether some types of museums are more likely to have a Wikipedia page than others.
+
+```{r}
+datasummary_crosstab(
+  Type ~ page_status,
+  data = museums |>
+    select(Type = type_other, page_status),
+  title = "Wikipedia Scottish museum article coverage by type"
+)
+```
+
+- `modelsummary()`'s `datasummary_crosstab()` creates a cross-tabulation showing the counts and percentages for combinations of two categorical variables.
+- `Type ~ page_status` tells the function which variables to use. The variable on the left of `~` defines the rows, while the variable on the right defines the columns.
+- `data = museums` specifies the dataframe to use. We also use `select()` to choose the two columns we're interested in and rename `type_other` to `Type` to improve presentation.
+- `title` specifies the caption displayed above the table.
+
+And what about for region instead, or any of our other original columns -
+
+```{r}
+datasummary_crosstab(
+  Region ~ page_status,
+  data = museums |>
+    select(Region = region, page_status),
+  title = "Wikipedia Scottish article coverage by region"
+)
+```
+
+Ahh, spot the typo.
+
+```{r}
+museums <- museums |>
+  mutate(region = region |>
+           str_replace("Argylle", "Argyll") |>
+           as.factor())
+```
+
+- We use `mutate()` to update the existing region column.
+- `str_replace()` searches for a particular piece of text and replaces it with another. Here, we're replacing "Argylle" with "Argyll".
+- `as.factor()` is included as `str_replace()` annoyingly also converts the column to a character string.
+
+```{r}
+datasummary_crosstab(
+  Region ~ page_status,
+  data = museums |>
+    select(Region = region, page_status),
+  title = "Wikipedia Scottish article coverag e by region"
+)
+```
+
+::: {.surface-activity}
+Pick a Wikipedia list page of your choice and follow the initial steps above to make a start on data collection, cleaning, and analysis.
+:::
+
+Some initial resources you might find useful:
+
+- [R for Data Science (2nd edition)](https://r4ds.hadley.nz/)
+- [Data Harvesting with R](https://cimentadaj.github.io/dataharvesting/)
+- [Data Science: A First Introduction](https://datasciencebook.ca/)
+- [Telling Stories with Data](https://tellingstorieswithdata.com/)
+- [Introduction to Web Scraping with R](https://sscc.wisc.edu/sscc/pubs/webscraping-r/)
+- [R Graphics Cookbook (2nd edition)](https://r-graphics.org/)
+- [Web Scraping 101 (rvest)](https://rvest.tidyverse.org/articles/rvest.html)
+- [Getting Started with httr2](https://httr2.r-lib.org/articles/httr2.html)
+- [Overview of janitor Functions](https://sfirke.github.io/janitor/articles/janitor.html)
+- [Data Summaries with modelsummary](https://modelsummary.com/vignettes/datasummary.html)

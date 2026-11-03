@@ -13,9 +13,11 @@ website:
       - course-info.qmd
       - welcome.qmd
       - r-refresher.qmd
-      #      - text: "---"
-      #      - section: "Week 7"
-      #        contents:
+      - text: "---"
+      - section: "Week 7"
+        contents:
+          - text: "Wikipedia & WikiData"
+            href: week7/wikipedia.qmd
       #          - week7/preamble.qmd
       - text: "---"
       - section: "[Slides]{.constell-group-green}"
