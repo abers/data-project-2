@@ -3,3 +3,11 @@ surfaces:
     colour: mauve
     title: Assessments
     icon: "{{< fa clipboard-check >}}"
+  dont-panic:
+    colour: yellow
+    title: "Don't Panic"
+    icon: "{{< fa thumbs-up >}}"
+  activity:
+    colour: pink
+    title: "Activity"
+    icon: "{{< fa comments >}}"

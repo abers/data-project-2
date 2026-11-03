@@ -1,5 +1,7 @@
 project:
   type: website
+  execute-dir: project
+  output-dir: docs
   post-render:
     - python3 _extensions/abers/constellate/scripts/render-slides.py --post-render
 
@@ -11,15 +13,16 @@ website:
       - course-info.qmd
       - welcome.qmd
       - r-refresher.qmd
-      - text: "---"
-      - section: "Week Test"
-        contents:
-          - week-test.qmd
+      #      - text: "---"
+      #      - section: "Week 7"
+      #        contents:
+      #          - week7/preamble.qmd
       - text: "---"
       - section: "[Slides]{.constell-group-green}"
         contents:
-          - text: "Example slides"
-            href: slides-example.qmd
+          - text: "Week 7"
+            href: slides/week7-social-life-digital-data.qmd
+            target: _blank
       - text: "---"
       - section: "[Assessments]{.constell-group-mauve}"
         contents:

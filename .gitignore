@@ -1,5 +1,6 @@
 /.quarto/
 /_site/
+/docs/
 /slides-export/
 *_files/
 /.Rproj.user/
@@ -10,3 +11,4 @@
 **/*.quarto_ipynb
 *.otter.R
 *.otter.html
+*.otter.yml

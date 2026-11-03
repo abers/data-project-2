@@ -23,3 +23,11 @@ library(ggplot2)
 The site is setup to follow your system theme. However, on most university computers that will mean light mode. If you prefer dark mode, there is a toggle in the top-left of the page in the sidebar after the course title.
 
 ![The light/dark mode toggle after the course title at the top of the side-bar.](images/toggle.png)
+
+::: {.callout-tip}
+The pages are set-up so that the links for the slides also follow the light/dark mode toggle. So, whatever mode you have set in the toggle, the version of the slides you open will match.
+:::
+
+::: {.callout-note}
+I hate Microslop Office so all slides are created using [Quarto's support for Revealjs](https://quarto.org/docs/presentations/revealjs/). All slides should work with existing browser accessibility features/extensions including screenreaders and high-contrast mode viewers. However, please let me know if you encounter any issues and I can investigate further.
+:::
