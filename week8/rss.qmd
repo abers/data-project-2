@@ -1,0 +1,100 @@
+---
+title: "RSS feeds"
+---
+
+```{r}
+#| eval: false
+
+library(tidyverse)
+library(tidyRSS)
+library(rvest)
+```
+
+```{r}
+#| eval: false
+
+feeds <- c(
+  "https://www.cityam.com/category/opinion/feed/",
+  "https://www.theguardian.com/tone/editorials/rss",
+  "https://www.thesun.co.uk/news/opinion/feed/"
+)
+```
+
+```{r}
+#| eval: false
+
+articles <- map(feeds, tidyfeed) |>
+  bind_rows() |>
+  select(feed_title, item_title, item_link, item_pub_date) |>
+  group_by(feed_title) |>
+  arrange(desc(item_pub_date)) |>
+  slice_head(n = 5) |>
+  ungroup() |>
+  mutate(
+    original_file = paste0("data/opinion/", row_number(), "_original.html"),
+    stripped_file = paste0("data/opinion/", row_number(), "_stripped.html")
+  )
+```
+
+```{r}
+#| eval: false
+
+dir.create("data/opinion")
+pages <- map(articles$item_link, read_html, encoding = "UTF-8")
+walk2(pages, articles$original_file, xml2::write_html)
+```
+
+```{r}
+#| eval: false
+
+example <- articles |> filter(str_detect(feed_title, "The Sun")) |> slice_head()
+elements <- read_html(example$original_file, encoding = "UTF-8") |>
+  html_elements(".article__content *")
+tibble(
+  element = xml2::xml_name(elements),
+  class = html_attr(elements, "class"),
+  text = html_text2(elements)
+)
+```
+
+```{r}
+#| eval: false
+
+bodies <- map(pages, html_elements, paste(
+  "[data-gu-name='standfirst'], .article-body-viewer-selector,",
+  "article.content-container__single, .article__content"
+))
+```
+
+```{r}
+#| eval: false
+
+unwanted <- paste(
+  "header, footer, aside, script, style, button, .notice-header, .newsletter-auto-inject,",
+  "img, picture, svg, video, audio, iframe,",
+  ".social-icons-wrapper, .advert-wrapper, .inline-module--newsletter,",
+  ".article-readmore, .rail-container, .digital-personalisation, .comments__anchor,",
+  "[data-spacefinder-type$='NewsletterSignupBlockElement'],",
+  "li:contains('Do you have an opinion on the issues raised')"
+)
+```
+
+```{r}
+#| eval: false
+
+map(bodies, html_elements, unwanted) |> walk(xml2::xml_remove)
+```
+
+```{r}
+#| eval: false
+
+html <- map(bodies, as.character) |> map_chr(paste, collapse = "\n")
+stripped <- paste("<body>", html, "</body>") |> map(minimal_html)
+walk2(stripped, articles$stripped_file, xml2::write_html)
+```
+
+```{r}
+#| eval: false
+
+write_csv(articles, "data/opinion/metadata.csv")
+```

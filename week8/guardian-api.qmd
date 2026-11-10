@@ -1,0 +1,158 @@
+---
+title: "Guardian API"
+---
+
+Some websites and services provide what is known as an [application programming interface](https://en.wikipedia.org/wiki/API). This provides an interface other software - such as R - can use.
+
+The Guardian is one such site that provides an API, in this case for searching and requesting newspaper articles. The [documentation](https://open-platform.theguardian.com/documentation/) provides an overview of what is possible.
+
+Such APIs often require an API key.
+
+::: {.surface-activity}
+Request a Guardian API key.
+
+- Go to the API [Get Started](https://open-platform.theguardian.com/access/) page.
+- Click 'Register developer key'
+- Fill in required fields. For reason select 'Student project' with brief explanation that for learning R and data analysis. As we will not be publicly sharing the content beyond the class it should be OK to select 'No' for whether content will be displayed. Product name can put 'N/A'.
+- Tick to accept the terms and conditions and click 'Register'.
+- You will receieve an email with link to verify your email address. Click the verify link. (Note: This may take you to a page saying the link is no longer valid - despite that I still received an API key after clicking the link)
+- After verifying your email you should receive another email with your API key - which is a long string of letters and numbers.
+
+**IMPORTANT**: The API key is unique to you, so treat it similar to a password.
+:::
+
+Once you have an API key, there is an online webpage the Guardian provides that can help you [explore API requests and responses](https://open-platform.theguardian.com/explore/). This can be useful to play about with to get sense of what is possible before moving to using R.
+
+It is possible to use the same set of [R packages for working with APIs](https://trevorfrench.github.io/R-for-Data-Analysis/p2c3-working-with-apis.html) from different websites and services. Whilst that provides flexibility, it can - depending on the specific API and complexity of what wishing to achieve - involve additional steps in cleaning and preparing the data.
+
+Fortunately, in some situations others have created 'wrappers' around the API to make it easier to work with. For R, there is the [GuardianAPI](https://docs.evanodell.com/guardianapi/articles/introduction) package. Whilst it has not been updated for a while, the core Guardian API has not changed so it remains useable. Alongside providing a slightly more direct way to work with the data, it also handles things like having clean variable names.
+
+## Code
+
+OK first we need to install the packages we need:
+
+```{r, filename="Run in Console"}
+#| eval: false
+
+install.packages(c("guardianapi", "tidyverse"))
+```
+
+If you installed `tidyverse` last week, there is no need to install it again this week.
+
+Then we load the packages we will use:
+
+```{r}
+#| eval: false
+
+library(guardianapi)
+library(tidyverse)
+```
+
+API keys should not be shared, we can either save our API key as an environment variable, or more simply for the moment run a function where we can enter it in the Console.
+
+```{r, filename="Run in Console"}
+#| eval: false
+
+gu_api_key()
+```
+
+After running the function you will see a prompt in the Console where you can copy/paste your API key in.
+
+Let's do a simple text-based search for any articles about rose-ringed / ring-necked parakeets.
+
+For that, we can create a query:
+
+```{r}
+#| eval: false
+
+query <- paste(
+  '"rose-ringed parakeet"',
+  '"rose-ringed parakeets"',
+  '"ring-necked parakeet"',
+  '"ring-necked parakeets"',
+  '"Psittacula krameri"',
+  sep = " OR "
+)
+```
+
+We have the quotations marks `"` inside each string to denote that we are searching for exact phrases.
+
+By default the API already gives up article IDs, titles, publication dates, and URLs. We can request others:
+
+```{r}
+#| eval: false
+
+fields <- c("byline", "publication", "wordcount", "standfirst", "body", "bodyText")
+```
+
+- `standfirst` = the introduction
+
+Next, let's grab the five latest articles matching out query:
+
+```{r}
+#| eval: false
+
+five_latest <- gu_content(query = query, tag = "type/article", show_fields = fields) |>
+  arrange(desc(web_publication_date)) |>
+  slice_head(n = 5) |>
+  select(-tags) |>
+  mutate(wordcount = as.integer(wordcount),
+         web_publication_date = force_tz(web_publication_date, "UTC"))
+```
+
+- We use `gu_content` to search articles
+- We pass in the `query` we created
+- specifiy that we only want `type/article` (i.e. no videos or live blogs)
+- include the extra fields we are interested in with `show_fields` argument
+- I couldn't get the guardianapi sort by date to work, so the `arrange(...)` line achieves similar
+- `slide_head(n = 5)` then keeps the five latest results only
+
+Next create a folder for storing the data:
+
+```{r}
+#| eval: false
+
+folder <- "data/parakeets/articles"
+dir.create(folder, recursive = TRUE, showWarnings = FALSE)
+```
+
+Then save the data as csv:
+
+```{r}
+#| eval: false
+
+write_csv(five_latest, file.path(folder, "five_latest.csv"))
+```
+
+Then we can turn the article content into HTML files:
+
+```{r}
+#| eval: false
+
+for (i in seq_len(nrow(articles))) {
+  write_lines(
+    c('<!doctype html><meta charset="utf-8">',
+      paste0("<h1>", articles$web_title[i], "</h1>"),
+      paste0("<p>", articles$standfirst[i], "</p>"),
+      articles$body[i]),
+    file.path(folder, paste0(i, ".html"))
+  )
+}
+
+```
+
+As a comparison, let's do the same but for opinion pieces only:
+
+```{r}
+#| eval: false
+
+opinion <- gu_content(query = query,
+  tag = "type/article,(tone/comment|tone/editorials)", show_fields = fields) |>
+  arrange(desc(web_publication_date)) |>
+  slice_head(n = 5) |>
+  select(-tags) |>
+  mutate(wordcount = as.integer(wordcount),
+         web_publication_date = force_tz(web_publication_date, "UTC"))
+```
+
+(and repeat the other steps above for this set)

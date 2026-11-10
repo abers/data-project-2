@@ -1,0 +1,22 @@
+---
+title: "Newspapers"
+---
+
+Through your University of Glasgow student account you have [access to multiple news sources](https://www.gla.ac.uk/myglasgow/library/specificsearch/newspapers/). This includes:
+
+- [PressReader](https://www-pressreader-com.uofglasgow.idm.oclc.org/catalog) with access to over 7,000 newspapers and magazines.
+- [Nexis](https://advance.lexis.com/?federationidp=8K7S4M60073) which lets you search across vast range of publications from across the globe.
+
+::: {.surface-activity}
+Use [Nexis](https://advance.lexis.com/?federationidp=8K7S4M60073) to:
+
+- Search for recent articles on topic of interest.
+- Add include / exclude criteria as relevant to the search results.
+- Take quick browse through the results.
+- Select 2-4 articles from the results using the checkboxes next to the article titles.
+- Click 'Download' to open the Download dialog options.
+- Go through the 'Basic options', 'Formatting options', and 'Content-specific options' tabs and make any adjustments.
+- Click the 'Download' button to down your selected articles as - depending on options selected - a file or zip of files.
+
+Then have a look through the files.
+:::

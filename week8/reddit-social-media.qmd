@@ -1,0 +1,181 @@
+---
+title: "Reddit (and social media data)"
+execute:
+  warning: false
+  message: false
+---
+
+**Important**: For the purposes of this module, you should not use any social media data directly as collecting such data would require ethics approval. There are also further issues of growing "post-API" landscape as sites add further restrictions to API access due to genAI. However, there is plethora of anonymised and psuedo-anonymised social media datasets available online. As long as these are from credible source, they are OK to use. See [The Social Media Archive](https://www.icpsr.umich.edu/sites/somar/home) and a [pre-print reviewing what social media datasets are available](https://zenodo.org/records/21704651).
+
+As an example, we will use a [Reddit dataset containing discussions on generative AI in education](https://data.mendeley.com/datasets/z6794ft3fs/3).
+
+Download `Data 2.csv` and add it to your `data` folder.
+
+Next install any needed packages:
+
+```{r, filename="Run in Console"}
+#| eval: false
+
+install.packages(c("tidytext", "tidyverse", "tokenizers", "textclean"))
+```
+
+`tidytext` is a tidyverse friendly package for doing quantitative text analysis. `tokenizers` gives us the `count_words()` function. `textclean` gives us a helper for tidying the text (e.g. removing web addresses)
+
+Then we need to load the libraries:
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(tokenizers)
+library(textclean)
+```
+
+And read in the data from the csv file:
+
+```{r}
+reddit <- read_delim("data/Data 2.csv", delim = ";")
+```
+
+- `reddit` gives our imported data name.
+- `read_delim()` is used for reading data where the columns are separated by a specific character
+- in our case that is a semicolon `;` in the `Data 2.csv` file.
+
+We can then get some basic info  about our data:
+
+```{r}
+glimpse(reddit)
+```
+
+Next, let's check which stakeholders are covered in the data:
+
+```{r}
+reddit |> count(stakeholder_group)
+```
+
+- `count()` let's us get a count of values in a specified column, in this case the `stakeholder_group`
+
+We can tidy up the issue with the typo:
+
+```{r}
+reddit <- reddit |>
+  mutate(stakeholder_group = recode(stakeholder_group, "educator" = "educators"))
+```
+
+Again exploring our data:
+
+```{r}
+group_sizes <- reddit |> count(stakeholder_group)
+group_sizes |> mutate(percent = n / sum(n) * 100)
+reddit |> count(stakeholder_group, type)
+```
+
+```{r}
+reddit |> count(specific_subreddit, sort = TRUE) |> head()
+```
+
+We can put both comments and posts into one column - this is not always best to do pending on analysis.
+
+First check for missing:
+
+```{r}
+reddit |>
+  summarise(missing_titles = sum(is.na(title)),
+            missing_bodies = sum(is.na(text)))
+```
+
+```{r}
+reddit <- reddit |>
+  mutate(title = replace_na(title, ""),
+         text = replace_na(text, ""),
+         content = paste(title, text))
+```
+
+Clean up the text:
+
+```{r}
+reddit <- reddit |>
+  mutate(content = replace_url(content),
+         content = str_replace_all(content, "’", "'"))
+```
+
+create word counts:
+
+```{r}
+reddit <- reddit |>
+  mutate(n_words = count_words(content))
+```
+
+some descriptive stats:
+
+```{r}
+reddit |>
+  summarise(mean_words = mean(n_words),
+            median_words = median(n_words))
+```
+
+and by type:
+
+```{r}
+reddit |>
+  group_by(type) |>
+  summarise(mean_words = mean(n_words),
+            median_words = median(n_words))
+```
+
+there are a lot of short low value comments:
+
+```{r}
+reddit_longer <- reddit |> filter(n_words >= 20)
+reddit_longer |> count(stakeholder_group, type)
+```
+
+some quick descripive text analysis:
+
+```{r}
+words <- reddit_longer |>
+  unnest_tokens(word, content, stopwords = stop_words$word)
+```
+
+```{r}
+word_frequency <- words |> count(word, sort = TRUE)
+top_words <- head(word_frequency, 20)
+top_words
+```
+
+```{r}
+ggplot(top_words, aes(x = n, y = word)) +
+  geom_col() +
+  labs(x = "Word frequency")
+```
+
+comments by group
+
+```{r}
+comments <- reddit_longer |> filter(type == "comment")
+comments |>
+  group_by(stakeholder_group) |>
+  summarise(comments = n(), mean_words = mean(n_words))
+```
+
+```{r}
+comments <- comments |>
+  mutate(mentions_chatgpt = str_detect(str_to_lower(content), "chatgpt"))
+```
+
+```{r}
+chatgpt_summary <- comments |>
+  group_by(stakeholder_group) |>
+  summarise(comments = n(), mentions = sum(mentions_chatgpt))
+```
+
+```{r}
+chatgpt_summary <- chatgpt_summary |>
+  mutate(percent = mentions / comments * 100)
+chatgpt_summary
+```
+
+```{r}
+ggplot(chatgpt_summary, aes(x = stakeholder_group, y = percent)) +
+  geom_col() +
+  labs(x = "Stakeholder", y = "Comments mentioning ChatGPT (%)")
+```

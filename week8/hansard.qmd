@@ -1,0 +1,180 @@
+---
+title: "Hansard"
+---
+
+Hansard data
+
+```{r}
+#| eval: false
+
+install.packages(c("jsonlite", "tidyverse", "tidytext")
+```
+
+https://hansard.parliament.uk/
+
+```{r}
+#| eval: false
+
+library(jsonlite)
+library(tidyverse)
+library(rvest)
+library(tidytext)
+```
+
+```{r}
+#| eval: false
+
+data_dir <- file.path("data", "hansard")
+dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
+```
+
+```{r}
+#| eval: false
+
+debate_id <- "A91DF2A1-6231-4A38-AF17-56B742D06E95"
+debate_url <- paste0(
+  "https://hansard-api.parliament.uk/debates/debate/", debate_id, ".json"
+)
+debate <- fromJSON(debate_url)
+debate_date <- substr(debate$Overview$Date, 1, 10)
+items <- debate$Items
+```
+
+```{r}
+#| eval: false
+
+transcript <- items |>
+  filter(ItemType == "Contribution", !is.na(MemberId)) |>
+  select(
+    sequence = OrderInSection,
+    contribution_id = ExternalId,
+    member_id = MemberId,
+    speaker = AttributedTo,
+    text = Value
+  )
+```
+
+```{r}
+#| eval: false
+
+transcript <- transcript |> mutate(date = debate_date)
+```
+
+```{r}
+#| eval: false
+
+for (i in seq_len(nrow(transcript))) {
+  text_html <- paste0("<body>", transcript$text[i], "</body>")
+  parsed_html <- read_html(text_html)
+  transcript$text[i] <- html_text(parsed_html)
+}
+```
+
+```{r}
+#| eval: false
+
+member_ids <- unique(transcript$member_id)
+contributors <- data.frame()
+```
+
+```{r}
+#| eval: false
+
+for (id in member_ids) {
+  member_url <- paste0(
+    "https://members-api.parliament.uk/api/Members/", id,
+    "?detailsForDate=", debate_date
+  )
+  member_response <- fromJSON(member_url)
+  member <- member_response$value
+
+  contributor <- data.frame(
+    member_id = member$id,
+    name = member$nameDisplayAs,
+    party = member$latestParty$name,
+    constituency = member$latestHouseMembership$membershipFrom,
+    gender = member$gender
+  )
+  contributors <- bind_rows(contributors, contributor)
+```
+
+```{r}
+#| eval: false
+
+write.csv(transcript, file.path(data_dir, "transcript.csv"),
+          row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(contributors, file.path(data_dir, "contributors.csv"),
+          row.names = FALSE, fileEncoding = "UTF-8")
+```
+
+```{r}
+#| eval: false
+
+text_data <- read.csv(file.path(data_dir, "transcript.csv"), fileEncoding = "UTF-8")
+```
+
+```{r}
+#| eval: false
+
+speaker_labels <- items$AttributedTo
+speaker_labels[is.na(speaker_labels)] <- ""
+```
+
+```{r}
+#| eval: false
+
+formatted_text <- gsub("\r\n|\r|\n", "<br>", items$Value)
+```
+
+```{r}
+#| eval: false
+
+html_entries <- paste0("<div><b>", speaker_labels, "</b><br>", formatted_text, "</div>")
+```
+
+```{r}
+#| eval: false
+
+writeLines(c(
+  "<!doctype html><meta charset='utf-8'>",
+  paste0("<h1>", debate$Overview$Title, "</h1>"),
+  paste0("<p>", debate_date, " | ", debate$Overview$House, "</p>"),
+  html_entries
+), file.path(data_dir, "transcript.html"), useBytes = TRUE)
+```
+
+```{r}
+#| eval: false
+
+text_data <- read.csv(file.path(data_dir, "transcript.csv"), fileEncoding = "UTF-8")
+```
+
+```{r}
+#| eval: false
+
+word_data <- text_data |> unnest_tokens(word, text)
+```
+
+```{r}
+#| eval: false
+
+word_totals <- word_data |> count(member_id, name = "words")
+```
+
+```{r}
+#| eval: false
+
+speaker_summary <- text_data |>
+  count(member_id, name = "contributions") |>
+  left_join(word_totals, by = "member_id") |>
+  left_join(contributors, by = "member_id") |>
+  arrange(desc(words))
+```
+
+```{r}
+#| eval: false
+
+print(speaker_summary)
+write.csv(speaker_summary, file.path(data_dir, "speaker_summary.csv"),
+          row.names = FALSE, fileEncoding = "UTF-8")
+```

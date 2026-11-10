@@ -1,0 +1,38 @@
+---
+title: "Nourishing Britain"
+---
+
+Project abstract:
+
+> The Nourishing Britain study comprises 20 semi-structured interviews with UK prime ministers, health secretaries and other relevant senior ministers, as well as two regional mayors, all of whom who were in post or government between 1990 (when the first government obesity-reduction targets were being developed) and 2022 (the government before this project started).
+>
+> The larger aim of the project was to develop a political manual for current and future politicians on how to effectively navigate the politics of food-related health policy.
+
+The project is [available as open data](https://datacatalogue.ukdataservice.ac.uk/studies/study/9329#details) from the UK Data Service's data catalogue.
+
+The [full report and all the transcripts as single file](https://www.nesta.org.uk/report/nourishing-britain/) is also available on Nesta's - one of the organisations that supported the research - website.
+
+::: {.surface-activity}
+Read through the following:
+
+- The [Details for the project](https://datacatalogue.ukdataservice.ac.uk/studies/study/9329#details) on the UK Data Service's data catalogue.
+- Appendix A and (quick skim) Appendix B of the [report document](https://media.nesta.org.uk/documents/Nourishing_Britain_-_a_political_manual_for_improving_the_nations_health_vRYCLmt.pdf#page=50.04).
+
+Then, download a copy of the transcripts. The data catalogue has a button on the left-hand side "PDF (3.93 MB)" to download a zip file of the transcripts as individual files.
+
+Imagine you were planning to use this data for secondary analysis:
+
+- How well does the documentation provide key information about the project and the data?
+- Is there anything missing?
+- How easy would it be to setup a data analysis project within NVivo using the data?
+- How would that process compare to reusing data for quantitative analysis with R?
+:::
+
+::: {.surface-activity}
+Pick two transcripts. One should be either Tony Blair, David Cameron, Jeremy Hunt, or Sadiq Khan - the other another of your choice not from these four listed.
+
+Quickly read/skim through them and consider:
+
+- Are there any differences between the two transcripts? If so, what are these and what potential reasons might there be for the differences?
+- How do these transcripts compare to interview/focus group transcripts from other research projects with regular members of the public?
+:::

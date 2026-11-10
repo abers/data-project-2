@@ -19,6 +19,14 @@ website:
           - text: "Wikipedia & WikiData"
             href: week7/wikipedia.qmd
       #          - week7/preamble.qmd
+      - section: "Week 8"
+        contents:
+          - week8/nourishing-britain.qmd
+          - week8/newspapers.qmd
+          - week8/guardian-api.qmd
+          - week8/reddit-social-media.qmd
+          - week8/hansard.qmd
+          - week8/rss.qmd
       - text: "---"
       - section: "[Slides]{.constell-group-green}"
         contents:

@@ -1,0 +1,77 @@
+---
+format: constellate-revealjs
+title: "Data Contexts and Genres"
+author:
+  - name: "Alasdair Stewart"
+    roles: ["Lecturer in Social & Public Policy"]
+module: "Working with Digital Data: Data Project 2"
+module-code: "SPS5072"
+week: 8
+---
+
+# Outline
+
+- R Markdown Primer
+- In Real Life?
+- APIs and Web Scraping
+- Digital Qualitative Data
+
+# But first...
+
+assessment questions
+
+data questions
+
+# R Markdown Primer
+
+...
+
+# In Real Life?
+
+## fads
+
+data increasingly digital with certain expectations around that
+
+- archiving
+- metadata
+- etc
+
+## djkfads
+
+Bulletin boards, Facebook, twitter, forums, blogs, instagram, comment sections.
+
+## Digital Enclosures
+
+API access, Facebook and what is made available to researchers
+
+# APIs and Web Scraping
+
+## Ethics
+
+...
+
+## Guardian API
+
+...
+
+## RSS feeds
+
+...
+
+## Web scraping
+
+...
+
+## Web 'clippers'
+
+...
+
+# Digital Qualitative Data
+
+## Discussion {.surface-activity}
+
+'open' quals etc
+
+## Nourishing Britain {.surface-activity}
+
+...
