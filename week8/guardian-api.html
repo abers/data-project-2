@@ -537,7 +537,8 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If revisiting this page after our in-person session please follow the new instructions for packages to install <em>and</em> load. I have ‘<a href="https://en.wikipedia.org/wiki/Fork_(software_development)">forked</a>’ the <code>guardianapi</code> R package and modified the code to fix a couple issues and add an optional feature. Combined, this makes the code you need to make requests shorter and simpler. I have updated the code below to match that, but it requires having my version of the package installed <em>and</em> loaded.</p>
+<p>If revisiting this page after our in-person session: I have ‘<a href="https://en.wikipedia.org/wiki/Fork_(software_development)">forked</a>’ the <code>guardianapi</code> R package so I could modify the code to fix a couple issues and add an optional feature.</p>
+<p>If you installed the regular version of the <code>guardianapi</code> package during the seminar, the <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github()</a></code> <a href="../week8/guardian-api.html#packages-to-install-and-load">code below</a> will overwrite it with my version. However, after installing, you still need to run <code><a href="https://docs.evanodell.com/guardianapi">library(guardianapi)</a></code> once more too.</p>
 </div>
 </div>
 <section id="intro" class="level2"><h2 class="anchored" data-anchor-id="intro">Intro</h2>
@@ -580,31 +581,27 @@ Important
 <span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>If you installed <code>tidyverse</code> last week, you do not need to install it again this week.</p>
+</div>
+</div>
+</div>
 <ul>
 <li>
 <code>remotes</code> is an R package which let’s us install packages from other sources. <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code> is only able to install packages available through the <a href="https://cran.r-project.org/">Comprehensive R Archive Network</a>.</li>
 <li>In this case we use <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github()</a></code> to install my version of the <code>guardianapi</code> package from GitHub.</li>
 </ul>
-<p>If you installed <code>tidyverse</code> last week, there is no need to install it again this week.</p>
 <p>Then we load the packages we will use:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.evanodell.com/guardianapi">guardianapi</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Whilst we are installing my version of the <code>guardianapi</code> package, we can still load it as normal with just <code><a href="https://docs.evanodell.com/guardianapi">library(guardianapi)</a></code>.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If you had installed the regular version of the <code>guardianapi</code> package during the seminar, the <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github()</a></code> code above will overwrite it with my version. However, after installing, you will still need to run <code><a href="https://docs.evanodell.com/guardianapi">library(guardianapi)</a></code> once more.</p>
-</div>
-</div>
 </section><section id="api-key-setup" class="level3"><h3 class="anchored" data-anchor-id="api-key-setup">API Key Setup</h3>
 <p>API keys should not be shared, we can either save our API key as an environment variable, or more simply for the moment run a function where we can enter it in the Console.</p>
 <div class="cell">
@@ -636,9 +633,14 @@ Important
 </div>
 <ul>
 <li>
-<code>standfirst</code> = the introduction</li>
+<code>standfirst</code> is the short summary opening sentence.</li>
+<li>
+<code>body</code> is version of the main article content with its HTML formatting, including things like links.</li>
+<li>
+<code>bodyText</code> is plain text version of the main article without formatting.</li>
 </ul>
-<p>Next, let’s grab the five latest articles matching out query:</p>
+<p>We are requesting both <code>body</code> and <code>bodyText</code> just so you can see both. Pending on your analysis you may not need both. As you will see below, we use <code>body</code> when saving HTML copies of each of the articles we requested. If you are doing quantitative text analysis, <code>bodyText</code> is more useful as it saves you needing to write code to remove any formatting.</p>
+<p>Next, let’s grab the five latest articles matching our query:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">five_latest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.evanodell.com/guardianapi/reference/gu_content.html">gu_content</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">query</span>, tag <span class="op">=</span> <span class="st">"type/article"</span>, show_fields <span class="op">=</span> <span class="va">fields</span>, `order-by` <span class="op">=</span> <span class="st">"newest"</span>, `page-size` <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>wordcount <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">wordcount</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
