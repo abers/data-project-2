@@ -43,6 +43,9 @@ website:
       - section: "[Reference]{.constell-group-yellow}"
         contents:
           - reference/dont-panic.qmd
+          - reference/r-syntax.qmd
+          - reference/r-markdown.qmd
+          - reference/code-chunks.qmd
       - text: "---"
       - section: "[GenAI]{.constell-group-red}"
         contents:

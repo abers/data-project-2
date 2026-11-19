@@ -2,6 +2,14 @@
 title: "Guardian API"
 ---
 
+::: {.callout-important}
+If revisiting this page after our in-person session: I have '[forked](https://en.wikipedia.org/wiki/Fork_(software_development))' the `guardianapi` R package so I could modify the code to fix a couple issues and add an optional feature.
+
+If you installed the regular version of the `guardianapi` package during the seminar, the `remotes::install_github()` [code below](guardian-api.qmd#packages-to-install-and-load) will overwrite it with my version. However, after installing, you still need to run `library(guardianapi)` once more too.
+:::
+
+## Intro
+
 Some websites and services provide what is known as an [application programming interface](https://en.wikipedia.org/wiki/API). This provides an interface other software - such as R - can use.
 
 The Guardian is one such site that provides an API, in this case for searching and requesting newspaper articles. The [documentation](https://open-platform.theguardian.com/documentation/) provides an overview of what is possible.
@@ -25,19 +33,35 @@ Once you have an API key, there is an online webpage the Guardian provides that 
 
 It is possible to use the same set of [R packages for working with APIs](https://trevorfrench.github.io/R-for-Data-Analysis/p2c3-working-with-apis.html) from different websites and services. Whilst that provides flexibility, it can - depending on the specific API and complexity of what wishing to achieve - involve additional steps in cleaning and preparing the data.
 
-Fortunately, in some situations others have created 'wrappers' around the API to make it easier to work with. For R, there is the [GuardianAPI](https://docs.evanodell.com/guardianapi/articles/introduction) package. Whilst it has not been updated for a while, the core Guardian API has not changed so it remains useable. Alongside providing a slightly more direct way to work with the data, it also handles things like having clean variable names.
+Fortunately, in some situations others have created 'wrappers' around the API to make it easier to work with. For R, there is the [GuardianAPI](https://docs.evanodell.com/guardianapi/articles/introduction) package. Whilst it has not been updated for a while, the core Guardian API has not changed. Alongside providing a slightly more direct way to work with the data, it also handles things like having clean variable names.
+
+However, I did discover two small issues in testing though. One, additional API parameters - such as specifying what order to return results in - did not work. Two, article published dates are provied by the Guardian in UTC, but were incorrectly being stored in the system's local time zone.
+
+Thanks to the wonder of open-source. I have been able to [fork](https://en.wikipedia.org/wiki/Fork_(software_development)) the package and fix the issues - as well as add an optional feature. I have made a couple '[pull requests](https://en.wikipedia.org/wiki/Distributed_version_control#Pull_requests)' - basically, sharing my code with the creator of the package so they can decide whether to add it to the official package or not. If interested, my pull requests for the edits to [fix the two issues](https://github.com/evanodell/guardianapi/pull/1) and [add support for pagination](https://github.com/evanodell/guardianapi/pull/2) are available to view online. If these changes get 'merged' - i.e. added - into the official package, I'll update the page again to use it.
 
 ## Code
+
+### Packages to Install and Load
 
 OK first we need to install the packages we need:
 
 ```{r, filename="Run in Console"}
 #| eval: false
 
-install.packages(c("guardianapi", "tidyverse"))
+install.packages(c("remotes", "tidyverse"))
+
+remotes::install_github(
+  "abers/guardianapi",
+  ref = "fixes-and-pagination"
+)
 ```
 
-If you installed `tidyverse` last week, there is no need to install it again this week.
+::: {.callout-note appearance="simple"}
+If you installed `tidyverse` last week, you do not need to install it again this week.
+:::
+
+- `remotes` is an R package which let's us install packages from other sources. `install.packages()` is only able to install packages available through the [Comprehensive R Archive Network](https://cran.r-project.org/).
+- In this case we use `remotes::install_github()` to install my version of the `guardianapi` package from GitHub.
 
 Then we load the packages we will use:
 
@@ -48,6 +72,10 @@ library(guardianapi)
 library(tidyverse)
 ```
 
+Whilst we are installing my version of the `guardianapi` package, we can still load it as normal with just `library(guardianapi)`.
+
+### API Key Setup
+
 API keys should not be shared, we can either save our API key as an environment variable, or more simply for the moment run a function where we can enter it in the Console.
 
 ```{r, filename="Run in Console"}
@@ -56,7 +84,9 @@ API keys should not be shared, we can either save our API key as an environment 
 gu_api_key()
 ```
 
-After running the function you will see a prompt in the Console where you can copy/paste your API key in.
+After running the function you will see a prompt in the Console where you can copy/paste your API key in. After hitting enter, you should see the following message: "Updating gu.API.key session variable...". Despite the phrasing, that means your API key was accepted and you are OK to continue.
+
+### Creating a Query
 
 Let's do a simple text-based search for any articles about rose-ringed / ring-necked parakeets.
 
@@ -85,34 +115,87 @@ By default the API already gives up article IDs, titles, publication dates, and 
 fields <- c("byline", "publication", "wordcount", "standfirst", "body", "bodyText")
 ```
 
-- `standfirst` = the introduction
+- `standfirst` is the short summary opening sentence.
+- `body` is version of the main article content with its HTML formatting, including things like links.
+- `bodyText` is plain text version of the main article without formatting.
 
-Next, let's grab the five latest articles matching out query:
+We are requesting both `body` and `bodyText` just so you can see both. Pending on your analysis you may not need both. As you will see below, we use `body` when saving HTML copies of each of the articles we requested. If you are doing quantitative text analysis, `bodyText` is more useful as it saves you needing to write code to remove any formatting.
+
+Next, let's grab the five latest articles matching our query:
 
 ```{r}
 #| eval: false
 
-five_latest <- gu_content(query = query, tag = "type/article", show_fields = fields) |>
-  arrange(desc(web_publication_date)) |>
-  slice_head(n = 5) |>
-  select(-tags) |>
-  mutate(wordcount = as.integer(wordcount),
-         web_publication_date = force_tz(web_publication_date, "UTC"))
+five_latest <- gu_content(query = query, tag = "type/article", show_fields = fields, `order-by` = "newest", `page-size` = 5) |>
+  mutate(wordcount = as.integer(wordcount))
 ```
 
-- We use `gu_content` to search articles
+- We use `gu_content` to make our request to the Guardian API, the results of which we are storing in `five_latest`.
 - We pass in the `query` we created
-- specifiy that we only want `type/article` (i.e. no videos or live blogs)
-- include the extra fields we are interested in with `show_fields` argument
-- I couldn't get the guardianapi sort by date to work, so the `arrange(...)` line achieves similar
-- `slide_head(n = 5)` then keeps the five latest results only
+- Specifiy that we only want `type/article` (i.e. no videos or live blogs)
+- Include the extra fields we are interested in with `show_fields` argument
+- In the documentation for `gu_content()` you see `...` and explanation: "Use to pass any other parameters to the API". Basically, what this means is anything [listed in Guardian API documentation](https://open-platform.theguardian.com/documentation/search) can be used even if there is not a specific paramter like `query` or `show_fields` for it. If you scroll down the [Guardian API documentation](https://open-platform.theguardian.com/documentation/search) you will see options for "order-by" and "page-size". To use these, we need to surround them with back-ticks - `` ` `` - so we have `` `order-by` `` and `` `page-size` ``.
+- `` `order-by` `` lets us specify that we want results ordered newest first.
+- `` `page-size` `` lets us specify how much results to return together. Most APIs use 'pagination', meaning they only return a certain number of results at a time. Each set of results is referred to as a 'page' - and you have to request each page in turn. So, if your query had 150 results and there are 50 results (i.e. articles) per page, then you would need to make 3 requests. Thankfully, the `guardianapi` package handles this for you. If you do not specify a page-size, it automatically requests all pages as neeed to match the number of results. However, if you only want a set number - such as just the 5 most recently published - rather than all articles, then you can specify a page-size and receive just that number.
+- The Guardian API returns word counts for each article, but R stores these as a character column, so we `mutate()` it `as.integer()` to convert the column into integers.
+
+### Nested Data
+
+However, if you look at the `five_latest` dataframe the above code creates in R you'll see some unexpected for the `tags` column. (Can double-click `five_latest` in RStudio's environment pane in top-right or run `View(five_latest)` in the Console). Scroll along to the `tags` column and you will see values like `<data.frame[17 x 17]>`. This is because the values are not things like "#tag". Instead, the 'tags' for each article is a data frame in-itself.
+
+We can see the tags table for the first article by running:
+
+```{r}
+#| eval: false
+
+five_latest$tags[[1]]
+```
+
+Within it, you will see that the tags data frame includes a lot of information for each tag. The `webTitle` though is the plain-text version of each tag. If we just wanted a list of those for the first article, we can run:
+
+```{r}
+#| eval: false
+
+five_latest$tags[[1]]$webTitle
+```
+
+To break it down:
+
+- `five_latest` is our dataframe
+- `$tags` selects the `tags` column of our dataframe
+- `[[1]]` selects the table in the `tags` column for our first article
+- `$webTitle` selects just the `webTitle` column of that table
+
+As can see, 'nested' data - tables within tables - can get confusing. There are various ways to handle such 'nested' information, with no hard right or wrong ways to do so as it depends on what information is useful for your analysis and how you plan to analyse it. You will see that tags have different types: series, keyword, campaign, etc. Say we were only interested in the keywords and not the rest - and, for the purposes of our analysis, it is OK to have these as a simple list. We could update our dataframe based on that:
+
+```{r}
+#| eval: false
+
+five_latest <- five_latest |>
+  rowwise() |>
+  mutate(keywords = paste(
+    tags$webTitle[tags$type %in% "keyword"],
+    collapse = "; ")) |>
+  ungroup() |>
+  select(-tags)
+```
+
+- `rowwise()` let's us make changes to the `five_latest` data frame one row at a time.
+- For each row, we `mutate()` to create a new `keyword` column.
+- We use `paste()` to say from the existing `tags` tables we want the `webTitle` column value if the row `type` is "keyword". We include `collapse = "; "` to add `; ` between each keywords so we have an easier to read list: "keyword1; keyword2; keyword3".
+- `ungroup()` says we have reached the end of the code to apply for each row in turn.
+- `select(-tags)` removes the original `tags` column from our `five_latest` data frame. Note: This does then remove all the other information the `tags` column contained - which we are doing assuming that's fine for the analysis we are doing.
+
+Take a look at the `five_latest` data frame again - `View(five_latest)` or double-click the data frame in the top-right Environment pane of RStudio - to see the change. Can also run `five_latest$keywords` to see all the keywords for each of the articles.
+
+### Saving Articles and Metadata
 
 Next create a folder for storing the data:
 
 ```{r}
 #| eval: false
 
-folder <- "data/parakeets/articles"
+folder <- "data/parakeets/five_latest"
 dir.create(folder, recursive = TRUE, showWarnings = FALSE)
 ```
 
@@ -129,7 +212,7 @@ Then we can turn the article content into HTML files:
 ```{r}
 #| eval: false
 
-for (i in seq_len(nrow(articles))) {
+for (i in seq_len(nrow(five_latest))) {
   write_lines(
     c('<!doctype html><meta charset="utf-8">',
       paste0("<h1>", articles$web_title[i], "</h1>"),
@@ -141,18 +224,15 @@ for (i in seq_len(nrow(articles))) {
 
 ```
 
+### Comparison
+
 As a comparison, let's do the same but for opinion pieces only:
 
 ```{r}
 #| eval: false
 
-opinion <- gu_content(query = query,
-  tag = "type/article,(tone/comment|tone/editorials)", show_fields = fields) |>
-  arrange(desc(web_publication_date)) |>
-  slice_head(n = 5) |>
-  select(-tags) |>
-  mutate(wordcount = as.integer(wordcount),
-         web_publication_date = force_tz(web_publication_date, "UTC"))
+opinions <- gu_content(query = query, tag = "type/article,(tone/comment|tone/editorials)", show_fields = fields, `order-by` = "newest", `page-size` = 5) |>
+  mutate(wordcount = as.integer(wordcount))
 ```
 
 (and repeat the other steps above for this set)
