@@ -138,7 +138,7 @@ Setting `eval=FALSE` is useful if wanting to include example code or code that w
 
 Importantly, showing the code from your code chunks in your knitted files is what makes the files and their knitted outputs useful reference material, such as notes on what you have learnt. When writing academic articles and research reports for a public audience, though, we usually do not want to include our code, so we use `echo=FALSE` so we have the tables and graphs without the code that made them.
 
-::: {.callout-note collapse=true title="Aside: `#|` options}
+::: {.callout-note collapse="true" title="Aside: `#|` options"}
 You may also come across options written on lines at the top of the chunk, each starting with `#|`. This does the same as writing them inside the curly brackets, and works in R Markdown files with more recent versions of the knitr package.
 
 Note the different way of writing the values: `false` rather than `FALSE`, and a colon rather than `=`:
