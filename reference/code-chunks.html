@@ -747,7 +747,19 @@ whether the code is run or not.
 </div>
 <p>Setting <code>eval=FALSE</code> is useful if wanting to include example code or code that would result in an error message. This makes it incredibly useful when writing your own notes as - for example - you can keep a record of code that resulted in an error message followed by another code chunk that has the working code.</p>
 <p>Importantly, showing the code from your code chunks in your knitted files is what makes the files and their knitted outputs useful reference material, such as notes on what you have learnt. When writing academic articles and research reports for a public audience, though, we usually do not want to include our code, so we use <code>echo=FALSE</code> so we have the tables and graphs without the code that made them.</p>
-<p>::: {.callout-note collapse=true title=“Aside: <code>#|</code> options} You may also come across options written on lines at the top of the chunk, each starting with <code>#|</code>. This does the same as writing them inside the curly brackets, and works in R Markdown files with more recent versions of the knitr package.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Aside: `#|` options">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Aside: <code>#|</code> options
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You may also come across options written on lines at the top of the chunk, each starting with <code>#|</code>. This does the same as writing them inside the curly brackets, and works in R Markdown files with more recent versions of the knitr package.</p>
 <p>Note the different way of writing the values: <code>false</code> rather than <code>FALSE</code>, and a colon rather than <code>=</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r counts}</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
@@ -758,7 +770,10 @@ whether the code is run or not.
 <li>However, a line starting <code>#|</code> holds only one option.</li>
 <li>All <code>#|</code> lines must come first in the chunk, before any code.</li>
 </ul>
-<p>The reason for this is <code>#|</code> is the styled used by Quarto. Quarto is similar to R Markdown but with better support for languages beyond R. I am unsure why they also decided to change the option style, but it has been added to new versions of knitr for R Markdown too for consistency. However, most online R Markdown resources still show the <code>{r OPTIONS}</code> version rather than <code>#|</code>. :::</p>
+<p>The reason for this is <code>#|</code> is the styled used by Quarto. Quarto is similar to R Markdown but with better support for languages beyond R. I am unsure why they also decided to change the option style, but it has been added to new versions of knitr for R Markdown too for consistency. However, most online R Markdown resources still show the <code>{r OPTIONS}</code> version rather than <code>#|</code>.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="setup-chunk" class="level3">
 <h3 class="anchored" data-anchor-id="setup-chunk">Setup code chunk</h3>
