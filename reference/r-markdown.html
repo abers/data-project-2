@@ -67,7 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../reference/code-chunks.html" rel="next">
-<link href="../reference/r-syntax.html" rel="prev">
+<link href="../reference/rstudio.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -488,6 +488,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../reference/rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RStudio</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../reference/r-markdown.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">R Markdown</span></a>
   </div>
@@ -799,7 +805,7 @@ Important
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Template"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"TITLE"</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"YOUR_NAME"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">"19/11/26"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">"20/11/26"</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">output</span><span class="kw">:</span><span class="at"> html_document</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -846,7 +852,7 @@ Important
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2026-11-19 00:26:04 GMT"</code></pre>
+<pre><code>[1] "2026-11-20 14:38:40 GMT"</code></pre>
 </div>
 </div>
 <p>This is common in computing as if you have a list of dates and sort them this will work, whereas if it was Day-Month-Year it would put 1st October before 5th May because 1 comes before 5.</p>
@@ -854,7 +860,7 @@ Important
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">'%d/%m/%y'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "19/11/26"</code></pre>
+<pre><code>[1] "20/11/26"</code></pre>
 </div>
 </div>
 <p>You can run <code><a href="https://rdrr.io/r/base/strptime.html">help(format.POSIXct)</a></code> in the Console and scroll down a bit in the help page to see what other <code>%</code> options are available. (<code>POSIXct</code> is just the class type of the date time object we created, with ‘ct’ standing for calendar time.)</p>
@@ -872,7 +878,7 @@ Important
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">toc_float</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> cosmo</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">"2026-11-19"</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">"2026-11-20"</span></span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li>
@@ -967,7 +973,7 @@ Execution halted</code></pre>
 ! 'data/police_killings.csv' does not exist in current working
   directory:
   '.../project/data'.</code></pre>
-<p>The fix is to move the R Markdown file up to the top-level project folder (see <a href="rstudio.qmd#moving-files">Moving files</a> on the RStudio page). File paths and the working directory are explained on the <a href="base-r.qmd#files">Base R</a> page.</p>
+<p>The fix is to move the R Markdown file up to the top-level project folder (see <a href="../reference/rstudio.html#moving-files">Moving files</a> on the RStudio page). File paths and the working directory are explained on the <a href="base-r.qmd#files">Base R</a> page.</p>
 </section><section id="duplicate-labels" class="level3"><h3 class="anchored" data-anchor-id="duplicate-labels">Two chunks with the same label</h3>
 <p>Chunk labels are optional, but each label can only be used once in a file. It is easy to end up with two when copying and tweaking an existing chunk, such as a second <code>setup</code> chunk copied with its label, and this stops the knit before any code runs:</p>
 <pre><code>Error in parse_block(g[-1], g[1], params.src, markdown_mode) :
@@ -1391,8 +1397,8 @@ Execution halted</code></pre>
     }
   });
   </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="../reference/r-syntax.html" class="pagination-link" aria-label="R syntax">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">R syntax</span>
+      <a href="../reference/rstudio.html" class="pagination-link" aria-label="RStudio">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">RStudio</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta charset="UTF-8">
+<meta name="generator" content="quarto-1.10.19">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>RStudio – Working With Digital Data</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../reference/r-markdown.html" rel="next">
+<link href="../reference/r-syntax.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-87aea89217c7cd55bc57469db99ddb2c.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-26c11f7fe3c9073e01f6c6bfde395c0d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-87aea89217c7cd55bc57469db99ddb2c.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7a9866c799c22348b10fae12bcb71ab7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-aaec8bf477367a5cbb0fe2b26dacc336.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-7a9866c799c22348b10fae12bcb71ab7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/constellate-website-1.0.0/sidebar.js"></script>
+<meta name="constellate-layout-light-surround" content="true">
+<meta name="constellate-sidebar-groups" content="true">
+<meta name="constellate-sidebar-hero-colour" content="true">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/kbd/kbd.js"></script>
+<link href="../site_libs/quarto-contrib/kbd/kbd.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+</head>
+<body class="nav-sidebar docked quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/dont-panic.html"><span class="constell-group-yellow">Reference</span></a></li><li class="breadcrumb-item"><a href="../reference/rstudio.html">RStudio</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><header id="title-block-header" class="quarto-title-block default page-columns page-full"><div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/dont-panic.html"><span class="constell-group-yellow">Reference</span></a></li><li class="breadcrumb-item"><a href="../reference/rstudio.html">RStudio</a></li></ol></nav>
+      <h1 class="title">RStudio</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Working With Digital Data</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Info</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../r-refresher.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Refresher</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 7</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week7/wikipedia.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Wikipedia &amp; WikiData</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 8</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/nourishing-britain.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nourishing Britain</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/newspapers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Newspapers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/guardian-api.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Guardian API</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/reddit-social-media.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reddit (and social media data)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/hansard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hansard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/rss.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RSS feeds</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span class="constell-group-green">Slides</span></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides/week7-social-life-digital-data.html" class="sidebar-item-text sidebar-link" target="_blank">
+ <span class="menu-text">Week 7</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span class="constell-group-mauve">Assessments</span></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../assessments/summative-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Summative Portfolio</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../assessments/formative-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Formative Assessment</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../assessments/assessments-faq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assessments FAQ</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span class="constell-group-yellow">Reference</span></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/dont-panic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Don’t Panic!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/r-syntax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R syntax</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rstudio.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">RStudio</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/r-markdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Markdown</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/code-chunks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Code chunks</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span class="constell-group-red">GenAI</span></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../genai/beware-bull.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Beware 🐂💩</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../genai/rstudio-helper.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RStudio Helper GPT</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li>
+<a href="#what-rstudio-is" id="toc-what-rstudio-is" class="nav-link active" data-scroll-target="#what-rstudio-is">What RStudio is</a>
+  <ul class="collapse">
+<li><a href="#r-and-rstudio" id="toc-r-and-rstudio" class="nav-link" data-scroll-target="#r-and-rstudio">R and RStudio</a></li>
+  <li><a href="#installing" id="toc-installing" class="nav-link" data-scroll-target="#installing">Installing R and RStudio Desktop</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#panes" id="toc-panes" class="nav-link" data-scroll-target="#panes">The RStudio screen</a>
+  <ul class="collapse">
+<li><a href="#source-pane" id="toc-source-pane" class="nav-link" data-scroll-target="#source-pane">Source pane</a></li>
+  <li><a href="#console" id="toc-console" class="nav-link" data-scroll-target="#console">Console</a></li>
+  <li><a href="#environment-pane" id="toc-environment-pane" class="nav-link" data-scroll-target="#environment-pane">Environment pane</a></li>
+  <li><a href="#data-viewer" id="toc-data-viewer" class="nav-link" data-scroll-target="#data-viewer">Viewing a data frame</a></li>
+  <li><a href="#files-pane" id="toc-files-pane" class="nav-link" data-scroll-target="#files-pane">Files pane</a></li>
+  <li><a href="#plots-pane" id="toc-plots-pane" class="nav-link" data-scroll-target="#plots-pane">Plots tab</a></li>
+  <li><a href="#viewer-pane" id="toc-viewer-pane" class="nav-link" data-scroll-target="#viewer-pane">Viewer tab</a></li>
+  <li><a href="#packages-pane" id="toc-packages-pane" class="nav-link" data-scroll-target="#packages-pane">Packages tab</a></li>
+  <li><a href="#help-pane" id="toc-help-pane" class="nav-link" data-scroll-target="#help-pane">Help tab</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#running-code" id="toc-running-code" class="nav-link" data-scroll-target="#running-code">Writing and running code</a>
+  <ul class="collapse">
+<li><a href="#console-or-file" id="toc-console-or-file" class="nav-link" data-scroll-target="#console-or-file">The Console or a file?</a></li>
+  <li><a href="#r-scripts" id="toc-r-scripts" class="nav-link" data-scroll-target="#r-scripts">R scripts</a></li>
+  <li><a href="#running-from-file" id="toc-running-from-file" class="nav-link" data-scroll-target="#running-from-file">Running code from a file</a></li>
+  <li><a href="#saving" id="toc-saving" class="nav-link" data-scroll-target="#saving">Saving files</a></li>
+  </ul>
+</li>
+  <li><a href="#into-word" id="toc-into-word" class="nav-link" data-scroll-target="#into-word">Getting graphs and tables into Word</a></li>
+  <li>
+<a href="#projects" id="toc-projects" class="nav-link" data-scroll-target="#projects">Projects and folders</a>
+  <ul class="collapse">
+<li><a href="#creating-project" id="toc-creating-project" class="nav-link" data-scroll-target="#creating-project">Creating an RStudio Project</a></li>
+  </ul>
+</li>
+  <li><a href="#restarting-r" id="toc-restarting-r" class="nav-link" data-scroll-target="#restarting-r">Restarting R</a></li>
+  <li>
+<a href="#shortcuts" id="toc-shortcuts" class="nav-link" data-scroll-target="#shortcuts">Keyboard shortcuts and cheat sheets</a>
+  <ul class="collapse">
+<li><a href="#keyboard-shortcuts" id="toc-keyboard-shortcuts" class="nav-link" data-scroll-target="#keyboard-shortcuts">Keyboard shortcuts</a></li>
+  <li><a href="#cheat-sheets" id="toc-cheat-sheets" class="nav-link" data-scroll-target="#cheat-sheets">Cheat sheets</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content"><section id="what-rstudio-is" class="level2"><h2 class="anchored" data-anchor-id="what-rstudio-is">What RStudio is</h2>
+<section id="r-and-rstudio" class="level3"><h3 class="anchored" data-anchor-id="r-and-rstudio">R and RStudio</h3>
+<dl>
+<dt><code>R</code></dt>
+<dd>
+a programming language and environment for data analysis.
+</dd>
+<dt><code>RStudio</code></dt>
+<dd>
+a user-interface for working with R.
+</dd>
+</dl>
+<p><code>R</code> and <code>RStudio</code> are two separate things. In short, most of the time in practice you chiefly use RStudio whilst <code>R</code> is doing all the work in the background. RStudio is what is known as an ‘integrated development environment’, which is just a technical way of saying that it makes it easier to write and run R code, manage files, view outputs, and so on within a (somewhat) user-friendly interface.</p>
+<p>Emphasis obviously on the ‘somewhat’. Whilst RStudio does make it ‘easier’ to work with R, it can still feel overwhelming at first.R strictly speaking is merely the programming language. It comes bundled with a ‘command line console’ that interprets and runs the code. Within RStudio this R console runs in the Console pane on the bottom-left. If you opened plain R on your desktop the content of that Console pane is all you would see.</p>
+<p>RStudio then is adding a lot of things around R to make it easier to work with. Importantly, whilst it presents you will a vast array of panes, tabs, and buttons - which adds to sense of overwhelm - you do not need to know what every single one of these does. Just like in Word or Google Docs where you rarely use most of its features, the same is true of RStudio. RStudio is also showing its age a bit that adds to the overwhelm. Once you adjust though to how it works and where to find things it is not as complex as it initially feels.</p>
+</section><section id="installing" class="level3"><h3 class="anchored" data-anchor-id="installing">Installing R and RStudio Desktop</h3>
+<p>There are multiple ways to work with R. One, and by far the most common, is to download both <code>R</code> and RStudio Desktop and install the applications on your local device.</p>
+<p>Install R first, from <a href="https://cran.r-project.org/">CRAN</a> (choose the download for Linux, macOS, or Windows based on the operating system your device uses), and then RStudio Desktop, from <a href="https://posit.co/download/rstudio-desktop/">Posit’s download page</a>.</p>
+<p>After you have both installed you only ever need to open RStudio.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Aside: Alternatives to RStudio">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Aside: Alternatives to RStudio
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>If you have prior experience working with other programming languages you may have used software such as Visual Studio Code. Both RStudio and Visual Studio Code are ‘intergrated development environments’. We use RStudio as it designed specifically for working with R, the most established IDE for working with R, and the one that most textbooks and online resources will assume you are using.</p>
+<p>So, do not worry about other software options if you have never used them before. One of the benefits of open-source software is that you often have a range of different tools you can pick and choose from. For beginners though that can just add to the overwhelm - which is again why RStudio is your best option if coding is general is entirely new for you.</p>
+<p>However, if you have used something like Visual Studio Code before and prefer how it looks and works over RStudio, you might want to take a look at <a href="https://positron.posit.co/">Positron</a>.</p>
+<p>Positron is built ontop of the core components of Visual Studio Code - but, crucially, set up to have a similar panel layout as within RStudio which makes it better for working with R over regular Visual Studio Code.</p>
+</div>
+</div>
+</div>
+</section></section><section id="panes" class="level2"><h2 class="anchored" data-anchor-id="panes">The RStudio screen</h2>
+<p>Your RStudio screen is split in four <strong>important</strong> windows or panes:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="posit_cloud_panels.png" class="img-fluid figure-img" alt="The RStudio window divided into four boxed and numbered panes: an R Markdown file in the top-left, the empty Environment pane in the top-right, the Console in the bottom-left, and the Files tab in the bottom-right listing the files in a project folder."></p>
+<figcaption>RStudio’s four main panes: 1 Source (top-left), 2 Environment (top-right), 3 Console (bottom-left), and 4 Files, Plots, Packages, Help and Viewer (bottom-right).</figcaption></figure>
+</div>
+<ul>
+<li>
+<strong>Pane 1</strong>, top-left: the Source pane, where your R Markdown files and R scripts are displayed in tabs when opened. This is the area where you will be working most of the time. From here, you will write text and code.
+<ul>
+<li>Note, if you are opening RStudio for the first time or created a new project this pane might not be displayed at first. Instead the whole of the left of the screen will be taken up by <strong>Pane 3</strong>. <strong>Pane 1</strong> though will show once you create / open a file.</li>
+</ul>
+</li>
+<li>
+<strong>Pane 2</strong>, top-right: the Environments, and its default ‘Environment’ tab is one of the most useful tabs in this pane, which shows you the active ‘objects’ that you have available/loaded in your current R session.</li>
+<li>
+<strong>Pane 3</strong>, bottom-left: the R Console. This is where you will see most of the results of the code you run.</li>
+<li>
+<strong>Pane 4</strong>, bottom-right: multiple useful tabs, including Files, Plots, Packages, Help and Viewer.</li>
+</ul>
+<p>Whilst it may look intimidating at first, with all of its panes and tabs, once you get used to it you will find this layout supports quickly moving between different tasks.</p>
+<section id="source-pane" class="level3"><h3 class="anchored" data-anchor-id="source-pane">Source pane</h3>
+<p>The top-left is where ‘Sources’, such as R scripts and R Markdown files, are opened. To open an existing file, click it in the Files tab in the bottom-right pane.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="../workbook-reference/images/posit_cloud_lab1_install.png" class="img-fluid figure-img" alt="The whole RStudio window with its menu bar. In the Files tab a file named Lab-01.Rmd is marked 1; it is open in the Source pane, where a yellow banner reads 'Package rmarkdown required but is not installed. Install. Don't Show Again', with Install marked 2."></p>
+<figcaption>Opening a file from the Files tab.</figcaption></figure>
+</div>
+<p>Importantly, if you are creating or opening an R Markdown file for the first time you will also see a yellow banner at the top of the Source pane. In order to ‘knit’ R Markdown files you need to have other R packages installed. So this banner is there just to let you know you still need to install those packages - where you can click ‘Install’ to do so. (If you previously clicked “Don’t Show Again” you can simply run <code>install.packages("rmarkdown")</code> in the Console.)</p>
+<p>Note that you can have multiple files open in the Source pane at the same time. These will appear as a series of tabs along the top of the Source pane. If what you were working on unexpectedly changes, make sure you haven’t accidentally switched tabs to anoother file.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="lab5_tabs.png" class="img-fluid figure-img" alt="The top of the Source pane with three tabs: RMarkdown.Rmd, nilt_test.Rmd and Lab-4-Exploratory.Rmd, above the toolbar with Knit, Run and Publish buttons and the Source and Visual toggle."></p>
+<figcaption>Source pane with tabs open for three R Markdown files.</figcaption></figure>
+</div>
+<p>The toolbar along the top of the Source pane changes with the type of file open: an R Markdown file has a Knit button (see <a href="../reference/r-markdown.html#knitting">Knitting</a>). So if you cannot see the Knit button, the file you currently have open might not be an R Markdown file. You will know it is an R Markdown file as the file-name will have <code>.Rmd</code> at the end of it.</p>
+</section><section id="console" class="level3"><h3 class="anchored" data-anchor-id="console">Console</h3>
+<p>The R Console is placed in the bottom-left pane. You can write and run code here, by typing the code and hitting <kbd title="Enter" aria-hidden="true">Enter</kbd><span class="visually-hidden">Enter</span>:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="rstudio_console_calc.png" class="img-fluid figure-img" alt="The Console pane showing '> 2 + 2' followed by '[1] 4', then '> 5 - 3' followed by '[1] 2', and an empty '>' prompt."></p>
+<figcaption>Running a simple calculations in the Console.</figcaption></figure>
+</div>
+<p>When you run a script, R Markdown file, or individual code chunks, the lines of code they contain are sent by RStudio to the Console. So, you see the code echoed and its raw output there. RStudio will then, as appropriate, add outputs from the Console below code chunks or display them in the bottom-right Viewer pane. Graphs and formatted tables cannot be viewed in the Console (see <a href="#plots-pane">Plots pane</a> and <a href="#viewer-pane">Viewer pane</a> for where they show).</p>
+<p>Sometimes you will want to type code directly in the Console, such as when installing packages or running quick checks with code you do not want to make a permanent part of your R Markdown file. (More on when and why to use the Console rather than a file is covered under <a href="#console-or-file">The Console or a file?</a>.)</p>
+<p>After typing in code and hitting enter to run it, you will not be able to enter more code until it finishes running. Pending on what the code does it can seem to run almost instantenously or for seconds, minutes, or longer. You will know when you can type more code again as the final line in the Console with be a <code>&gt;</code> prompt symbol.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="../workbook-reference/images/lab3_already-tidy.png" class="img-fluid figure-img" alt="The Console pane: the last lines of a tidyverse install ('installing binary package tidyverse ... DONE'), then a comment and an if line beginning with '>', showing code sent from a script, and an empty '>' prompt."></p>
+<figcaption>The Console pane after installing the tidyverse package.</figcaption></figure>
+</div>
+<p>If the <code>&gt;</code> prompt at the start of the Console’s last line changes to <code>+</code>, see <a href="../reference/r-syntax.html#prompts">the <code>&gt;</code> and <code>+</code> prompts</a>.</p>
+<p>If you ever run code that you want to cancel, you can press <kbd title="Esc" aria-hidden="true">Esc</kbd><span class="visually-hidden">Esc</span> in the Console to stop it.</p>
+</section><section id="environment-pane" class="level3"><h3 class="anchored" data-anchor-id="environment-pane">Environment pane</h3>
+<p>The top-right pane includes the main R environment. The environment is the work space where all data and functions you create are stored during a session. When code that reads in a dataset is run, it stores the read dataset as a data frame object in the environment.</p>
+<p>Say we ran the following code:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">c</span> <span class="op">&lt;-</span> <span class="fl">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This creates two objects. An object named <code>a</code> with the value of <code>10</code> and another object named <code>c</code> with a value of <code>3</code>. You’ll know such code has run OK if you can see the data frame in the Environment pane.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="rstudio_lab1_env.png" class="img-fluid figure-img"></p>
+<figcaption>The two named objects we created in the Environment pange</figcaption></figure>
+</div>
+<p>The same is true for all objects that we create with the code we run. For example, if we were working with the <a href="https://github.com/fivethirtyeight/data/tree/master/police-killings">police killings dataset</a>, we could read it in and assign it to an object called <code>police</code>. The object <code>police</code> will then be listed under Data with its 467 observations (i.e.&nbsp;its rows) and 34 variables (i.e.&nbsp;its columns).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="rstudio_lab2_env.png" class="img-fluid figure-img" alt="The Environment pane under the heading Data, listing police with 467 obs. of 34 variables and starwars2 with 87 obs. of 11 variables, each with a blue expand arrow on the left and a table icon on the right."></p>
+<figcaption>The <code>police</code> data frame (and another data frame) listed in the Global Environment.</figcaption></figure>
+</div>
+<p>The broom icon in the Environment pane’s toolbar clears all objects from the environment, leaving it empty. This can be useful if you’ve created a whole bunch of objects and want to remove them all.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="../workbook-reference/images/lab3_clear-env.png" class="img-fluid figure-img" alt="The Environment pane showing 'Environment is empty', with the broom icon in its toolbar beside the memory usage."></p>
+<figcaption>(Global) Environment is empty</figcaption></figure>
+</div>
+<p>Note, whilst this removes objects, it does not remove any loaded libraries (see <a href="base-r.qmd#clearing">Clearing the environment</a> on the Base R page); for a completely fresh start, see <a href="#restarting-r">Restarting R</a>.</p>
+</section><section id="data-viewer" class="level3"><h3 class="anchored" data-anchor-id="data-viewer">Viewing a data frame</h3>
+<p>If you double-click on a data frame in the Environment pane, you can open it up in a new tab like an Excel sheet. If you look in the Environment pane, you will also see a small faded table icon at the far right of the row for the dataframe. Clicking it does the same as double-clicking its name. Similarly, if we had read in our data as a named object called <code>survey_data</code> we could run in the Console <code>View(survey_data)</code> to also open this tab.</p>
+<p>(In general, you will find there are 3+ different ways to do the same thing. This can seem confusing when first learning how to use RStudio, but as you get more experience using RStudio you will find some options more convinient than others pending on your workflow and preferences.)</p>
+<p>So say we were working with data from the NILT 2012 survey and loaded it in as an object named <code>nilt</code>. If you used one of the above options to view this object we would see something similar to the below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="lab3_nilt2.png" class="img-fluid figure-img" alt="The data viewer tab for the nilt data frame: columns serial, househld, rage and spage, each with its variable label in small text under the name, NA values in grey italics, a Filter button, a 'Cols: 1 - 50' control, and 'Showing 1 to 12 of 1,204 entries, 133 total columns' at the bottom."></p>
+<figcaption>Viewing a data frame (the NILT 2012 survey) as a table in the Source pane.</figcaption></figure>
+</div>
+<p>You can scroll down or along your columns in a table-style format, and you can sort the contents of the variables by clicking on the header. But note that you cannot make any changes from here. Once you have finished checking your data, you can get back to your file by either (1) clicking the small ‘x’ to close the tab showing the data frame or (2) clicking on the tab with the name for the file you were working in.</p>
+<p>This gives a nice visual way to get overview of your data, but for many things it remains better to use code. (See <code>glimpse()</code> on the <a href="tidyverse.qmd#glimpse">tidyverse</a> page, and <a href="learning-to-code.qmd#worth-it">why exploring with code soon becomes quicker</a>).</p>
+</section><section id="files-pane" class="level3"><h3 class="anchored" data-anchor-id="files-pane">Files pane</h3>
+<p>In the Files tab (bottom-right) you can see the files and folders that you have in your project. Click a file to open it in the Source pane. You can also click a folder’s name to go into that folder within the Files tab. (Note, you need to click the name and not the folder icon).</p>
+<p>It has a toolbar along the top with buttons for common actions you might want to take. For example, the folder icon with a green plus creates a new folder, opening a ‘New Folder’ dialog for its name:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="lab3_new-folder.png" class="img-fluid figure-img" alt="The Files tab toolbar with the first button, a yellow folder with a green plus, boxed and marked 1."></p>
+<figcaption>The icon to click to create a new folder.</figcaption></figure>
+</div>
+<p>The white document icon to the right of it, with its small drop-down arrow, creates a new file, such as an R Script or an R Markdown file. Importantly, if you click this it will create a new file within the folder currently being viewed within the Files tab, so if you are in a sub-folder and want to actually create a new file in the top-level folder of your project you will need to navigate back to it. You can click the <code>..</code> at the top of the list of items in a folder to navigate up.</p>
+<p>If you click the button to create a new R script file, a ‘Create a New File in Current Directory’ dialog asks for the file’s name, and the file then opens in the Source pane.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="../workbook-reference/images/lab3_new-folder5.png" class="img-fluid figure-img"></p>
+<figcaption>The new file menu in the Files tab.</figcaption></figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="It's all just files and folders">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>It’s all just files and folders
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The files and folders that you see in the Files tab are just ordinary files and folders stored on your computer. It is permanently displayed as it is common to work with multiple files when using R and this is easier than having to repeatedly go through multiple steps like clicking File, Open File, and then using a dialogue to navigate to the folder and file you want. (This is covered in more detail in the next section.)</p>
+<p>It’s become clear though in recent years that this pane causes a lot more issues and confusions than in the past - when it rarely needed any explaining at all. This appears to be due to mix of (1) it is a slightly old style for how to display files and folders, (2) many Microsoft, Google, and Apple apps - store files in proprietary cloud platforms by default, and (3) sadly, a lot of modern software - and especially ‘apps’ - hide the files and folders being used from you.</p>
+<p>The way a lot of ‘contemporary’ software works is convienent, but this convenience is also part of a concerted effort by proprietary companies to obscure how your own data is stored, encourage users to pay for Cloud storage and subscription services, and/or make it more difficult to move to alternatives.</p>
+<p>Don’t worry then if you run into issues or feel confused by the Files tab - you are definitely not alone. Based on my experience teaching, the number of people each year who run into issues with it is still noticeably increasing. As with most things in RStudio though, it may be frustrating at first, but once you get used to it, you will find it is easy to work with. It is more ugly than it is complex.</p>
+</div>
+</div>
+</div>
+<section id="path-bar" class="level4"><h4 class="anchored" data-anchor-id="path-bar">Knowing which folder you are in</h4>
+<p>Near the top of the Files tab you’ll see a folder path, the navigation bar, which shows the folder you are currently looking at. If you named the folder for your data analysis project <code>project</code>, you know you are in the top-level folder if it is the last item named in the folder path.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="lab6_ensure_project.png" class="img-fluid figure-img" alt="The Files tab's navigation bar reading 'Cloud > project', with project highlighted and nothing after it."></p>
+<figcaption>The folder navigation bar showing the top-level project folder, with nothing after it.</figcaption></figure>
+</div>
+<p>If instead it shows something after it, such as “&gt; data”, you are currently in a subfolder and any new file you create will be placed in it rather than the top-level project folder. As a result, if you thought you had create the file in the top-level <code>project</code> folder but accidentally created in the <code>data</code> subfolder you will receive an error message running code like: <code>survey_data &lt;- read_csv("data/survey_data.csv")</code> as instead of looking in “project/data” for the <code>survey_data.csv</code> it will be trying to find something in “project/data/data”. (See <a href="../reference/r-markdown.html#wrong-folder">the file is in the wrong folder</a> on the R Markdown page)</p>
+<p>As a wee reminder, to navigate back up to the top-level folder, click <em>either</em> the ‘..’ at the top of the folder content list or the name of the project folder in the navigation bar.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="lab3_new-folder8.png" class="img-fluid figure-img" alt="The Files tab inside a subfolder named R, with 'project' in the navigation bar and the '..' at the top of the file list both boxed."></p>
+<figcaption>Navigate back to the parent folder with the ‘..’ or the project folder’s name.</figcaption></figure>
+</div>
+</section><section id="moving-files" class="level4"><h4 class="anchored" data-anchor-id="moving-files">Moving files</h4>
+<p>To move a file, such as an R Markdown file that was created in a subfolder by mistake:</p>
+<ol type="1">
+<li>Tick the checkbox next to it in the file list.</li>
+<li>Click ‘More’ in the toolbar at the top of the ‘Files’ tab.</li>
+<li>From the drop-down options select ‘Move…’</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="lab5_move.png" class="img-fluid figure-img" alt="The Files tab inside a data subfolder with Lab-4-Exploratory.Rmd ticked (1), the More menu opened (2), and Move... highlighted (3) among Copy..., Copy To..., Copy Folder Path to Clipboard, Open Selected in Source Pane and Open Each File in New Columns."></p>
+<figcaption>Moving a file</figcaption></figure>
+</div>
+<p>This will open a ‘Choose Folder’ dialog. Click the folder you want to move the file to, such as the top-level project folder, then click ‘Choose’ to confirm.</p>
+<ol start="3" type="1">
+<li>Click the name of the top-level folder for your project. It is called <code>project</code> here but you might have chosen a different name already.</li>
+<li>Click the ‘Choose’ button.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="lab5_move2.png" class="img-fluid figure-img" alt="The Choose Folder dialog with the path cloud > project > data, the word project marked 3, and the Choose button marked 4."></p>
+<figcaption>The Choose Folder dialog</figcaption></figure>
+</div>
+<p>If you have the file open in a tab in the Source pane, you will be asked if you wish to close the tab now that it is moved, click ‘Yes’ and then re-open the file from the parent folder where you have moved it to.</p>
+</section></section><section id="plots-pane" class="level3"><h3 class="anchored" data-anchor-id="plots-pane">Plots tab</h3>
+<p>In the Plots tab you will see a preview of <strong>static</strong> (i.e.&nbsp;images) plots you produce using code the Console or from individual lines of code. Plots made by running a code chunk in an R Markdown file will instead appear below the chunk instead. (See <a href="ggplot.qmd">ggplot</a> for more info on creating plots).</p>
+</section><section id="viewer-pane" class="level3"><h3 class="anchored" data-anchor-id="viewer-pane">Viewer tab</h3>
+<p>The Viewer displays <strong>interactive</strong> outputs, and other web content such as some formatted tables: <code>sumtable()</code> from vtable, for example, opens its table in the Viewer when run in RStudio (see <a href="vtable.qmd#where">vtable</a>). This is because it uses HTML (the coding language used to create webpages) to format its tables.</p>
+</section><section id="packages-pane" class="level3"><h3 class="anchored" data-anchor-id="packages-pane">Packages tab</h3>
+<p>In the Packages tab you have a list of the R packages that are installed on your computer.</p>
+<p>The Install button in its toolbar opens a dialog where you type a package’s name. RStudio then runs <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code> in the Console for you, the same code you would type there yourself (see <a href="base-r.qmd#install">installing a package</a> on the Base R page). The Update button lists the installed packages that have newer versions, for you to tick the ones to update and install them. Clicking a package’s name opens the list of its help pages in the Help tab.</p>
+</section><section id="help-pane" class="level3"><h3 class="anchored" data-anchor-id="help-pane">Help tab</h3>
+<p>The Help tab contains some resources that clarify or expand what each package and its functions do. Running <code><a href="https://rdrr.io/r/utils/help.html">help()</a></code> or <code>?</code> with a package’s or function’s name in the Console opens its help page here. How to read a help page, including the default value of each argument listed under Usage, is on the R syntax page (see <a href="../reference/r-syntax.html#help">finding a function’s help page</a> and <a href="../reference/r-syntax.html#functions">functions and arguments</a>).</p>
+</section></section><section id="running-code" class="level2"><h2 class="anchored" data-anchor-id="running-code">Writing and running code</h2>
+<section id="console-or-file" class="level3"><h3 class="anchored" data-anchor-id="console-or-file">The Console or a file?</h3>
+<p><strong>Note</strong>, it is best practice to have code necessary for your analysis saved in your R Markdown file. The Console is usually used instead to quickly run code that you do not want to store permamently in your file, such as a quick look at a data frame with <code>glimpse()</code>, a check with <code><a href="https://rdrr.io/r/base/class.html">class()</a></code>, or installing a package (see <a href="base-r.qmd#install">installing a package</a>).</p>
+<p>Being able to move from the Source pane (top-left) to the Console (bottom-left) and switch between ‘writing code we want to save in our file’ and ‘writing code to quickly check our data’ is another one of the reasons why RStudio has its different panes. It makes things look overwhelming at first, but provides ways to smoothly move between tasks once you build an understanding of how it works.</p>
+<p>Any code that is needed for your analysis - such as loading packages, reading in files, coercing variables, etc - should be into your file. As code run from the Console is not part of your file, if you gave someone a copy of your file they would not be able to follow and reproduce your analysis. Similarly, if you wanted to turn your analysis into a neatly formatted HTML, PDF, or Word document by ‘knitting’ your R Markdown file, the knitting process will fail - as the knitting process starts from a clean environment and runs all your code in your file from top to bottom. (see <a href="../reference/r-markdown.html#fresh-session">Knitting starts from a clean R session</a></p>
+</section><section id="r-scripts" class="level3"><h3 class="anchored" data-anchor-id="r-scripts">R scripts</h3>
+<p>As well as R Markdown files, RStudio can open and run R scripts (<code>.R</code> files). An R script file is simply a file that contains only R code, like a giant code chunk.</p>
+<p>Some researchers prefer using R scripts and a lot of online resources - especially those aimed at beginners - assume you are working in an R script.</p>
+<p>As explained on the R Markdown pages though, R Markdown is useful (1) when learning R as you can add additional notes etc as you go and (2) you can ‘knit’ your file into neatly formatted HTML, PDF, or Word documents.</p>
+<p>However, even when using R Markdown, there can be times where it still makes sense to also have separate R scripts. Say you have code that is used for downloading a file and doing a lot of initial data cleaning steps over dozens and dozens of lines of code. If you included this code in your R Markdown file, each time you click ‘Run all Code Chunks’ or ‘knit’ your file that file will be repeatedly - and needlessly - downloaded again and again.</p>
+<p>In such situations, you would want to instead move that code to a separate R script that you - and importantly others who you share your files with - only need to run once. When working through lab activities and you are not repeatedly knitting your file, it can remain fine to keep things in an R Markdown file to make it easier to include notes, different examples, etc.</p>
+<p>Where you do decide to split such code though into its own script, it is a common convention to put them in an <code>R</code> subfolder. That way all R markdown files are in the top-level folder, all data in a <code>data</code> subfolder, and all R scripts in an <code>R</code> subfolder.</p>
+<p>To create a new R script, use the new file button in the Files tab (see <a href="#files-pane">Files pane</a>) and choose ‘R Script’, or use File &gt; New File &gt; R Script from the menu bar (a script made this way is saved where you choose when you first save it).</p>
+<section id="script-header" class="level4"><h4 class="anchored" data-anchor-id="script-header">A header for an R script</h4>
+<p>In an R script, it is good practice to include some key information at the top, such as what it does, when it was written, and who wrote it. (see the <a href="../reference/r-markdown.html">R Markdown page</a> for good practice for structuring R Markdown files.)</p>
+<p>Given an R script is all R code, we can add this info using comments (see <a href="../reference/r-syntax.html#comments">comments</a> on the R syntax page):</p>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Template</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## SHORT DESCRIPTION OF WHAT THE SCRIPT DOES</span></span>
+<span></span>
+<span><span class="co"># Date: DATE</span></span>
+<span><span class="co"># Author: YOUR_NAME</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>The <code>##</code>, with an extra <code>#</code>, at the top doesn’t do anything extra or different, we just include it to make visually clear this is the title / short description of what the script does.</p>
+<p>Next, it is good practice to include details for the data set being used, especially important if the data is not our own to ensure proper attribution. In addition to being good practice, it is often a condition for data sets where it is permitted to re-share them elsewhere that you can do so only as long as you include an attribution (i.e.&nbsp;a reference).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># References  -----------------------------------------------------------------</span></span>
+<span></span>
+<span><span class="co"># https://www.ark.ac.uk/teaching/</span></span>
+<span><span class="co"># 2012 Good relations: ARK. Northern Ireland Life and Times Survey Teaching Dataset 2012, Good relations [computer file]. ARK www.ark.ac.uk/nilt [distributor], March 2014.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="code-sections" class="level4"><h4 class="anchored" data-anchor-id="code-sections">Code sections</h4>
+<p>Comments can also divide a script into sections:</p>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Template</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># SECTION_NAME ----------------------------------------------------------------</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>A comment: <code>#</code>, then the name of the section (such as <code>References</code>, <code>Packages</code> or <code>Download and read data</code>), then a space and a row of at least four <code>-</code>.</p>
+<p>The <code>-----</code> after a line such as <code># References</code> helps make the section visually distinct. This may seem odd in a short file, but as the file grows in length, the importance of making it easy to find sections quickly from visual glance starts to make sense.</p>
+<p>As this is a common convention, RStudio also treats any comment line that ends with at least four dashes (<code>----</code>) as a ‘code section’. RStudio adds a small arrow next to its line number that folds the section away, and lists the section in the menu at the bottom left of the Source pane.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="lab3_iftidy.png" class="img-fluid figure-img" alt="An R script in the Source pane: title and author comments, a '# References' line and a '# Packages' line each followed by a row of dashes and each with a small fold arrow by its line number, and line 14 highlighted. The Run button in the toolbar is boxed."></p>
+<figcaption>An R script with ‘References’ and ‘Packages’ code sections (note the small arrows next to lines 6 and 11), and the Run button boxed.</figcaption></figure>
+</div>
+</section></section><section id="running-from-file" class="level3"><h3 class="anchored" data-anchor-id="running-from-file">Running code from a file</h3>
+<p>To run a line of code from a script, put the text cursor on the line with the code and press <kbd title="Ctrl-Enter, mac: Command-Return" aria-hidden="true" data-mac="Command-Return">Ctrl-Enter</kbd><span class="visually-hidden">Ctrl-Enter</span>, or click the Run button at the top of the file. To run several lines, use your mouse to select them and press <kbd title="Ctrl-Enter, mac: Command-Return" aria-hidden="true" data-mac="Command-Return">Ctrl-Enter</kbd><span class="visually-hidden">Ctrl-Enter</span> or click the Run button. After running a line in an R script, RStudio moves the cursor to the next line, so you can step through a file line by line.</p>
+<p>The same works for single lines inside an R Markdown code chunk (‘Run Selected Line(s)’ in the Run button’s drop-down menu). Running whole code chunks, and the other options in that menu, are on the <a href="../reference/code-chunks.html#run-menu">Code chunks</a> page.</p>
+</section><section id="saving" class="level3"><h3 class="anchored" data-anchor-id="saving">Saving files</h3>
+<p>Another small issue which more and more people new to RStudio run into is that you need to manually save all changes made to your files - whereas a lot of contemporary, and especially commerical, software auto-saves changes.</p>
+<p>If you have made changes to a file that are not yet saved, the name of your file in its tab at the top of the Source pane will be written in red with an asterisk at the end, e.g.&nbsp;<code>analysis.Rmd*</code>. If it is in red, save changes by clicking on the disk icon, or with <kbd title="Ctrl-S, mac: Command-S" aria-hidden="true" data-mac="Command-S">Ctrl-S</kbd><span class="visually-hidden">Ctrl-S</span>.</p>
+<p>What can add to this confusion is RStudio does keep a backup of unsaved changes, so you can close RStudio without saves the changes and they are usually still there when you next open RStudio. However, these changes are stored in temporary files until you explicitly save the change, when they will then get written into the file proper.</p>
+<p>If you would rather RStudio auto-saved files for you, under Tools &gt; Global Options &gt; Code &gt; Saving: tick ‘Automatically save when editor loses focus’ and set ‘When editor is idle’ to ‘Save and write changes’.</p>
+</section></section><section id="into-word" class="level2"><h2 class="anchored" data-anchor-id="into-word">Getting graphs and tables into Word</h2>
+<p>It is possible to knit your R Markdown file to HTML, PDF, or Word document. Although I will endlessly praise the sheer wonder and beauty of R Markdown, and the absolute and utter joyful bliss of working with it compared to the endless horrors and frustrations of Microslop Office - I do recognise that it can take time to become comfortable with R Markdown and how to get code, outputs, and formatting to display how you want. It is also easy to have code that works perfectly fine when running individual chunks but run into unexpectedly issues when knitting with vague poorly written error messages that are hard to decipher.</p>
+<p><strong>It is absolutely fine</strong> then if you want to keep the write-up for your analysis in a Word or Google docs document (though I’d also encourage you to give <a href="https://www.libreoffice.org/">LibreOffice</a> a try - it is a free and open-source Office suite) and copy across any plots and tables. There are plenty of experienced researchers who do that too.</p>
+<p>Graphs and tables made in RStudio can be copied into your Word document with just a few clicks.</p>
+<p><strong>A graph in the Plots pane</strong> (made by code run in the Console or an R script):</p>
+<ol type="1">
+<li>Click ‘Export’ in the Plots pane’s toolbar and choose ‘Copy to Clipboard…’.</li>
+<li>In the ‘Copy Plot to Clipboard’ dialog that opens, click ‘Copy Plot’.</li>
+<li>Paste it into your Word document.</li>
+</ol>
+<p>Alternatively, choose ‘Save as Image…’ from the same ‘Export’ menu, give the image a name and save it, then insert the image file into your Word document.</p>
+<p><strong>A graph under a code chunk</strong>: a graph made by running a code chunk shows below the chunk rather than in the Plots pane. You can simply right-click the plot and choose “Copy image” or “Save image as…”.</p>
+<p><strong>A table in the Viewer pane</strong>, such as one made with <code>sumtable()</code> (see <a href="vtable.qmd">vtable</a>) can be exported - in the Viewer tab (bottom-left pane) - clicking the ‘Export’ button and choosing ‘Copy top Clipboard…’ or ‘Save as Image…’. Both of those will then open a dialog with options for image size etc, where the defaults are perfectly fine. <strong>However</strong>, add tables as images within a Word document result in presentation issues - such as fuzzy images or text too small to read easily. You can instead simply use your mouse in the Viewer tab to select all the text for the copy and right-click and select copy. That will copy the raw HTML to your clipboard which most Office apps will auto-convert to a formatted table when you paste it in. This will look a bit ugly at first, but it is a proper table you can now edit and tweak its formatting as can do normally within in an app like Word.</p>
+</section><section id="projects" class="level2"><h2 class="anchored" data-anchor-id="projects">Projects and folders</h2>
+<p>An RStudio Project keeps all the files for one piece of work - the R Markdown files, R scripts, data, and outputs - together in one folder. It is a way to set your work up in a ‘reproducible’ way.</p>
+<section id="creating-project" class="level3"><h3 class="anchored" data-anchor-id="creating-project">Creating an RStudio Project</h3>
+<p>To create a project, use File &gt; New Project… from the menu bar. In the dialog, choose ‘New Directory’, then ‘New Project’, give the project folder a name, choose where on your computer to put it, and click ‘Create Project’. (Choose ‘Existing Directory’ instead to turn a folder you already have into a project folder - which is useful if already downloaded existing files and data you want to use in RStudio.)</p>
+<p>RStudio creates the folder with a file in it called <code>PROJECT_NAME.Rproj</code>, and opens the project. The project’s name is shown at the top right of RStudio.</p>
+<p>When a project opens, R starts in the project’s folder, which becomes the ‘working directory’. That is why code inside the project can refer to files by paths that start from the project folder, such as <code>"data/police_killings.csv"</code> (see <a href="base-r.qmd#paths">file paths</a> and <a href="base-r.qmd#working-directory">the working directory</a> on the Base R page).</p>
+<p>RStudio reopens whichever project you were last in each time you launch it. If you want to switch to another project, use File &gt; Open Project…, pick it from the list of recent projects in the File menu.</p>
+<p>The <code>PROJECT_NAME.Rproj</code> tells RStudio the folder is a project <em>and</em> stores any project preferences. In most cases the defaults are perfectly fine to go with. You can see what options you can change in Tools &gt; Project Options …</p>
+</section></section><section id="restarting-r" class="level2"><h2 class="anchored" data-anchor-id="restarting-r">Restarting R</h2>
+<p>The R environment maintains the results of any previously run code, so you do not need to keep re-running everything from the top. The flip side is that objects you created and then removed the code for, or packages you loaded only in the Console, are still there.</p>
+<p>Restarting R gives you a fresh R session - i.e.&nbsp;an empty Environment and no packages loaded. Use Session &gt; Clear Workspace…</p>
+<p>Your files are not affected, and you can then run your code again from the top.</p>
+<p>In an R Markdown file, ‘Restart R and Run All Chunks’ in the Run button’s drop-down menu does this in one step (see <a href="../reference/code-chunks.html#run-menu">the Run menu</a> and why it helps when debugging is under <a href="learning-to-code.qmd#from-the-top">running your code again from the top</a>). Note though, that recent versions of RStudio by default reload all objects after R Restarts, so sometimes you might still need to manually ‘Clear Workspace…’ and then ‘Run all Chunks’.</p>
+</section><section id="shortcuts" class="level2"><h2 class="anchored" data-anchor-id="shortcuts">Keyboard shortcuts and cheat sheets</h2>
+<section id="keyboard-shortcuts" class="level3"><h3 class="anchored" data-anchor-id="keyboard-shortcuts">Keyboard shortcuts</h3>
+<p>Many of RStudio’s options have keyboard shortcuts listed next to them in the menus. Learning these pays off long-term as you will be able to write and run your code without needing to move your hands from the keyboard.</p>
+<p>(If you think my evangelicising about the wonders of code and joys of R Markdown is bad, don’t get me started on why I believe the mouse is one of the worst inventions in the history of computing… As with other things, don’t worry if you prefer using the mouse as trying to learn R, RStudio, <em>and</em> keyboard shortcuts is too much at once. That’s perfectly normal. I am more flagging these exist as once you build experience and gain confidence keyboard shortcuts become really powerful and let’s you maintain more of a ‘flow’ when working on your analysis.)</p>
+<p>From the ‘Help’ menu, the option ‘Keyboard Shortcuts Help’ (<kbd title="Alt-Shift-K, mac: Option-Shift-K" aria-hidden="true" data-mac="Option-Shift-K">Alt-Shift-K</kbd><span class="visually-hidden">Alt-Shift-K</span>) displays a screen with most of the shortcuts available within RStudio. This also includes a link to ‘See All Shortcuts…’.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="keyboard-shortcuts.png" class="img-fluid figure-img" alt="RStudio's dark Keyboard Shortcut Quick Reference overlay, with columns of shortcuts headed Tabs, Panes, Files, Source Navigation, Execute, Source Editor, Debug, Source Control, Build, Console, Terminal and Other, and a 'See All Shortcuts...' link at the top right."></p>
+<figcaption>The Keyboard Shortcut Quick Reference, opened from Help &gt; Keyboard Shortcuts Help (Windows shortcuts shown).</figcaption></figure>
+</div>
+<p>Here are also some of the common shortcuts covered across these reference pages:</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>What it does</th>
+<th>Shortcut</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Run the current line, or the selected lines</td>
+<td><p><kbd title="Ctrl-Enter, mac: Command-Return" aria-hidden="true" data-mac="Command-Return">Ctrl-Enter</kbd><span class="visually-hidden">Ctrl-Enter</span></p></td>
+</tr>
+<tr class="even">
+<td>Run the current code chunk (see <a href="../reference/code-chunks.html#run-chunk">Code chunks</a>)</td>
+<td><p><kbd title="Ctrl-Alt-C, mac: Option-Command-C" aria-hidden="true" data-mac="Option-Command-C">Ctrl-Alt-C</kbd><span class="visually-hidden">Ctrl-Alt-C</span></p></td>
+</tr>
+<tr class="odd">
+<td>Insert a new code chunk (see <a href="../reference/code-chunks.html#inserting">Code chunks</a>)</td>
+<td><p><kbd title="Ctrl-Alt-I, mac: Option-Command-I" aria-hidden="true" data-mac="Option-Command-I">Ctrl-Alt-I</kbd><span class="visually-hidden">Ctrl-Alt-I</span></p></td>
+</tr>
+<tr class="even">
+<td>Keyboard Shortcuts Help</td>
+<td><p><kbd title="Alt-Shift-K, mac: Option-Shift-K" aria-hidden="true" data-mac="Option-Shift-K">Alt-Shift-K</kbd><span class="visually-hidden">Alt-Shift-K</span></p></td>
+</tr>
+<tr class="odd">
+<td><span class="new">Save the current file</span></td>
+<td><span class="new"><kbd title="Ctrl-S, mac: Command-S" aria-hidden="true" data-mac="Command-S">Ctrl-S</kbd><span class="visually-hidden">Ctrl-S</span></span></td>
+</tr>
+<tr class="even">
+<td><span class="new">Insert the pipe, <code>|&gt;</code></span></td>
+<td><span class="new"><kbd title="Ctrl-Shift-M, mac: Shift-Command-M" aria-hidden="true" data-mac="Shift-Command-M">Ctrl-Shift-M</kbd><span class="visually-hidden">Ctrl-Shift-M</span></span></td>
+</tr>
+<tr class="odd">
+<td><span class="new">Insert the assignment arrow, <code>&lt;-</code></span></td>
+<td><span class="new"><kbd title="Alt--, mac: Option--" aria-hidden="true" data-mac="Option--">Alt--</kbd><span class="visually-hidden">Alt--</span></span></td>
+</tr>
+<tr class="even">
+<td><span class="new">Turn the selected lines into comments, or back</span></td>
+<td><span class="new"><kbd title="Ctrl-Shift-C, mac: Shift-Command-C" aria-hidden="true" data-mac="Shift-Command-C">Ctrl-Shift-C</kbd><span class="visually-hidden">Ctrl-Shift-C</span></span></td>
+</tr>
+<tr class="odd">
+<td><span class="new">Restart R</span></td>
+<td><span class="new"><kbd title="Ctrl-Shift-F10, mac: Shift-Command-0" aria-hidden="true" data-mac="Shift-Command-0">Ctrl-Shift-F10</kbd><span class="visually-hidden">Ctrl-Shift-F10</span></span></td>
+</tr>
+<tr class="even">
+<td><span class="new">Cancel unfinished code or stop running code in the Console</span></td>
+<td><span class="new"><kbd title="Esc" aria-hidden="true">Esc</kbd><span class="visually-hidden">Esc</span></span></td>
+</tr>
+<tr class="odd">
+<td><span class="new">Clear the Console</span></td>
+<td><span class="new"><kbd title="Ctrl-L" aria-hidden="true">Ctrl-L</kbd><span class="visually-hidden">Ctrl-L</span></span></td>
+</tr>
+</tbody>
+</table>
+<p>Note, on some Windows computers the ‘Insert a new code chunk’ annoyingly does not work as it is already used by a Windows shortcut to insert an alternative version of the letter ‘i’ that is used in some languages. I think this issue has never been fixed as it may be unique to UK keyboards, whereas most of the developers of RStudio are based elsewhere.</p>
+</section><section id="cheat-sheets" class="level3"><h3 class="anchored" data-anchor-id="cheat-sheets">Cheat sheets</h3>
+<p>It is also possible to access cheat sheets for R Markdown (as well as ones for ggplot2 and dplyr!) from within RStudio, from Help &gt; Cheat Sheets:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="markdowncheetsheet.png" class="img-fluid figure-img" alt="RStudio's Help menu open with Cheat Sheets highlighted and its submenu listing RStudio IDE Cheat Sheet, Data Transformation with dplyr, Data Visualization with ggplot2, List manipulation with purrr, Package Development with devtools, Web Applications with shiny, Interfacing Spark with sparklyr, R Markdown Cheat Sheet, R Markdown Reference Guide and Browse Cheat Sheets...."></p>
+<figcaption>Help &gt; Cheat Sheets, listing the RStudio IDE, dplyr, ggplot2 and R Markdown cheat sheets among others.</figcaption></figure>
+</div>
+<p>The ‘RStudio IDE Cheat Sheet’ at the top of the list is the one for RStudio itself with a shorter overviewer of its panes etc!</p>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/abers\.github\.io\/data-project-2\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../reference/r-syntax.html" class="pagination-link" aria-label="R syntax">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">R syntax</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../reference/r-markdown.html" class="pagination-link" aria-label="R Markdown">
+        <span class="nav-page-text">R Markdown</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Made with <a href="https://www.r-project.org/" class="linked-icon"><i class="fa-brands fa-r-project" aria-label="R"></i></a> and <img src="../site_libs/quarto-contrib/quarto-project/abers/constellate/assets/quarto-logo.svg" style="height:1em" alt="Quarto"><a href="https://quarto.org">Quarto</a></p>
+</div>   
+    <div class="nav-footer-center">
+<p>Licensed under <span aria-hidden="true"><i class="fa-brands fa-creative-commons" aria-label="creative-commons"></i> <i class="fa-brands fa-creative-commons-by" aria-label="creative-commons-by"></i> <i class="fa-brands fa-creative-commons-sa" aria-label="creative-commons-sa"></i></span> <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons BY-SA 4.0</a></p>
+</div>
+    <div class="nav-footer-right">
+<p>Colour scheme <img src="../site_libs/quarto-contrib/quarto-project/abers/constellate/assets/cat-logo.png" style="height:1em" alt="Catppuccin"><a href="https://catppuccin.com/">Catppuccin</a></p>
+</div>
+  </div>
+</footer><script id="slide-variant-manifest" src="../slide-variants.js"></script>
+
+
+<script src="../site_libs/quarto-contrib/slide-variants-1.0.0/slide-links.js"></script>
+</body></html>
