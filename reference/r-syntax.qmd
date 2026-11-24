@@ -15,7 +15,7 @@ This page covers the basic aspects of R's syntax and some common symbols might s
 
 ## What is R?
 
-R is a programming language and environment specifically designed for data analysis. Computer code is used for working with and analysing data, which when run is passed to an R [interpreter](https://en.wikipedia.org/wiki/Interpreter_(computing) to execute. Inside RStudio, the Console panel is running the R interpreter in an [interactive shell](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop). It runs in a 'read-eval-print' loop, which basically just means you can type code into it, which is then read, evaluated, and any output - or error messages - printed (i.e. displayed) on the screen. After it finishes running code passed to it, it waits for any further code being passed to it. Within RStudio, when you 'run' a code chunk, RStudio passes the code to R and copies any output underneath the code chunk. R also maintains an active 'environment' whilst it is running, which is a collection of all objects - such as data frames, variables, loaded packages - created by any code that was run so far.
+R is a programming language and environment specifically designed for data analysis. Computer code is used for working with and analysing data, which when run is passed to an R [interpreter](https://en.wikipedia.org/wiki/Interpreter_(computing)) to execute. Inside RStudio, the Console panel is running the R interpreter in an [interactive shell](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop). It runs in a 'read-eval-print' loop, which basically just means you can type code into it, which is then read, evaluated, and any output - or error messages - printed (i.e. displayed) on the screen. After it finishes running code passed to it, it waits for any further code being passed to it. Within RStudio, when you 'run' a code chunk, RStudio passes the code to R and copies any output underneath the code chunk. R also maintains an active 'environment' whilst it is running, which is a collection of all objects - such as data frames, variables, loaded packages - created by any code that was run so far.
 
 ### Coding and Programming
 
@@ -478,7 +478,7 @@ For what we cover on the programme, you will not need to write your own function
 
 ```{r}
 add_numbers <- function(x, y) {
-  paste0("The value of ", x, " plus ", y, " is: ", x + y)
+  paste("The value of", x, "plus", y, "is:", x + y)
 }
 ```
 
@@ -487,7 +487,7 @@ Here:
 - `add_numbers` is the name of the function we want to create
 - `<- function(x, y)` declares we want to create a function that takes two arguments, we will name `x` and `y`. (Argument names - with a few exceptions - can be pretty much anything you want.)
 - all the code between the `{}` curly braces is the reuseable instructions for the function we are creating, which to keep things simple for this first example we just have a single line of code
-- `paste0()` is an existing function to combine text and output together. Here we use it to combine strings of text, the original values for the arguments, and the value of the two arguments added together.
+- `paste()` is an existing function to combine text and output together. Here we use it to combine strings of text, the original values for the arguments, and the value of the two arguments added together.
 
 So, let's test it:
 
@@ -495,6 +495,74 @@ So, let's test it:
 add_numbers(1, 2)
 add_numbers(5, 5)
 ```
+
+::: {.callout-note collapse="true" title="Aside: `paste()` and `paste0()`"}
+You may have spotted in R code across the examples on these webpages and elsewhere two functions, `paste()` and `paste0()` and wondered (1) what is the `0` for and (2) why are there two 'paste' functions?
+
+If you look at the `paste()` documentation you will see both of these functions share the same documentation page. Below is a simplified version of the usage examples from the documentation with just the two parameters of interest to us:
+
+```{r}
+#| eval: false
+
+paste(..., sep = " ")
+paste0(...)
+```
+
+To break it down:
+
+- `...` means "any number of arguments". This is how we can write things like `paste("The value of x is:", x)` or as we did above `paste("The value of", x, "plus", y, "is:", x + y)`. We can pass as much elements separated by commas as we want and `paste()` will join them together.
+- `sep = " "` is a named argument (covered in more detail in the next section). We do not need to specify a value for it as, by default, it's value is `" "` - an empty space. `sep` is sort for separator. If we wanted, we could write something like `paste("This", "That", sep = "+")` and R would return "This+That".
+
+So, what about `paste0()`? You'll notice it has no `sep = " "` named argument. This is because all `paste0()` does is combine the items past to it with no separation.
+
+Why would you want to do that? Say you were working with strings of text where you want no separation between the items. With paste you would need to write `paste(item1, item2, sep ="")` - where `""` has no space between the quotation marks - but with `paste0()` you can simply write `paste0(item1, item2)`.
+
+All `paste0()` is then is a nice utility function that if we were writing a lot of code where we do not want separators between the items it saves us having to write `sep = ""` again and again and again. And often what you will find is if something is overly repetitive in coding it is highly likely there is way to do it with less code.
+
+To go through some examples then -
+
+Regular `paste()` using the default `sep` value:
+
+```{r}
+paste("This", "and", "that.")
+```
+
+`paste()` with us specifying a value for `sep`:
+
+```{r}
+paste("This", "That", sep = "+")
+```
+
+And `paste0`:
+
+```{r}
+domain <- "example.com"
+about <- "/about.html"
+
+paste0(domain, about)
+```
+
+The above is a simplified example but you will see `paste0()` used a lot in code for webscraping and working with APIs as you will be wanting to construct web address and API calls which have no spaces in them.
+
+For instance, imagine we had a list of domains and pages we were interested in:
+
+```{r}
+domains <- c("example.com", "another-example.com")
+pages <- c("/index.html", "/about.html")
+
+for (domain in domains) {
+  for (page in pages) {
+    print(paste0(domain, page))
+  }
+}
+```
+
+In the above we are using what is known as a "for loop". The `for (domain in domains)` means "for each item in the `domains` object we want to do the following...". Everything between the curly braces - `{}` - is then repeated for each item in turn. So in our case first for "example.com" and then "another-example.com".
+
+We also use "nesting", running a for loop within a for loop with `for (page in pages)`. So what our code is effectively saying is "for each domain in our list of domains we want to do the following with each page in our list of pages".
+
+Again, I have kept the example relatively simple so can see how this type of code works. Without loops we could have simply written the 4 web addresses manually. However, say our list of domains was 12 items and our list of pages 6. Without the for loops we would have 72 items to manually create... or we can automate constructing all of them with just 2 for loops.
+:::
 
 ### Functions with multiple arguments
 

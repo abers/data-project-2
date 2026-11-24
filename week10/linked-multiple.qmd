@@ -1,0 +1,209 @@
+---
+title: "Linking multiple datasets"
+execute:
+  warning: false
+  message: false
+---
+
+Say we were interested in whether there is a relationship between an area's deprivation level and the energy efficiency of housing. We could model that and control for variables such as age of building, whether house/flat, and tenure type (e.g. homeownership, private rent, social rent).
+
+The Scottish Government publishes [Energy Performance Certificates data](https://data.gov.scot/dataset/domestic_energy_performance_certificates___dataset_to_q1_2026) as a large 188mb 7z file. Manually download it and extract `Q1_2026.csv`, `Q2_2026.csv`, and `Q3_2026.csv` files into the `data` subfolder of your R project. Each csv file contains all energy certifications issued in a given quarter. These are issued when a dwelling is built, sold, let to a new tenant, and under various grant schemes and other potential reasons. We will be using the "SAP rating" which is calculated based on energy efficiency of the building and energy costs.
+
+You might be more used to seeing SAP ratings via the bands:
+
+  | Band | Rating     |
+  | ---- | ---------- |
+  | A    | 92 or more |
+  | B    | 81 to 91   |
+  | C    | 69 to 80   |
+  | D    | 55 to 68   |
+  | E    | 39 to 54   |
+  | F    | 21 to 38   |
+  | G    | 1 to 20    |
+
+See [SAP specification](https://files.bregroup.com/SAP/SAP-2012_9-92.pdf), Table 14 "Rating bands" (page 231).
+
+(Note, in practice which data to use would depend on your research questions. To keep things relatively simple to cover linking datasets, we will just assume we are interested in '2026 to date'.)
+
+Importantly, we can link this Scottish Government EPC data with the SIMD data used on Data Project 1.
+
+If using same R project folder as used for DP1 then reuse the SIMD Excel file - with the name you saved it as.
+
+If working in a new R project:
+
+1. Create a data directory:
+
+```{r}
+dir.create("data", showWarnings = FALSE)
+```
+
+2. Grab a copy of the SIMD data:
+
+```{r}
+#| eval: false
+
+download.file("https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2020/01/scottish-index-of-multiple-deprivation-2020-indicator-data/documents/simd_2020_indicators/simd_2020_indicators/govscot%3Adocument/SIMD%2B2020v2%2B-%2Bindicators.xlsx",
+              "data/simd2020_indicators.xlsx", mode = "wb")
+```
+
+Next we install the packages we needed - only installing those not previously installed:
+
+```{r}
+#| eval: false
+
+install.packages(c("tidyverse", "janitor", "vtable", "modelsummary"))
+```
+
+Then we laod the packages we need:
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(vtable)
+library(modelsummary)
+```
+
+Followed by reading in our datasets:
+
+```{r}
+simd <- read_excel("data/simd2020_indicators.xlsx", sheet = "Data", na = "*") |> clean_names()
+
+epc_raw <- read_csv(c("data/Q1 2026.csv", "data/Q2 2026.csv", "data/Q3 2026.csv"),
+                    skip = 1, id = "file") |> clean_names()
+```
+
+If reusing the file from DP1, ensure to edit the first line to match name you saved the SIMD under.
+
+As can see, as the EPC data is consistent across files we can simply read the files of interest together. If there were any changes in the columns used across the csv files we would instead need to load them by which are consistent and then do further steps to link them. We `skip = 1` as if you look at the files you will see they have two header rows. There are different ways to handle that, but this is easy option that suits our purposes. The `id = "file"` adds a column with info for which file each row comes from, which is not always needed, but useful to have in many circumstances. We also use `_raw` as at this stage we just have the 'raw' csv read in.
+
+`clean_names()` is from the `janitor` package we used in previous week. It has a function to covert all variable names like `Data Zone 2011` to `data_zone_2011`. Though we still end up with some overly long column names we will want to rename.
+
+Next we can select - and rename- the variables of interest from the EPC data:
+
+```{r}
+epc <- epc_raw |>
+  select(rating = current_energy_efficiency_rating,
+         tenure,
+         type = property_type,
+         age = part_1_construction_age_band,
+         reason = transaction_type,
+         data_zone = data_zone_2011)
+```
+
+Now we can see what the reasons were for a new certificate:
+
+```{r}
+epc |> count(reason)
+```
+
+(Note, we could also write the above as `count(epc, reason)` without pipes.)
+
+If we look at `tenure` we will also see a lot of unknowns:
+
+```{r}
+table(epc$tenure)
+```
+
+There can be various reasons for that, which would be worth investing further, but again to keep things relatively simple we will simply treat these as NA, which will also result in these rows being dropped from our regression models.
+
+```{r}
+epc <- epc |> mutate(tenure = na_if(tenure, "unknown"))
+```
+
+Next if we look at our data zones, we will see we cannot do a simple match as the EPC data includes more than just the direct code:
+
+```{r}
+head(epc$data_zone)
+```
+
+And SIMD:
+
+```{r}
+head(simd$data_zone)
+```
+
+Fortunately though the 9 character code we want appears at the start of the EPC data, so we can simply edit the colum to only keep those first 9 characters:
+
+```{r}
+epc <- epc |> mutate(data_zone = str_sub(data_zone, 1, 9))
+```
+
+Now we can create a new dwelling data frame based on EPC which links to the SIMD by their `data_zone` column:
+
+```{r}
+dwellings <- epc |> left_join(simd, by = "data_zone")
+# And a quick count of number of dwellings by zone
+dwellings |> count(data_zone, sort = TRUE)
+```
+
+There is one (small) issue though with our data. We can see it if check for rows without a data zone:
+
+```{r}
+count(dwellings, is.na(data_zone))
+```
+
+Looking at reasons for a new rating, it is unclear why some do not have a data zone, but most are new dwellings:
+
+```{r}
+count(dwellings, is.na(income_rate), reason)
+```
+
+I could not find better info skimming the documentation, where there might be clearer info on why - but in some cases you will run into situations where the full reasons behind missing data is unclear.
+
+The income domain is % of people in a data zone receiving certain benefits - see [SIMD technical notes PDF](https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2020/09/simd-2020-technical-notes/documents/simd-2020-technical-notes/simd-2020-technical-notes/govscot%3Adocument/SIMD%2B2020%2Btechnical%2Bnotes.pdf). Rather than direct % it is stored in format of `0.10` for 10%. So to make things more directly readable we can then `* 100`.
+
+```{r}
+dwellings <- dwellings |> mutate(income_domain = income_rate * 100)
+```
+
+Next let's look at some descriptive stats for our data:
+
+```{r}
+dwellings |>
+  select(rating, income_domain, tenure, type) |>
+  sumtable(labels = c("Energy efficiency rating (SAP)",
+                      "Income deprivation, & of data zone",
+                      "Tenure",
+                      "Property type"))
+```
+
+And % meeting the income domain's measure of deprivation and energy rating by dwelling tenure:
+
+```{r}
+dwellings |>
+  group_by(tenure) |>
+  summarise(income_domain = mean(income_domain, na.rm = TRUE), rating = mean(rating))
+```
+
+Next we can look at scatterplot of our two main variables of interest, the income domain measure of deprivation and energy rating:
+
+```{r}
+ggplot(dwellings, aes(x = income_domain, y = rating)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(x = "Income domain, % of data zone population",
+       y = "Energy efficiency rating (SAP)")
+```
+
+(Note: So not necessarily the best data for multiple regression which want to cover this week too, so I'll quickly go through rest of code to show the regression results so have time to work on page with better examples.)
+
+```{r}
+model_dwellings <- dwellings |>
+  drop_na(income_domain, tenure, age) |>
+  mutate(age = fct_relevel(age, "before 1919"))
+```
+
+(We are dropping so our two models use same sample.)
+
+```{r}
+model_simp <- lm(rating ~ income_domain, data = model_dwellings)
+model_mult <- lm(rating ~ income_domain + tenure + type + age, data = model_dwellings)
+summary(model_mult)
+```
+
+```{r}
+modelsummary(list("Simple" = model_simp, "Multiple" = model_mult), gof_map = c("nobs", "r.squared", "adj.r.squared"))
+```
+
+(Note, the above is merely to compare the simple with multiple linear regression model)

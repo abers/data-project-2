@@ -1,0 +1,145 @@
+---
+title: "Households without a car"
+execute:
+  warning: false
+  message: false
+---
+
+Say we were interested in relationship between areas defined as deprived on the SIMD income domain and whether they are more likely to include households without a car / van.
+
+We could combine the SIMD and Consesus data for that. (Note, we are using 2011 rather than 2022 just as it is slightly easier to work with. If I find time, I'll add code for extra step needed for 2022 data at the end.)
+
+Lets grab our data - this time also using code to grab files from the zip files:
+
+```{r}
+#| eval: false
+
+download.file("https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2020/01/scottish-index-of-multiple-deprivation-2020-indicator-data/documents/simd_2020_indicators/simd_2020_indicators/govscot%3Adocument/SIMD%2B2020v2%2B-%2Bindicators.xlsx",
+              "data/simd2020_indicators.xlsx", mode = "wb")
+download.file("https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2020/01/scottish-index-of-multiple-deprivation-2020-data-zone-look-up-file/documents/scottish-index-of-multiple-deprivation-data-zone-look-up/scottish-index-of-multiple-deprivation-data-zone-look-up/govscot%3Adocument/SIMD%2B2020v2%2B-%2Bdatazone%2Blookup%2B-%2Bupdated%2B2025.xlsx",
+              "data/simd_datazone_lookup.xlsx", mode = "wb")
+download.file("https://www.scotlandscensus.gov.uk/media/zz8620250217zjs8/SNS%20Data%20Zone%202011%20blk.zip",
+              "data/census_2011_data_zones.zip", mode = "wb")
+unzip("data/census_2011_data_zones.zip", files = c("KS404SC.csv", "KS105SC.csv"), exdir = "data")
+```
+
+- SIMD indicators with with one per data zone. Income domain is based on % receiving certain benefits.
+- SIMD data zone lookup includes URname with urban/rual classifications (peeople in rural areas may be more likely to own vehicle)
+- census KS404SC includes car/van ownership / available for use by one or more household members
+- KS105SC is household composition
+
+(If downloads timeout, then run `options(timeout = 600)` and try the downloads that failed again.)
+
+Load our packages (installing any if needed):
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(vtable)
+library(modelsummary)
+```
+
+Read in our data and select our variables of interest:
+
+```{r}
+simd_ind <- read_excel("data/simd2020_indicators.xlsx", sheet = "Data", na = "*") |>
+  clean_names()
+simd_zones <- read_excel("data/simd_datazone_lookup.xlsx", sheet = "SIMD 2020v2 DZ lookup data") |>
+  clean_names() |>
+  select(data_zone = dz, zone_name = d_zname, urban_rural = u_rname)
+cars <- read_csv("data/KS404SC.csv") |>
+  clean_names() |>
+  select(data_zone = x1, households = all_households,
+         no_car = number_of_cars_or_vans_in_household_no_cars_or_vans)
+household_types <- read_csv("data/KS105SC.csv") |>
+  clean_names() |>
+  select(data_zone = x1, one_person_65 = one_person_household_aged_65_and_over,
+         one_person_under65 = one_person_household_aged_under_65,
+         all_student = other_households_all_full_time_students)
+```
+
+Link all the files:
+
+```{r}
+cars_simd <- simd_ind |>
+  left_join(simd_zones, by = "data_zone") |>
+  left_join(cars, by = "data_zone") |>
+  left_join(household_types, by = "data_zone")
+```
+
+Some more wrangling to create various %s:
+
+```{r}
+cars_simd <- cars_simd |>
+  mutate(no_car_pct = no_car / households * 100,
+         income_pct = income_count / total_population * 100,
+         one_person_pct = (one_person_65 + one_person_under65) / households * 100,
+         all_student_pct = all_student / households * 100) |>
+  select(data_zone, zone_name, council_area, no_car_pct, income_pct, urban_rural, one_person_pct, all_student_pct) |>
+  drop_na(income_pct)
+```
+
+Quick scattersplot:
+
+```{r}
+ggplot(cars_simd, aes(x = income_pct, y = no_car_pct)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = "lm") +
+  labs(x = "Income domain (%)", y = "Households with no car or van (%)")
+```
+
+(We use alpha here just to make the dots slightly easier to read given number + clustering)
+
+Can also do similar for each rural/urban area type:
+
+```{r}
+ggplot(cars_simd, aes(x = income_pct, y = no_car_pct)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ urban_rural) +
+  labs(x = "Income deprived (%)", y = "Households with no car or van (%)")
+```
+
+- `facet_wrap()` is doing the hard work for us here, creating facets of the plot based on the `urban_rural` variable.
+
+Some descriptive stats:
+
+```{r}
+labs <- data.frame(
+  no_car_pct = "Households with no car or van (%)",
+  income_pct = "Income deprived (%)",
+  one_person_pct = "One-person households (%)",
+  all_student_pct = "All-student households (%)",
+  urban_rural = "Urban rural class")
+sumtable(cars_simd, labels = labs)
+```
+
+Three example models:
+
+```{r}
+model_simp <- lm(no_car_pct ~ income_pct, data = cars_simd)
+model_mult1 <- lm(no_car_pct ~ income_pct + urban_rural, data = cars_simd)
+model_mult2 <- lm(no_car_pct ~ income_pct + urban_rural + one_person_pct, data = cars_simd)
+summary(model_mult2)
+```
+
+```{r}
+modelsummary(list("Model 1" = model_simp, "Model 2" = model_mult1, "Model 3" = model_mult2),
+             coef_map = c("income_pct" = "Income domain (%)",
+                          "urban_ruralLarge Urban Areas" = "Large urban areas",
+                          "urban_ruralOther Urban Areas" = "Other urban areas",
+                          "urban_ruralAccessible Small Towns" = "Accessible small towns",
+                          "urban_ruralRemote Small Towns" = "Remote small towns",
+                          "urban_ruralRemote Rural" = "Remote rural",
+                          "one_person_pct" = "One-person households (%)",
+                          "(Intercept)" = "Constant"),
+             gof_map = c("nobs", "r.squared", "adj.r.squared", "rmse", "F"),
+             stars = TRUE)
+```
+
+```{r}
+plot(model_mult2, which = c(1, 2, 4))
+```
+
+- `plot()` lets us quickly pick residual checks

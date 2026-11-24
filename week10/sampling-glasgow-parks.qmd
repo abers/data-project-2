@@ -1,0 +1,117 @@
+---
+title: "Sampling Glasgow Parks"
+execute:
+  warning: false
+  message: false
+---
+
+Saw we were doing ethnography of Glasgow parks and as part of that wanted to select parks across different areas based on SIMD data zones.
+
+We can use teh following data:
+
+- An SIMD map file with the levels of deprivation.
+- [OS Open Greenspace](https://osdatahub.os.uk/data/downloads/open/OpenGreenspace) will info including land "designed, constructed, managed, and maintained as a public park or garden".
+
+We can download and 'unzip' the data with the following:
+
+```{r}
+#| eval: false
+
+download.file("https://maps.gov.scot/ATOM/shapefiles/SG_SIMD_2020.zip",
+              "data/simd_2020.zip", mode = "wb")
+download.file("https://api.os.uk/downloads/v1/products/OpenGreenspace/downloads?area=NS&format=ESRI%C2%AE+Shapefile&redirect",
+              "data/greenspace_ns.zip", mode = "wb")
+unzip("data/simd_2020.zip", exdir = "data/simd_2020")
+unzip("data/greenspace_ns.zip", exdir = "data/greenspace", junkpaths = TRUE)
+```
+
+Then load packages (first installing any where need to):
+
+```{r}
+library(tidyverse)
+library(sf)
+```
+
+sf lets us work with spatial data.
+
+We can then read in the spatial data for Glasgow and use the quntile SIMD measure (1 = most deprived, 5 = least deprived).
+
+```{r}
+simd_map <- read_sf("data/simd_2020/SG_SIMD_2020.shp") |>
+  filter(LAName == "Glasgow City") |>
+  mutate(quintile = factor(Quintilev2))
+```
+
+And now our parks data:
+
+```{r}
+parks <- read_sf("data/greenspace/NS_GreenspaceSite.shp") |>
+  filter(`function` == "Public Park Or Garden", !is.na(distName1)) |>
+  mutate(hectares = as.numeric(st_area(geometry)) / 10000)
+```
+
+- We `filter()` for the data we want.
+- "function" is already a word used by R (for when creating functions) so we need to place inside backticks so R knows it is a name within our data
+- Sadly not all parks / gardens are named. For our example, we are going to assume we only want to look at ones that have a name in the data so also `!is.na(distName1)`. (In practice you would want to do some further exploration of those without names and any reasons why they do not have names).
+- (optional) Each park's rea is in metres squared so can concert to hectares.
+
+Again, for our purposes, we are going to turn each park into a point on a map (why will become clear further down) rather than drawing its exact shape. We will also use `st_join` to join our park and SIMD data together.
+
+```{r}
+glasgow_parks <- parks |>
+  st_point_on_surface() |>
+  st_join(simd_map, left = FALSE)
+```
+
+- `st_point_on_surface()` handles the conversion to a point which is guaranteed to be within the area of the original surface. Another option would be `sf_centroid()` but an uneven spaced park could have a dot outside of itself using it.
+- `st_join()` joins by location - where here each point gets columns added for the SIMD data zone it falls into
+- `left = FALSE` drops points that do not fall into a data zone, which as we have already only selected Glasgow City data zones for SIMD, means we only keep points for parks and gardens in Glasgow City.
+
+(Converting to points first makes this easy as do not have to worry about parks that span data zones, it's now based on where the point was calculated to only - again there are pros and cons of this, but it helps keep things more simple and straight forward for our example.)
+
+So let's turn our spatial data into a regular data frame and check how many parks are in each SIMD quintile:
+
+```{r}
+park_df <- st_drop_geometry(glasgow_parks)
+park_df |> count(quintile)
+```
+
+For our purposes, let's also assume we were interested in parks in most deprived, middle, and least deprived quintiles:
+
+```{r}
+park_df |>
+  filter(quintile %in% c(1, 3, 5)) |>
+  select(
+    quintile, simd_rank = Rankv2, park = distName1, hectares, DZName
+  ) |>
+  arrange(quintile, desc(hectares)) |>
+  print(n = Inf)
+```
+
+From this we could then select our qualitative sample. Let's go with three of similar size, with one from each quintile of interest:
+
+```{r}
+sample <- glasgow_parks |>
+  filter(distName1 %in% c("Ruchill Park", "King's Park", "Victoria Park"))
+```
+
+Not only have we used R to help with our qualitative sampling, we can also use it to create a map for our Methods chapter/section:
+
+```{r}
+ggplot() +
+  geom_sf(data = simd_map, aes(fill = quintile), colour = NA, alpha = 0.5) +
+  scale_fill_viridis_d() +
+  geom_sf(data = glasgow_parks) +
+  geom_sf(data = sample, colour = "red", size = 3) +
+  labs(fill = "SIMD 2020 quintiles",
+       caption = "Red: chosen parks. Black: other named parks.") +
+  theme_void()
+```
+
+This is all standard ggplot but with some tweaks to make the map easier to read for our purposes:
+
+- `colour = NA` removes zone outlines
+- `alpha = 0.5` lightens the area colours to make the dots easier to see
+- our first `gemo_sf()` draws every park in black
+- our second draws our sample in red and slightly larger size
+- `theme_void()` removes a lot of extras like background, grid, axis labels, etc - which is all fine here as we want a map which clearly shows the SIMD quintiles, all parks, and our sampled parks.

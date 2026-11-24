@@ -1,0 +1,164 @@
+---
+title: "Holyrood debates"
+execute:
+  warning: false
+  message: false
+---
+
+(Sorry this page is terse due to time. Let me know if anything unclear and I'll move this up on my priority list of pages to flesh out more)
+
+Grab data needed:
+
+```{r}
+#| eval: false
+
+dir.create("data/holyrood", recursive = TRUE)
+options(timeout = 600)
+download.file("https://data.parliament.scot/api/votesmotion?year=2025", "data/holyrood/votes_2025.json")
+download.file("https://data.parliament.scot/api/bills/json", "data/holyrood/bills.json")
+download.file("https://data.parliament.scot/api/billstages/json", "data/holyrood/billstages.json")
+download.file("https://data.parliament.scot/api/billstagetypes/json", "data/holyrood/billstagetypes.json")
+```
+
+Load packages needed (install any that haven't already):
+
+```{r}
+library(tidyverse)
+library(jsonlite)
+library(janitor)
+library(httr2)
+library(rvest)
+```
+
+Load data and get stage 3 (final stage):
+
+```{r}
+bills <- fromJSON("data/holyrood/bills.json") |> clean_names()
+stages <- fromJSON("data/holyrood/billstages.json") |> clean_names()
+stage_types <- fromJSON("data/holyrood/billstagetypes.json") |> clean_names()
+
+stage_3 <- stages |>
+  left_join(stage_types, by = join_by(bill_stage_type_id == id)) |>
+  left_join(bills, by = join_by(bill_id == id)) |>
+  filter(name == "Stage 3") |>
+  select(bill = full_name, date = stage_date) |>
+  mutate(bill = str_squish(bill), date = as_date(date))
+```
+
+The votes file is one MSP vote per row, we flatten it to turn nested columns into ordinary ones:
+
+```{r}
+votes <- fromJSON("data/holyrood/votes_2025.json", flatten = TRUE) |> clean_names()
+
+final_votes <- votes |>
+  mutate(bill = str_squish(motion_title), date = as_date(time_start)) |>
+  semi_join(stage_3, by = join_by(bill, date))
+```
+
+Now let's categories by whether parties voted Yes cross-party or along party lines (we are using 10% as are cut-off, which was just arbitary number that seemed OK for purposes of this example).
+
+```{r}
+kinds <- final_votes |>
+  filter(detail_vote_msp != "Not Voted") |>
+  summarise(share_for = round(mean(detail_vote_msp == "Yes"), 2), .by = c(date, bill, motion_reference)) |>
+  mutate(kind = if_else(share_for >= 0.9 | share_for <= 0.1, "Cross-party", "Party lines")) |>
+  arrange(desc(share_for))
+
+kinds
+```
+
+let's pick one of each:
+
+```{r}
+debates <- tibble(
+  file = c("schools", "victims"),
+  bill = c("Schools (Residential Outdoor Education) (Scotland) Bill",
+           "Victims, Witnesses, and Justice Reform (Scotland) Bill"),
+  page = c("meeting-of-parliament-16-12-2025?meeting=16755&iob=143101",
+           "meeting-of-parliament-17-09-2025?meeting=16579&iob=141525"))
+
+final_votes |>
+  filter(bill %in% debates$bill, detail_vote_msp != "Not Voted") |>
+  count(bill, vote = detail_vote_msp, party = person_party_abbreviation) |>
+  pivot_wider(names_from = party, values_from = n, values_fill = 0)
+```
+
+pivot_wider() give one row per bill and vote, one column per part
+
+some vote pages can move (though seems very rare), but can search on the Parliament page if so
+
+let's use this to create dataset for quals analysis
+
+```{r}
+#| eval: false
+
+dir.create("data/final_debates")
+for (i in 1:nrow(debates)) {
+  request(str_c("https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament/", debates$page[i])) |>
+    req_user_agent("NAME (EMAIL)") |>
+    req_perform(path = str_c("data/final_debates/", debates$file[i], ".html"))
+  Sys.sleep(5)
+}
+```
+
+Ensure to add your name + email in the above!!!
+
+You'll notice the HTML files are hard to read, so let's extract the text:
+
+```{r}
+#| eval: false
+
+speeches <- tibble()
+for (i in 1:nrow(debates)) {
+  page <- read_html(str_c("data/final_debates/", debates$file[i], ".html"))
+  nodes <- html_elements(page, "div.rich-text strong, div.rich-text p")
+  pieces <- tibble(bill = debates$bill[i],
+                   tag = html_name(nodes),
+                   text = html_text2(nodes),
+                   person_id = nodes |> html_element("a") |> html_attr("name") |> as.integer()) |>
+    mutate(speaker = if_else(tag == "strong", text, NA),
+           turn = cumsum(tag == "strong")) |>
+    fill(speaker, person_id)
+  debate <- pieces |>
+    filter(tag == "p", text != "", turn > 0) |>
+    summarise(text = str_c(text, collapse = "\n\n"), .by = c(bill, turn, speaker, person_id))
+  writeLines(str_c(debate$speaker, ": ", debate$text),
+             str_c("data/final_debates/", debates$file[i], ".txt"), sep = "\n\n")
+  speeches <- bind_rows(speeches, debate)
+}
+```
+
+(Note, the above looks like it works - but I have not had time to do a line-by-line check. Please let me know if spot any issues - especially if it doesn't work with other transcripts than the two used for this example)
+
+We have the sys.sleep() to space out our requests.
+
+```{r}
+#| eval: false
+
+speeches <- speeches |> mutate(words = str_count(text, boundary("word")))
+
+debate_lengths <- speeches |>
+  summarise(words = sum(words), contributions = n(), speakers = n_distinct(person_id), .by = bill)
+debate_lengths
+```
+
+and -
+
+```{r}
+#| eval: false
+
+msp_votes <- final_votes |>
+  filter(bill %in% debates$bill) |>
+  select(bill, person_id, name = person_display_name, party = person_party_abbreviation,
+         constituency_region = person_constituency_region, vote = detail_vote_msp)
+
+speakers <- speeches |>
+  summarise(contributions = n(), words = sum(words), .by = c(bill, person_id)) |>
+  left_join(msp_votes, by = join_by(bill, person_id))
+
+debate_info <- debates |> left_join(kinds, by = "bill") |> left_join(debate_lengths, by = "bill")
+
+write_csv(debate_info, "data/final_debates/debates.csv")
+write_csv(speakers, "data/final_debates/speakers.csv")
+write_csv(msp_votes, "data/final_debates/votes.csv")
+```

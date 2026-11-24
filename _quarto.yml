@@ -27,6 +27,12 @@ website:
           - week8/reddit-social-media.qmd
           - week8/hansard.qmd
           - week8/rss.qmd
+      - section: "Week 10"
+        contents:
+          - week10/linked-multiple.qmd
+          - week10/multiple-regression.qmd
+          - week10/sampling-glasgow-parks.qmd
+          - week10/holyrood.qmd
       - text: "---"
       - section: "[Slides]{.constell-group-green}"
         contents:
@@ -44,6 +50,7 @@ website:
         contents:
           - reference/dont-panic.qmd
           - reference/r-syntax.qmd
+          - reference/rstudio.qmd
           - reference/r-markdown.qmd
           - reference/code-chunks.qmd
       - text: "---"
