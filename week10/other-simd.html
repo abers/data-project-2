@@ -561,8 +561,17 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#covered-in-examples-for-this-week" id="toc-covered-in-examples-for-this-week" class="nav-link active" data-scroll-target="#covered-in-examples-for-this-week">Covered in examples for this week</a></li>
+  <li><a href="#link-by-data-zone" id="toc-link-by-data-zone" class="nav-link" data-scroll-target="#link-by-data-zone">Link by data zone</a></li>
+  <li><a href="#link-by-postcode-coordinates" id="toc-link-by-postcode-coordinates" class="nav-link" data-scroll-target="#link-by-postcode-coordinates">Link by postcode / coordinates</a></li>
+  <li><a href="#link-via-aggregation-simd-summarised-to-a-larger-area" id="toc-link-via-aggregation-simd-summarised-to-a-larger-area" class="nav-link" data-scroll-target="#link-via-aggregation-simd-summarised-to-a-larger-area">Link via aggregation (SIMD summarised to a larger area)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -573,13 +582,163 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Below are various other datasets that should be linkable with the SIMD. Note, I have not tested these all. As seen in the two examples covered on other pages, linking SIMD can be straight forward if the something like the data zone column value are direct match in both data sets. However, as also seen, sometimes the column in one can be slightly different to the other, where may need to first modify the column in one data set so they can be joined.</p>
-<p>(work in progress)</p>
+<section id="covered-in-examples-for-this-week" class="level3">
+<h3 class="anchored" data-anchor-id="covered-in-examples-for-this-week">Covered in examples for this week</h3>
 <ul>
 <li>Scottish Government <a href="https://data.gov.scot/dataset/domestic_energy_performance_certificates___dataset_to_q1_2026">Domestic Energy Performance Certificates - Dataset to Q3 2026</a> (we only used a few of the files but there are a lot more files)</li>
 <li>Ordnance Survey <a href="https://osdatahub.os.uk/data/downloads/open/OpenGreenspace">OS Open Greenspace</a> (we only used the parks and gardens data, but it includes a lot more)</li>
 </ul>
+</section>
+<section id="link-by-data-zone" class="level3">
+<h3 class="anchored" data-anchor-id="link-by-data-zone">Link by data zone</h3>
+<p><strong>Scottish Government</strong>:</p>
+<ul>
+<li><a href="https://data.gov.scot/dataset/house_prices">House Prices</a></li>
+<li><a href="https://data.gov.scot/dataset/house_sales">House Sales</a></li>
+<li><a href="https://data.gov.scot/dataset/secondary_fires">Secondary Fires</a></li>
+<li><a href="https://data.gov.scot/dataset/total_fires">Total Fires</a></li>
+<li><a href="https://data.gov.scot/dataset/primary_road_vehicle_and_other_primary_fires">Primary Road Vehicle and Other Primary Fires</a></li>
+<li><a href="https://data.gov.scot/dataset/land_area__based_on_2011_data_zones_">Land Area (based on 2011 Data Zones)</a></li>
+<li><a href="https://data.gov.scot/dataset/population_living_in_close_proximity_to_a_derelict_site">Population living in close proximity to a derelict site</a></li>
+<li><a href="https://www.gov.scot/publications/the-scottish-vacant-and-derelict-land-survey-site-register/">Scottish Vacant and Derelict Land Survey: Site Register</a></li>
+<li><a href="https://data.gov.scot/dataset/domestic_energy_performance_certificates___dataset_to_q1_2026">Domestic Energy Performance Certificates - Dataset to Q3 2026</a></li>
+<li><a href="https://data.gov.scot/dataset/non_domestic_energy_performance_certificates___dataset_to_q1_2026">Non-domestic Energy Performance Certificates - Dataset to Q3 2026</a></li>
+<li><a href="https://data.gov.scot/dataset/bus_accessibility">Bus Accessibility</a></li>
+<li><a href="https://www.gov.scot/publications/local-level-brexit-vulnerabilities-scotland-brexit-vulnerabilities-index-bvi/documents/">Local level Brexit vulnerabilities in Scotland: Brexit Vulnerabilities Index (BVI)</a></li>
+</ul>
+<p><strong>National Records of Scotland</strong>:</p>
+<ul>
+<li><a href="https://www.nrscotland.gov.uk/publications/small-area-population-estimates-mid-2022">Small area population estimates: mid-2022</a></li>
+<li><a href="https://www.nrscotland.gov.uk/publications/small-area-population-estimates-mid-2023-and-mid-2024-2011-data-zones/">Small area population estimates: mid-2023 and mid-2024 (2011 data zones)</a></li>
+<li><a href="https://www.scotlandscensus.gov.uk/documents/2011-census-table-data-sns-data-zone-2011">2011 census table data: SNS Data Zone 2011</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv201-ethnic-group">Scotland’s Census 2022 - UV201 - Ethnic group</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv205b-religion-12-categories-by-sex-by-age-6-categories">Scotland’s Census 2022 - UV205b - Religion (12 categories) by sex by age (6 categories)</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv302-general-health">Scotland’s Census 2022 - UV302 - General health</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv404-tenure-households">Scotland’s Census 2022 - UV404 - Tenure - Households</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv405-car-or-van-availability">Scotland’s Census 2022 - UV405 - Car or van availability</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv501-highest-level-of-qualification">Scotland’s Census 2022 - UV501 - Highest level of qualification</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv601-economic-activity">Scotland’s Census 2022 - UV601 - Economic activity</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv606-occupation">Scotland’s Census 2022 - UV606 - Occupation</a></li>
+<li><a href="https://statistics.ukdataservice.ac.uk/dataset/scotland-s-census-2022-uv607-national-statistics-socio-economic-classification-ns-sec">Scotland’s Census 2022 - UV607 - National Statistics Socio-economic Classification (NS-SeC)</a></li>
+<li><a href="https://data.gov.scot/dataset/births">Births</a></li>
+<li><a href="https://data.gov.scot/dataset/deaths">Deaths</a></li>
+<li><a href="https://www.nrscotland.gov.uk/publications/small-area-statistics-on-households-and-dwellings-2025/">Small area statistics on households and dwellings, 2025</a></li>
+<li><a href="https://data.gov.scot/dataset/dwellings_by_council_tax_band_summary__current_geographic_boundaries_">Dwellings by Council Tax Band Summary (Current Geographic Boundaries)</a></li>
+<li><a href="https://data.gov.scot/dataset/dwellings_by_council_tax_band_detailed__current_geographic_boundaries_">Dwellings by Council Tax Band Detailed (Current Geographic Boundaries)</a></li>
+<li><a href="https://data.gov.scot/dataset/dwellings_by_type">Dwellings by Type</a></li>
+<li><a href="https://data.gov.scot/dataset/dwellings_by_number_of_rooms">Dwellings by Number of Rooms</a></li>
+<li><a href="https://data.gov.scot/dataset/dwellings_median_number_of_rooms">Dwellings Median Number Of Rooms</a></li>
+<li><a href="https://data.gov.scot/dataset/dwellings_per_hectare">Dwellings per Hectare</a></li>
+</ul>
+<p><strong>HM Revenue &amp; Customs</strong>:</p>
+<ul>
+<li><a href="https://data.gov.scot/dataset/child_benefit___children">Child Benefit - Children</a></li>
+<li><a href="https://data.gov.scot/dataset/child_benefit___families">Child Benefit - Families</a></li>
+<li><a href="https://www.gov.uk/government/statistics/child-benefit-small-area-statistics-august-2021">Child Benefit Small Area Statistics: August 2021</a></li>
+<li><a href="https://www.gov.uk/government/statistics/child-benefit-statistics-annual-release-august-2024">Child Benefit Statistics: annual release, August 2024</a></li>
+</ul>
+<p><strong>Public Health Scotland</strong>:</p>
+<ul>
+<li><a href="https://data.gov.scot/dataset/age_of_first_time_mothers">Age of First Time Mothers</a></li>
+<li><a href="https://data.gov.scot/dataset/ante_natal_smoking">Ante-Natal Smoking</a></li>
+</ul>
+<p><strong>Office for National Statistics</strong>:</p>
+<ul>
+<li><a href="https://www.ons.gov.uk/economy/grossvalueaddedgva/datasets/uksmallareagvaestimates">UK small area gross value added (GVA) estimates</a></li>
+<li><a href="https://www.nomisweb.co.uk/datasets/newbres6pub">Business Register and Employment Survey : open access</a></li>
+</ul>
+<p><strong>Other</strong>:</p>
+<ul>
+<li>Registers of Scotland <a href="https://data.gov.scot/dataset/house_prices___residential_properties_sales_and_price">House Prices - Residential Properties Sales and Price</a></li>
+<li>Care Inspectorate <a href="https://www.careinspectorate.scot/resources-data/publications-and-statistics/library/datastore-31-august-2026">Datastore: August 2026</a></li>
+<li>Department for Business, Energy &amp; Industrial Strategy <a href="https://www.gov.uk/government/statistics/electric-prepayment-meter-statistics">Electric prepayment meter statistics</a></li>
+<li>Ofgem <a href="https://www.ofgem.gov.uk/transparency-document/feed-tariff-installation-report-30-september-2026">Feed-in Tariff Installation Report 30 September 2026</a></li>
+<li>American Forests <a href="https://opennetzero.org/american-forests/tree-equity-score-map-data-scotland">Tree Equity Score Map Data - Scotland</a></li>
+<li>The James Hutton Institute <a href="https://zenodo.org/records/10523105">Sparsely Populated Areas: Scottish Data Zone classification</a></li>
+<li>Geographic Data Service <a href="https://data.geods.ac.uk/dataset/access-to-healthy-assets-hazards-ahah">Access to Healthy Assets &amp; Hazards (AHAH)</a></li>
+<li>Glasgow City Council <a href="https://open-data-design-glasgowgis.hub.arcgis.com/datasets/GlasgowGIS::housing-association-properties">Housing Association Properties</a></li>
+</ul>
+</section>
+<section id="link-by-postcode-coordinates" class="level3">
+<h3 class="anchored" data-anchor-id="link-by-postcode-coordinates">Link by postcode / coordinates</h3>
+<p><strong>Department for Energy Security and Net Zero</strong>:</p>
+<ul>
+<li><a href="https://www.gov.uk/government/statistics/postcode-level-gas-statistics-2024">Postcode level gas statistics: 2024</a></li>
+<li><a href="https://www.gov.uk/government/statistics/postcode-level-electricity-statistics-2024">Postcode level electricity statistics: 2024</a></li>
+</ul>
+<p><strong>Other</strong>:</p>
+<ul>
+<li>Food Standards Agency <a href="https://ratings.food.gov.uk/open-data">UK food hygiene rating data API</a></li>
+<li>Gambling Commission <a href="https://www.gamblingcommission.gov.uk/public-register/premises/download">Download the register of gambling premises</a></li>
+<li>Birkbeck, University of London and King’s College London <a href="https://github.com/Birkbeck/mapping-museums">Mapping Museums - Data and Code for Analytics</a></li>
+<li>Geolytix <a href="https://geolytix.com/blog/supermarket-retail-points/">Supermarket Retail Points</a></li>
+<li>Inside Airbnb <a href="https://insideairbnb.com/get-the-data/">Get the Data</a></li>
+<li>Ordnance Survey <a href="https://osdatahub.os.uk/data/downloads/open/OpenGreenspace">OS Open Greenspace</a></li>
+<li>Scottish Environment Protection Agency <a href="https://www.sepa.org.uk/data/spri/spri-publications/">Scottish Pollutant Release Inventory 2025 - Full data</a></li>
+<li>Department for Transport <a href="https://www.gov.uk/government/statistics/road-safety-data">Road safety open data</a></li>
+<li>Scottish Government <a href="https://ckan.publishing.service.gov.uk/dataset/heat-network-locations-existing-and-planned-scotland">Heat Network Locations (Existing and Planned) - Scotland</a></li>
+<li>Historic Environment Scotland <a href="https://portal.historicenvironment.scot/downloads">Downloads</a></li>
+<li>NatureScot <a href="https://ckan.publishing.service.gov.uk/dataset/local-nature-reserves-scotland">Local Nature Reserves (Scotland)</a></li>
+<li>City of Edinburgh Council <a href="https://city-of-edinburgh-council-open-spatial-data-cityofedinburgh.hub.arcgis.com/datasets/cityofedinburgh::shop-survey-2015">Shop Survey 2015</a></li>
+<li>Glasgow City Council <a href="https://open-data-design-glasgowgis.hub.arcgis.com/datasets/GlasgowGIS::licensed-premises">Licensed Premises</a></li>
+</ul>
+</section>
+<section id="link-via-aggregation-simd-summarised-to-a-larger-area" class="level3">
+<h3 class="anchored" data-anchor-id="link-via-aggregation-simd-summarised-to-a-larger-area">Link via aggregation (SIMD summarised to a larger area)</h3>
+<section id="intermediate-zone" class="level4">
+<h4 class="anchored" data-anchor-id="intermediate-zone">Intermediate zone</h4>
+<p><strong>Office for National Statistics</strong>:</p>
+<ul>
+<li><a href="https://www.nomisweb.co.uk/datasets/idbrlu">UK Business Counts - local units by industry and employment size band</a></li>
+<li><a href="https://www.ons.gov.uk/economy/regionalaccounts/grossdisposablehouseholdincome/datasets/ukgrossdisposablehouseholdincomegdhiforothergeographicareas">UK gross disposable household income (GDHI) estimates for other geographic areas</a></li>
+</ul>
+<p><strong>Public Health Scotland</strong>:</p>
+<ul>
+<li><a href="https://scotland.shinyapps.io/ScotPHO_profiles_tool/">ScotPHO profiles</a></li>
+<li><a href="https://www.opendata.nhs.scot/dataset/population-estimates">Population Estimates</a></li>
+</ul>
+<p><strong>Other</strong>:</p>
+<ul>
+<li>Scottish Government <a href="https://data.gov.scot/dataset/business_stocks___sites">Business Stocks &amp; Sites</a></li>
+</ul>
+</section>
+<section id="ward-or-constituency" class="level4">
+<h4 class="anchored" data-anchor-id="ward-or-constituency">Ward or constituency</h4>
+<p><strong>Police Scotland</strong>:</p>
+<ul>
+<li><a href="https://www.scotland.police.uk/about-us/how-we-do-it/crime-data/">Crime data</a></li>
+<li><a href="https://www.scotland.police.uk/about-us/how-we-do-it/stop-and-search/data-publication/">Data publication</a></li>
+</ul>
+<p><strong>Other</strong>:</p>
+<ul>
+<li>Scottish Fire and Rescue Service <a href="https://data.gov.scot/dataset/fire___type_of_incident">Fire - Type of Incident</a></li>
+<li>Electoral Management Board for Scotland <a href="https://www.emb.scot/news/article/22/full-votes-and-seats-by-party-etc-spe21">Full votes and seats by party etc - SPE21</a></li>
+<li>House of Commons Library <a href="https://electionresults.parliament.uk/general-elections/6">Results for the UK general election on 4 July 2024</a></li>
+</ul>
+</section>
+<section id="council" class="level4">
+<h4 class="anchored" data-anchor-id="council">Council</h4>
+<p><strong>Public Health Scotland</strong>:</p>
+<ul>
+<li><a href="https://www.opendata.nhs.scot/dataset/drug-related-hospital-statistics-scotland">Drug-Related Hospital Statistics Scotland</a></li>
+<li><a href="https://www.opendata.nhs.scot/dataset/alcohol-related-hospital-statistics-scotland">Alcohol Related Hospital Statistics Scotland</a></li>
+<li><a href="https://www.opendata.nhs.scot/dataset/care-home-census">Care Home Census</a></li>
+<li><a href="https://www.opendata.nhs.scot/dataset/delayed-discharges-in-nhsscotland">Delayed Discharges in NHSScotland</a></li>
+<li><a href="https://www.opendata.nhs.scot/dataset/mental-health-inpatient-activity">Mental Health Inpatient Activity</a></li>
+<li><a href="https://www.opendata.nhs.scot/dataset/unintentional-injuries">Unintentional Injuries</a></li>
+<li><a href="https://www.opendata.nhs.scot/dataset/teenage-pregnancy">Teenage Pregnancy</a></li>
+<li><a href="https://www.opendata.nhs.scot/dataset/the-scottish-public-health-observatory-suicide-overview">The Scottish Public Health Observatory - Suicide Overview</a></li>
+</ul>
+<p><strong>Other</strong>:</p>
+<ul>
+<li>National Records of Scotland <a href="https://www.nrscotland.gov.uk/publications/drug-related-deaths-in-scotland-2025/">Drug-related deaths in Scotland, 2025</a></li>
+<li>Scottish Government <a href="https://data.gov.scot/dataset/homelessness_applications">Homelessness Applications</a></li>
+<li>Home Office <a href="https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-regional-and-local-authority-data">Regional and local authority data on immigration groups</a></li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
