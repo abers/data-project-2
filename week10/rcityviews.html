@@ -849,7 +849,87 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>(Rest stll under construction: To be completed)</p>
+<p>(Rest stll under construction: I realise the code is much more complex here so will eventually get bullet point breakdowns added too / see if can find way to achieve similar output with simpler code)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">building_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  building <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Gilbert Scott Building"</span>, <span class="st">"University Library"</span>,</span>
+<span>               <span class="st">"Miller Building\n(42 Bute Gardens)"</span>, <span class="st">"25 Bute Gardens"</span><span class="op">)</span>,</span>
+<span>  lat      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">55.87149</span>, <span class="fl">55.87335</span>, <span class="fl">55.87377</span>, <span class="fl">55.87434</span><span class="op">)</span>,</span>
+<span>  long     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4.288544</span>, <span class="op">-</span><span class="fl">4.28909</span>, <span class="op">-</span><span class="fl">4.289887</span>, <span class="op">-</span><span class="fl">4.289425</span><span class="op">)</span>,</span>
+<span>  side     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"below"</span>, <span class="st">"right"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">place_labels</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">labels</span>, <span class="va">zoom</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">sides</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"above"</span>, <span class="st">"below"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">labels</span><span class="op">$</span><span class="va">side</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">sides</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">'Values must be one of the following: "above", "below", "left" or "right".'</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="va">gap</span> <span class="op">&lt;-</span> <span class="fl">150</span> <span class="op">/</span> <span class="va">zoom</span></span>
+<span></span>
+<span>  <span class="va">labels</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>      gap_lat    <span class="op">=</span> <span class="va">gap</span> <span class="op">/</span> <span class="fl">111000</span>,</span>
+<span>      gap_long   <span class="op">=</span> <span class="va">gap</span> <span class="op">/</span> <span class="op">(</span><span class="fl">111000</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="va">lat</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">/</span> <span class="fl">180</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      label_lat  <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html">case_when</a></span><span class="op">(</span><span class="va">side</span> <span class="op">==</span> <span class="st">"above"</span> <span class="op">~</span> <span class="va">lat</span> <span class="op">+</span> <span class="va">gap_lat</span>,</span>
+<span>                             <span class="va">side</span> <span class="op">==</span> <span class="st">"below"</span> <span class="op">~</span> <span class="va">lat</span> <span class="op">-</span> <span class="va">gap_lat</span>,</span>
+<span>                             .default <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>,</span>
+<span>      label_long <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html">case_when</a></span><span class="op">(</span><span class="va">side</span> <span class="op">==</span> <span class="st">"right"</span> <span class="op">~</span> <span class="va">long</span> <span class="op">+</span> <span class="va">gap_long</span>,</span>
+<span>                             <span class="va">side</span> <span class="op">==</span> <span class="st">"left"</span>  <span class="op">~</span> <span class="va">long</span> <span class="op">-</span> <span class="va">gap_long</span>,</span>
+<span>                             .default <span class="op">=</span> <span class="va">long</span><span class="op">)</span>,</span>
+<span>      hjust      <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html">case_when</a></span><span class="op">(</span><span class="va">side</span> <span class="op">==</span> <span class="st">"right"</span> <span class="op">~</span> <span class="st">"left"</span>,</span>
+<span>                             <span class="va">side</span> <span class="op">==</span> <span class="st">"left"</span>  <span class="op">~</span> <span class="st">"right"</span>,</span>
+<span>                             .default <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span>,</span>
+<span>      vjust      <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html">case_when</a></span><span class="op">(</span><span class="va">side</span> <span class="op">==</span> <span class="st">"above"</span> <span class="op">~</span> <span class="st">"bottom"</span>,</span>
+<span>                             <span class="va">side</span> <span class="op">==</span> <span class="st">"below"</span> <span class="op">~</span> <span class="st">"top"</span>,</span>
+<span>                             .default <span class="op">=</span> <span class="st">"middle"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">gap_lat</span>, <span class="op">-</span><span class="va">gap_long</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">get_inner_map</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">map</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">inner_map</span> <span class="op">&lt;-</span> <span class="va">map</span><span class="op">$</span><span class="va">plot_env</span><span class="op">$</span><span class="va">plot</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">inner_map</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"No map found. Provide get_inner_map() a map made with cityview()."</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">inner_map</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">finish_map</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">labelled_map</span>, <span class="va">map</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/ggdraw.html">ggdraw</a></span><span class="op">(</span><span class="va">labelled_map</span><span class="op">)</span> <span class="op">+</span> <span class="va">map</span><span class="op">$</span><span class="va">layers</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">map</span><span class="op">$</span><span class="va">theme</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">building_labels</span> <span class="op">&lt;-</span> <span class="va">building_labels</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">place_labels</span><span class="op">(</span>zoom <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">labelled_map</span> <span class="op">&lt;-</span> <span class="fu">get_inner_map</span><span class="op">(</span><span class="va">uofg_buildings_map</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">building_labels</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">long</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>,</span>
+<span>             shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">14</span>, stroke <span class="op">=</span> <span class="fl">3</span>, colour <span class="op">=</span> <span class="st">"white"</span>, fill <span class="op">=</span> <span class="st">"#c8102e"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_label</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">building_labels</span>,</span>
+<span>             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">label_long</span>, y <span class="op">=</span> <span class="va">label_lat</span>, label <span class="op">=</span> <span class="va">building</span>,</span>
+<span>                 hjust <span class="op">=</span> <span class="va">hjust</span>, vjust <span class="op">=</span> <span class="va">vjust</span><span class="op">)</span>,</span>
+<span>             fontface <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">13</span>, lineheight <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>             colour <span class="op">=</span> <span class="st">"white"</span>, fill <span class="op">=</span> <span class="st">"#1d3557"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">labelled_map</span> <span class="op">&lt;-</span> <span class="fu">finish_map</span><span class="op">(</span><span class="va">labelled_map</span>, <span class="va">uofg_buildings_map</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"label"</span>, x <span class="op">=</span> <span class="fl">0.99</span>, y <span class="op">=</span> <span class="fl">0.012</span>, hjust <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>           label <span class="op">=</span> <span class="st">"Data by © OpenStreetMap contributors"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"images/uofg_campus_4.png"</span>, plot <span class="op">=</span> <span class="va">labelled_map</span>,</span>
+<span>       width <span class="op">=</span> <span class="fl">500</span>, height <span class="op">=</span> <span class="fl">500</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/uofg_campus_4.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/uofg_campus_4.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
