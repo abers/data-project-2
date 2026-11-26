@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta charset="UTF-8">
+<meta name="generator" content="quarto-1.10.19">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Glasgow City Views – Working With Digital Data</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../week10/holyrood.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-87aea89217c7cd55bc57469db99ddb2c.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-26c11f7fe3c9073e01f6c6bfde395c0d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-87aea89217c7cd55bc57469db99ddb2c.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7a9866c799c22348b10fae12bcb71ab7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-aaec8bf477367a5cbb0fe2b26dacc336.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-7a9866c799c22348b10fae12bcb71ab7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/constellate-website-1.0.0/sidebar.js"></script>
+<meta name="constellate-layout-light-surround" content="true">
+<meta name="constellate-sidebar-groups" content="true">
+<meta name="constellate-sidebar-hero-colour" content="true">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+</head>
+<body class="nav-sidebar docked quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../week10/linked-multiple.html">Week 10</a></li><li class="breadcrumb-item"><a href="../week10/rcityviews.html">Glasgow City Views</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><header id="title-block-header" class="quarto-title-block default page-columns page-full"><div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../week10/linked-multiple.html">Week 10</a></li><li class="breadcrumb-item"><a href="../week10/rcityviews.html">Glasgow City Views</a></li></ol></nav>
+      <h1 class="title">Glasgow City Views</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Working With Digital Data</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../course-info.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course Info</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../r-refresher.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Refresher</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 7</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week7/wikipedia.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Wikipedia &amp; WikiData</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 8</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/nourishing-britain.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nourishing Britain</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/newspapers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Newspapers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/guardian-api.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Guardian API</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/reddit-social-media.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reddit (and social media data)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/hansard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hansard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week8/rss.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RSS feeds</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Week 10</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week10/linked-multiple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linking multiple datasets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week10/multiple-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Households without a car</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week10/other-simd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Other SIMD linkable datasets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week10/sampling-glasgow-parks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sampling Glasgow Parks</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week10/holyrood.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Holyrood debates</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week10/rcityviews.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Glasgow City Views</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span class="constell-group-green">Slides</span></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides/week7-social-life-digital-data.html" class="sidebar-item-text sidebar-link" target="_blank">
+ <span class="menu-text">Week 7</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span class="constell-group-mauve">Assessments</span></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../assessments/summative-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Summative Portfolio</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../assessments/formative-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Formative Assessment</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../assessments/assessments-faq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assessments FAQ</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span class="constell-group-yellow">Reference</span></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/dont-panic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Don’t Panic!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/r-syntax.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R syntax</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RStudio</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/r-markdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Markdown</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/code-chunks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Code chunks</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span class="constell-group-red">GenAI</span></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../genai/beware-bull.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Beware 🐂💩</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../genai/rstudio-helper.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RStudio Helper GPT</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#install" id="toc-install" class="nav-link active" data-scroll-target="#install">Install</a></li>
+  <li><a href="#load" id="toc-load" class="nav-link" data-scroll-target="#load">Load</a></li>
+  <li><a href="#folder-creation" id="toc-folder-creation" class="nav-link" data-scroll-target="#folder-creation">Folder creation</a></li>
+  <li><a href="#osm-servers" id="toc-osm-servers" class="nav-link" data-scroll-target="#osm-servers">OSM Servers</a></li>
+  <li><a href="#creating-our-areas" id="toc-creating-our-areas" class="nav-link" data-scroll-target="#creating-our-areas">Creating our areas</a></li>
+  <li><a href="#map-1-simple" id="toc-map-1-simple" class="nav-link" data-scroll-target="#map-1-simple">Map 1: Simple</a></li>
+  <li><a href="#map-2-themeborder" id="toc-map-2-themeborder" class="nav-link" data-scroll-target="#map-2-themeborder">Map 2: Theme+border</a></li>
+  <li><a href="#map-3-zoom" id="toc-map-3-zoom" class="nav-link" data-scroll-target="#map-3-zoom">Map 3: Zoom</a></li>
+  <li><a href="#map-4-changing-fonts" id="toc-map-4-changing-fonts" class="nav-link" data-scroll-target="#map-4-changing-fonts">Map 4: Changing fonts</a></li>
+  <li><a href="#map-5-fonts-and-texture" id="toc-map-5-fonts-and-texture" class="nav-link" data-scroll-target="#map-5-fonts-and-texture">Map 5: Fonts and texture</a></li>
+  <li><a href="#map-6-customising-themes-colours" id="toc-map-6-customising-themes-colours" class="nav-link" data-scroll-target="#map-6-customising-themes-colours">Map 6: Customising theme’s colours</a></li>
+  <li><a href="#map-7-custom-colour-scheme" id="toc-map-7-custom-colour-scheme" class="nav-link" data-scroll-target="#map-7-custom-colour-scheme">Map 7: Custom colour scheme</a></li>
+  <li><a href="#map-8-reusing-custom-scheme" id="toc-map-8-reusing-custom-scheme" class="nav-link" data-scroll-target="#map-8-reusing-custom-scheme">Map 8: Reusing custom scheme</a></li>
+  <li><a href="#map-9-adding-labels-with-ggplot" id="toc-map-9-adding-labels-with-ggplot" class="nav-link" data-scroll-target="#map-9-adding-labels-with-ggplot">Map 9: Adding labels with ggplot</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content"><p>(I mentioned at our in-person session that you can use code to also created ‘stylised’ maps, so here is an initial very quick guide for how you can do that with example maps ordered from simple to more complex. At the moment it is just sections and code. It likely will not be until mid-December that I have time to go back through adding in better text explanations, but hopefully at least the code for the initial 3-4 maps are easy enough to follow and understand what bits of code can tweak and change to create your own maps.)</p>
+<ul>
+<li>We will be using <a href="https://koenderks.github.io/rcityviews/">rcityviews</a> (Which has documentation that explains each of the main functions and includes further examples!)</li>
+<li>It has its own official tutorial covering <a href="https://koenderks.github.io/rcityviews/">making maps of Amsterdam</a>
+</li>
+<li>All the map data - and how this still fits in this week’s theme of ‘linking data’ comes from the wonderful <a href="https://www.openstreetmap.org/#map=17/55.895114/-4.307520">OpenStreetMap</a> project - an open source community run project. <strong>Anyone</strong> can contribute to their maps, and many Google Maps alternatives use it. It is also used frequently by NGOs following natural disasters as people can actively update the maps based on what roads are closed/open, where shelters are setup, etc. Indeed, not only can you edit OpenStreetMap online, you can also download various Android and iOS apps so can edit maps when out and about!</li>
+<li>OpenStreetMap like Wikipedia is a ‘wonder of the modern internet’ and testament to the power of open source. Steve Coast who started OpenStreetMap in 2004 did so whilst a student and balking at the Ordnance Survey - the UK’s national mapping agency - which despite being publicly funded charged a fee to use their data. So, Steve did what many would think ridiculous - he decided to make his own maps, with the first data added created by him cycling around London with… a GPS unit attached to… a laptop. Yet because communities can flourish around open source - when done right - there are over 11 million accounts registered with OpenStreetMap today, with maps of various levels of detail that span the entire globe.</li>
+<li>All OpenStreetMap data is entirely free to use as long as you acknowledge the community of contributors - which <code>rcityviews</code> does for us automatically. (Note, however, if for personal use only - i.e.&nbsp;creating an image which not sharing publicly with others, then it is OK to not include the copyright notice.)</li>
+</ul>
+<section id="install" class="level2"><h2 class="anchored" data-anchor-id="install">Install</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"koenderks/rcityviews"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="load" class="level2"><h2 class="anchored" data-anchor-id="load">Load</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/koenderks/rcityviews">rcityviews</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="folder-creation" class="level2"><h2 class="anchored" data-anchor-id="folder-creation">Folder creation</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">"images"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="osm-servers" class="level2"><h2 class="anchored" data-anchor-id="osm-servers">OSM Servers</h2>
+<p>When we create a new area in <code>rcityviews</code> it downloads data from OpenStreetMap. Given the amount of data and OSM being a free service, downloads can be slow and fail if the servers are overloaded at the time you try them.</p>
+<p><strong>However</strong>, as long as you keep the same R session active, the data only needs to be downloaded once and then all maps you create for the same area do not need to repeat the downloads. This data is ‘cached’ though so if you restart/stop the R session, you will need to re-download the data again.</p>
+<p>By default <code>rcityviews</code> seems to use the OSM server based in Germany.</p>
+<p>You can check the status of the server with:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">osmdata</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/osmdata/reference/overpass_status.html">overpass_status</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>There are a lot of OSM servers - though all are community / individual volunteer run with varying download speeds and data coverage. Whilst a few are paid for - given the costs of running a server - there are plenty that are free to use.</p>
+<p>You can see a <a href="https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances">list of OSM server instances</a> online. If the default server is overloaded with requests, you can switch servers - and check the status - with:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">osmdata</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/osmdata/reference/set_overpass_url.html">set_overpass_url</a></span><span class="op">(</span><span class="st">"WEB-ADDRESS-OF-SERVER-TO-TRY-HERE"</span><span class="op">)</span></span>
+<span><span class="fu">osmdata</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/osmdata/reference/overpass_status.html">overpass_status</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For example, you could replace “WEB-ADDRESS…” in the above with <code>"https://maps.mail.ru/osm/tools/overpass/api/interpreter"</code>. The web addresses can use are all listed in the list of OSM server instances linked above.</p>
+<p>Sometimes though all servers might be busy and you might just need to try again at a different time of day.</p>
+</section><section id="creating-our-areas" class="level2"><h2 class="anchored" data-anchor-id="creating-our-areas">Creating our areas</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">glasgow_city</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/new_city.html">new_city</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Glasgow"</span>, country <span class="op">=</span> <span class="st">"Scotland"</span>,</span>
+<span>                         lat <span class="op">=</span> <span class="fl">55.87</span>, long <span class="op">=</span> <span class="op">-</span><span class="fl">4.27</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">uofg_campus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/new_city.html">new_city</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"University of Glasgow"</span>, country <span class="op">=</span> <span class="st">""</span>,</span>
+<span>                        lat <span class="op">=</span> <span class="fl">55.87144</span>, long <span class="op">=</span> <span class="op">-</span><span class="fl">4.288488</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To find these for any spot, go to <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, find the place, right-click on it and choose “Show address”. The two numbers that appear in the search box are the latitude, then the longitude.</p>
+<p>Alternatively, <code>rcityviews</code> has a list of pre-built cities:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/list_cities.html">list_cities</a></span><span class="op">(</span>match <span class="op">=</span> <span class="st">"Glasgow"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>However, using new_city() makes it easier to pick exact spot and pass in custom labels to use.</p>
+</section><section id="map-1-simple" class="level2"><h2 class="anchored" data-anchor-id="map-1-simple">Map 1: Simple</h2>
+<p><strong>Important</strong>, <code>rcityviews</code> documentation recommends writing two code chunks. One to create and save the map, and the other to view it. This (1) means you are not constantly redownloading data (2) not having to run code to generate the images each time.</p>
+<p>In other words -</p>
+<p><strong>Run only once - once image is created you do not need to run this code chunk ever again</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">glasgow_city</span>, filename <span class="op">=</span> <span class="st">"images/glasgow_city_1.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Run to view image</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/glasgow_city_1.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/glasgow_city_1.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="map-2-themeborder" class="level2"><h2 class="anchored" data-anchor-id="map-2-themeborder">Map 2: Theme+border</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">glasgow_city</span>, theme <span class="op">=</span> <span class="st">"rouge"</span>, border <span class="op">=</span> <span class="st">"square"</span>,</span>
+<span>         filename <span class="op">=</span> <span class="st">"images/glasgow_city_2.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/glasgow_city_2.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/glasgow_city_2.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="map-3-zoom" class="level2"><h2 class="anchored" data-anchor-id="map-3-zoom">Map 3: Zoom</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">uofg_campus</span>, zoom <span class="op">=</span> <span class="fl">3</span>, theme <span class="op">=</span> <span class="st">"modern"</span>, border <span class="op">=</span> <span class="st">"hexagon"</span>,</span>
+<span>         legend <span class="op">=</span> <span class="cn">TRUE</span>, filename <span class="op">=</span> <span class="st">"images/uofg_campus_1.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/uofg_campus_1.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/uofg_campus_1.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="map-4-changing-fonts" class="level2"><h2 class="anchored" data-anchor-id="map-4-changing-fonts">Map 4: Changing fonts</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">batik_theme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/city_themes.html">city_themes</a></span><span class="op">(</span><span class="st">"batik"</span><span class="op">)</span></span>
+<span><span class="va">batik_theme</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">family</span> <span class="op">&lt;-</span> <span class="st">"serif"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">glasgow_city</span>, theme <span class="op">=</span> <span class="va">batik_theme</span>, border <span class="op">=</span> <span class="st">"decagon"</span>,</span>
+<span>         filename <span class="op">=</span> <span class="st">"images/glasgow_city_3.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/glasgow_city_3.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/glasgow_city_3.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="map-5-fonts-and-texture" class="level2"><h2 class="anchored" data-anchor-id="map-5-fonts-and-texture">Map 5: Fonts and texture</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">comic_theme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/city_themes.html">city_themes</a></span><span class="op">(</span><span class="st">"comic"</span><span class="op">)</span></span>
+<span><span class="va">comic_theme</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">family</span> <span class="op">&lt;-</span> <span class="st">"sans"</span></span>
+<span><span class="va">comic_theme</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">face</span> <span class="op">&lt;-</span> <span class="st">"bold"</span></span>
+<span><span class="va">comic_theme</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">append</span> <span class="op">&lt;-</span> <span class="st">" ~ "</span></span>
+<span></span>
+<span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">uofg_campus</span>, zoom <span class="op">=</span> <span class="fl">3</span>, theme <span class="op">=</span> <span class="va">comic_theme</span>, halftone <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>         filename <span class="op">=</span> <span class="st">"images/uofg_campus_2.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/uofg_campus_2.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/uofg_campus_2.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="map-6-customising-themes-colours" class="level2"><h2 class="anchored" data-anchor-id="map-6-customising-themes-colours">Map 6: Customising theme’s colours</h2>
+<p>A lot of software use mix of named (e.g.&nbsp;<code>darkgreen</code>) and <strong>hex codes</strong> (e.g.&nbsp;<code>#3259a6</code>) for colours. You can use online <a href="https://htmlcolorcodes.com/color-picker/">colour pickers</a> to get the hex code for any colour. The colour names you can use keep expanding, but you can also find <a href="https://www.w3schools.com/colors/colors_names.asp">lists of named colours</a> online, but they might not cover all options that are now available.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">delftware_theme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/city_themes.html">city_themes</a></span><span class="op">(</span><span class="st">"delftware"</span><span class="op">)</span></span>
+<span><span class="va">delftware_theme</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">family</span> <span class="op">&lt;-</span> <span class="st">"Oswald"</span></span>
+<span><span class="va">delftware_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">water</span> <span class="op">&lt;-</span> <span class="st">"#3259a6"</span></span>
+<span><span class="va">delftware_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">waterlines</span> <span class="op">&lt;-</span> <span class="st">"#3259a6"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">glasgow_city</span>, theme <span class="op">=</span> <span class="va">delftware_theme</span>,</span>
+<span>         filename <span class="op">=</span> <span class="st">"images/glasgow_city_4.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/glasgow_city_4.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/glasgow_city_4.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="map-7-custom-colour-scheme" class="level2"><h2 class="anchored" data-anchor-id="map-7-custom-colour-scheme">Map 7: Custom colour scheme</h2>
+<p>Let’s use the ever wonderful and dapper <a href="https://catppuccin.com/palette/">Catppuccin colour palette</a> to create a custom colour scheme.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">macchiato_theme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/city_themes.html">city_themes</a></span><span class="op">(</span><span class="st">"modern"</span><span class="op">)</span></span>
+<span><span class="va">macchiato_theme</span><span class="op">$</span><span class="va">size</span><span class="op">$</span><span class="va">streets</span><span class="op">$</span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
+<span><span class="va">macchiato_theme</span><span class="op">$</span><span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  background <span class="op">=</span> <span class="st">"#24273a"</span>,</span>
+<span>  water      <span class="op">=</span> <span class="st">"#637baf"</span>,</span>
+<span>  waterlines <span class="op">=</span> <span class="st">"#637baf"</span>,</span>
+<span>  landuse    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#4a6047"</span>, <span class="st">"#3e503e"</span><span class="op">)</span>,</span>
+<span>  contours   <span class="op">=</span> <span class="st">"#24273a"</span>,</span>
+<span>  streets    <span class="op">=</span> <span class="st">"#c4b0ad"</span>,</span>
+<span>  rails      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#7bbcb3"</span>, <span class="st">"#24273a"</span><span class="op">)</span>,</span>
+<span>  buildings  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#a86170"</span>, <span class="st">"#ae7961"</span>, <span class="st">"#926656"</span>,</span>
+<span>                 <span class="st">"#bfaa82"</span>, <span class="st">"#ad9b9b"</span>, <span class="st">"#8286b2"</span><span class="op">)</span>,</span>
+<span>  text       <span class="op">=</span> <span class="st">"#f5e6cd"</span>,</span>
+<span>  textshadow <span class="op">=</span> <span class="st">"#181926"</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can now reuse that theme as we like:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">uofg_campus</span>, zoom <span class="op">=</span> <span class="fl">3</span>, theme <span class="op">=</span> <span class="va">macchiato_theme</span>,</span>
+<span>         filename <span class="op">=</span> <span class="st">"images/uofg_campus_3.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/uofg_campus_3.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/uofg_campus_3.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="map-8-reusing-custom-scheme" class="level2"><h2 class="anchored" data-anchor-id="map-8-reusing-custom-scheme">Map 8: Reusing custom scheme</h2>
+<p>We can reuse our custom theme created above - and continue to tweak it if needed.</p>
+<p>Let’s create a new <code>macchiato_glasgow_theme</code> that starts with the same value as our <code>macchiato_theme</code> created above with some tweaks to the customisation -</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">macchiato_glasgow_theme</span> <span class="op">&lt;-</span> <span class="va">macchiato_theme</span></span>
+<span><span class="va">macchiato_glasgow_theme</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">scale</span> <span class="op">&lt;-</span> <span class="fl">1.3</span></span>
+<span><span class="va">macchiato_glasgow_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"#cad3f5"</span></span>
+<span><span class="va">macchiato_glasgow_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">buildings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#8286b2"</span>, <span class="st">"#8286b2"</span>, <span class="st">"#8c72b1"</span>, <span class="st">"#8c72b1"</span>,</span>
+<span>                                              <span class="st">"#ae86a6"</span>, <span class="st">"#a86170"</span>, <span class="st">"#ae7961"</span>, <span class="st">"#bfaa82"</span>,</span>
+<span>                                              <span class="st">"#5b6078"</span>, <span class="st">"#5b6078"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">glasgow_city</span>, theme <span class="op">=</span> <span class="va">macchiato_glasgow_theme</span>,</span>
+<span>         filename <span class="op">=</span> <span class="st">"images/glasgow_city_5.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/glasgow_city_5.png"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/glasgow_city_5.png" class="img-fluid figure-img" width="984"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="map-9-adding-labels-with-ggplot" class="level2"><h2 class="anchored" data-anchor-id="map-9-adding-labels-with-ggplot">Map 9: Adding labels with ggplot</h2>
+<p>Let’s first create a custom theme that is slightly easier to parse:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">clear_theme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/city_themes.html">city_themes</a></span><span class="op">(</span><span class="st">"original"</span><span class="op">)</span></span>
+<span><span class="va">clear_theme</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">scale</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span><span class="va">clear_theme</span><span class="op">$</span><span class="va">size</span><span class="op">$</span><span class="va">streets</span><span class="op">$</span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
+<span><span class="va">clear_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">buildings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#e3c9a1"</span>, <span class="st">"#d9b382"</span><span class="op">)</span></span>
+<span><span class="va">clear_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">contours</span> <span class="op">&lt;-</span> <span class="st">"#b8a990"</span></span>
+<span><span class="va">clear_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">landuse</span> <span class="op">&lt;-</span> <span class="st">"#cfe3c4"</span></span>
+<span><span class="va">clear_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">water</span> <span class="op">&lt;-</span> <span class="st">"#a9cfe6"</span></span>
+<span><span class="va">clear_theme</span><span class="op">$</span><span class="va">colors</span><span class="op">$</span><span class="va">waterlines</span> <span class="op">&lt;-</span> <span class="st">"#a9cfe6"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>(Note, you will not always need this level of customisation this is just to show another example of customising colours etc.)</p>
+<p>We are going to create a new area and map centred to the north side of campus (using OSM again - see above when created our original campus area - to get the lat and long)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">uofg_buildings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/new_city.html">new_city</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"University of Glasgow"</span>, country <span class="op">=</span> <span class="st">""</span>,</span>
+<span>                           lat <span class="op">=</span> <span class="fl">55.8727</span>, long <span class="op">=</span> <span class="op">-</span><span class="fl">4.2893</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">uofg_buildings_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://koenderks.github.io/rcityviews/reference/cityview.html">cityview</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">uofg_buildings</span>, zoom <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                               theme <span class="op">=</span> <span class="va">clear_theme</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We next need to get the lat and long of specific buildings that we want to label on this map. To get the latitude and longitude of a place, find it on <a href="https://www.openstreetmap.org/">openstreetmap.org</a>, right-click on it and choose ‘Show address’:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/osm_lat_long_1.jpg" class="img-fluid figure-img" width="800"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The two numbers that then appear in the search box at the top left are the latitude and then the longitude of the point you clicked on, which the map marks with a red pin:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="images/osm_lat_long_2.jpg" class="img-fluid figure-img" width="800"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>(Rest stll under construction: To be completed)</p>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/abers\.github\.io\/data-project-2\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../week10/holyrood.html" class="pagination-link" aria-label="Holyrood debates">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Holyrood debates</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Made with <a href="https://www.r-project.org/" class="linked-icon"><i class="fa-brands fa-r-project" aria-label="R"></i></a> and <img src="../site_libs/quarto-contrib/quarto-project/abers/constellate/assets/quarto-logo.svg" style="height:1em" alt="Quarto"><a href="https://quarto.org">Quarto</a></p>
+</div>   
+    <div class="nav-footer-center">
+<p>Licensed under <span aria-hidden="true"><i class="fa-brands fa-creative-commons" aria-label="creative-commons"></i> <i class="fa-brands fa-creative-commons-by" aria-label="creative-commons-by"></i> <i class="fa-brands fa-creative-commons-sa" aria-label="creative-commons-sa"></i></span> <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons BY-SA 4.0</a></p>
+</div>
+    <div class="nav-footer-right">
+<p>Colour scheme <img src="../site_libs/quarto-contrib/quarto-project/abers/constellate/assets/cat-logo.png" style="height:1em" alt="Catppuccin"><a href="https://catppuccin.com/">Catppuccin</a></p>
+</div>
+  </div>
+</footer><script id="slide-variant-manifest" src="../slide-variants.js"></script>
+
+
+<script src="../site_libs/quarto-contrib/slide-variants-1.0.0/slide-links.js"></script>
+</body></html>

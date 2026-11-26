@@ -67,7 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../week10/holyrood.html" rel="next">
-<link href="../week10/multiple-regression.html" rel="prev">
+<link href="../week10/other-simd.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -437,6 +437,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../week10/other-simd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Other SIMD linkable datasets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../week10/sampling-glasgow-parks.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Sampling Glasgow Parks</span></a>
   </div>
@@ -445,6 +451,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../week10/holyrood.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Holyrood debates</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week10/rcityviews.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glasgow City Views</span></a>
   </div>
 </li>
       </ul>
@@ -567,69 +579,606 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li>
+<a href="#geospatial-data" id="toc-geospatial-data" class="nav-link active" data-scroll-target="#geospatial-data">Geospatial Data</a>
+  <ul class="collapse">
+<li><a href="#downloading-the-data" id="toc-downloading-the-data" class="nav-link" data-scroll-target="#downloading-the-data">Downloading the Data</a></li>
+  </ul>
+</li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#spatial-data" id="toc-spatial-data" class="nav-link" data-scroll-target="#spatial-data">Spatial Data</a></li>
+  <li>
+<a href="#simd-data" id="toc-simd-data" class="nav-link" data-scroll-target="#simd-data">SIMD data</a>
+  <ul class="collapse">
+<li><a href="#exploring-simd-data" id="toc-exploring-simd-data" class="nav-link" data-scroll-target="#exploring-simd-data">Exploring SIMD Data</a></li>
+  <li><a href="#the-data-frame-variables" id="toc-the-data-frame-variables" class="nav-link" data-scroll-target="#the-data-frame-variables">The Data Frame Variables</a></li>
+  <li><a href="#creating-glasgow-subset" id="toc-creating-glasgow-subset" class="nav-link" data-scroll-target="#creating-glasgow-subset">Creating Glasgow subset</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#greenspace-data" id="toc-greenspace-data" class="nav-link" data-scroll-target="#greenspace-data">Greenspace Data</a>
+  <ul class="collapse">
+<li><a href="#exploring-the-greenspace-dat" id="toc-exploring-the-greenspace-dat" class="nav-link" data-scroll-target="#exploring-the-greenspace-dat">Exploring the greenspace dat</a></li>
+  <li><a href="#creating-subset-for-named-parks" id="toc-creating-subset-for-named-parks" class="nav-link" data-scroll-target="#creating-subset-for-named-parks">Creating subset for named parks</a></li>
+  <li><a href="#viewing-the-named-parks" id="toc-viewing-the-named-parks" class="nav-link" data-scroll-target="#viewing-the-named-parks">Viewing the named parks</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#joining-our-datasets" id="toc-joining-our-datasets" class="nav-link" data-scroll-target="#joining-our-datasets">Joining our datasets</a>
+  <ul class="collapse">
+<li><a href="#visualising-a-single-park" id="toc-visualising-a-single-park" class="nav-link" data-scroll-target="#visualising-a-single-park">Visualising a single park</a></li>
+  <li><a href="#looking-at-our-joined-data-frame" id="toc-looking-at-our-joined-data-frame" class="nav-link" data-scroll-target="#looking-at-our-joined-data-frame">Looking at our joined data frame</a></li>
+  <li><a href="#selecting-a-sample" id="toc-selecting-a-sample" class="nav-link" data-scroll-target="#selecting-a-sample">Selecting a sample</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#mapping-our-sample" id="toc-mapping-our-sample" class="nav-link" data-scroll-target="#mapping-our-sample">Mapping our sample</a>
+  <ul class="collapse">
+<li><a href="#adding-the-green" id="toc-adding-the-green" class="nav-link" data-scroll-target="#adding-the-green">Adding ‘The Green’</a></li>
+  </ul>
+</li>
+  </ul></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content"><p>Saw we were doing ethnography of Glasgow parks and as part of that wanted to select parks across different areas based on SIMD data zones.</p>
-<p>We can use teh following data:</p>
+<section id="geospatial-data" class="level2"><h2 class="anchored" data-anchor-id="geospatial-data">Geospatial Data</h2>
+<p>We can use the following data:</p>
 <ul>
-<li>An SIMD map file with the levels of deprivation.</li>
+<li>
+<a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">Scottish Index of Multiple Deprivation</a> - and more specifically its <a href="https://www.spatialdata.gov.scot/geonetwork/srv/eng/catalog.search#/metadata/02866b0b-66e5-46ab-9b1c-d433dc3c2fae">spatial data</a> - to create a map of Glasgow with data zones shared by which quantile they fall into.</li>
 <li>
 <a href="https://osdatahub.os.uk/data/downloads/open/OpenGreenspace">OS Open Greenspace</a> will info including land “designed, constructed, managed, and maintained as a public park or garden”.</li>
 </ul>
+<p>The code in the next session already has the web addresses for the data we are using. The below just provides the steps I used for getting those web addresses:</p>
+<p>The SIMD data was found by:</p>
+<ol type="1">
+<li>Going to the main <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/">SIMD data and resources</a> page.</li>
+<li>Within the ‘Data’ section you’ll see a link to <a href="https://www.spatialdata.gov.scot/geonetwork/srv/eng/catalog.search#/metadata/02866b0b-66e5-46ab-9b1c-d433dc3c2fae">“Scottish Spatial Data website”</a>.</li>
+<li>On that page, scrolls down to the ‘Download’ section and there is the link for the “Scottish Index of Multiple Deprivation 2020” that we are using.</li>
+<li>Right-click the link and ‘Copy link address’</li>
+</ol>
+<p>The address for OS Open Greenspace data was found by:</p>
+<ol type="1">
+<li>Going to the <a href="https://osdatahub.os.uk/data/downloads/open/OpenGreenspace">OS Data Hub download page</a>.</li>
+<li>Under “Specify an area”, choosing “Set a custom area”. This will open a make of the UK with areas cut into 100 km tiles (i.e.&nbsp;squares). Each is named via two letters.</li>
+<li>If you look at Glasgow, you will see it is in the tile labelled ‘NS’. You can either simply Click the NS tile or type it into the “Enter map tile references” on the left-hand side and hit Enter.</li>
+<li>Click the ‘Save selection’ button in the bottom left corner. This will take you back to the main page with your selection in the ‘Specify an area’ part of the form.</li>
+<li>Under “Data format”, choose “ESRI Shapefile”.</li>
+<li>Right-click it and select ‘Copy link address’.</li>
+</ol>
+<section id="downloading-the-data" class="level3"><h3 class="anchored" data-anchor-id="downloading-the-data">Downloading the Data</h3>
 <p>We can download and ‘unzip’ the data with the following:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://maps.gov.scot/ATOM/shapefiles/SG_SIMD_2020.zip"</span>,</span>
-<span>              <span class="st">"data/simd_2020.zip"</span>, mode <span class="op">=</span> <span class="st">"wb"</span><span class="op">)</span></span>
+<span>              <span class="st">"data/simd_2020.zip"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://api.os.uk/downloads/v1/products/OpenGreenspace/downloads?area=NS&amp;format=ESRI%C2%AE+Shapefile&amp;redirect"</span>,</span>
 <span>              <span class="st">"data/greenspace_ns.zip"</span>, mode <span class="op">=</span> <span class="st">"wb"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html">unzip</a></span><span class="op">(</span><span class="st">"data/simd_2020.zip"</span>, exdir <span class="op">=</span> <span class="st">"data/simd_2020"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html">unzip</a></span><span class="op">(</span><span class="st">"data/greenspace_ns.zip"</span>, exdir <span class="op">=</span> <span class="st">"data/greenspace"</span>, junkpaths <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<ul>
+<li>
+<code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code> is from base R and takes a web address (first argument) and location want to save it’s content (the second argument). Here the web address points to zip files which we are then saving in our existing <code>data</code> sub-folder for our R project.</li>
+<li>We include <code>mode = "wb"</code> for our greenspace file as the web address does not end in <code>.zip</code>. We technically only need this on Windows - Linux and macOS will download the file without issue. However, even if not using Windows, it is good practice to still include this code in case we are sharing it with anyone who is using Windows. The reason for the code is that by default Windows treats files as plain-text and Microsoft being Microsoft stores new lines for plain-text slightly different to how Linux and macOS do it. As a result, files that are not plain-text can end up unuseable as the symbols used mean something else. The <code>mode = "wb"</code> switching the download mode to “write binary” and prevents the files being edited on Windows.</li>
+<li>
+<code><a href="https://rdrr.io/r/utils/unzip.html">unzip()</a></code> is another base R function which let’s us extract the content of our zip files, here also creating a subfolder for each dataset. As will see if look in the folders after running the code, there are a decent number of files for each dataset, so it makes sense to split them into sub-folders to keep things organised. In contrast, if each dataset was contained in a single file, we wouldn’t need a sub-folder for each.</li>
+<li>
+<code>junkpaths = TRUE</code> is used as the greenspace zip file has its own folder structure already inside it, adding this argument then ‘junks’ - i.e.&nbsp;ignores - any folder structure within the zip file and instead extracts everything into the single folder we specified (in this case <code>data/greenspace</code>).</li>
+</ul>
+<p>Note, if you are on a slow internet connection, R may time-out the file download. By default R gives certain tasks a 60 second timer, killing the task if it is not complete by then. You can fix that by running <code>options(timeout = 600)</code> - or whatever number seems adequate based on the tasks you are doing - and run the code to download the files again.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Aside: Code readability and practical considerations">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Aside: Code readability and practical considerations
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>There is no one single ‘correct’ way to write code that applies across all contexts.</p>
+<p>Even in comparing programming and markup languages, we can see different decisions get made about what syntax to use. We have seen how the top of R Markdown files have a <a href="https://en.wikipedia.org/wiki/YAML">YAML</a> header and in a few of our examples we have used <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> data. Both of these are ways to store data using key-value pairs.</p>
+<p>YAML aims to be more ‘human-readible’ - and accessible - so makes use of ‘white space’ to structure the data. This means that any idents are required as it has meaning to how software will read the data. It also makes it easier to write, which is why it is often used for declaring any configuration options.</p>
+<p>JSON on the other hand has a syntax structured using curly braces, square brackets, commas, and so on. This is easier for computers to read, and if working with very high volumes of data takes up less storage space than YAML as the ‘white space’ is optional. That is why some JSON files we download are an endless string of text with no line breaks.</p>
+<p>However, it becomes easier to see how the YAML and JSON are similar if we add white space to make the JSON more ‘human-readable’.</p>
+<p>Here is some example data in YAML:</p>
+<pre><code>#| eval: false
+person:
+  name: John Smith
+  age: 52
+  address:
+    city: Kirkcaldy
+    country: Scotland
+  hobbies:
+    - gardening
+    - chess</code></pre>
+<p>And the same in JSON using optional white-space to make it easier to read:</p>
+<pre><code>#| eval: false
+{
+  "person": {
+    "name": "John Smith",
+    "age": 52,
+    "address": {
+      "city": "Kirkcaldy",
+      "country": "Scotland"
+    },
+    "hobbies": [
+      "gardening",
+      "chess"
+    ]
+  }
+}</code></pre>
+<p>Whilst there are other differences between the two, the decision of which is ‘better’ is about which is more practical in the context for which it is going to be used.</p>
+<p>Then each within a single programming language, we have seen how there can be different ‘design languages’ behind the design of functions we use. <code>iris</code> is a dataset about iris plants built into R which can use without loading anything. So we can use it here to demonstrate differences between ‘base R’ and the tidyverse.</p>
+<p>Base R:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">[</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    setosa versicolor  virginica 
+        22         47         49 </code></pre>
+</div>
+</div>
+<p>Tidyverse:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">iris</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">count</span><span class="op">(</span><span class="va">Species</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Species  n
+1     setosa 22
+2 versicolor 47
+3  virginica 49</code></pre>
+</div>
+</div>
+<p>Neither of these is ‘better’ than the other. Base R is more compact and can be used without installing and loading additional ‘dependencies’ (like the Tidyverse). R is also a general purpose language that whilst aimed primarily at data analysis, still needs to support other programming features. The Tidyverse, in contrast, can assume a narrow set of use cases and have therefore designed their packages around them with an emphasise too on readibility - hence the use of pipes (<code>|&gt;</code>) to help separate and order functions in a ‘this, then this, then this’ style and with functions named around verbs - the action they do, <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code>. We can read it’s code example then as “take the iris dataset, filter it for where sepal length is greater than 5, and then produce a count for each species”.</p>
+<p>We sometimes also see features introduced in packages make their way back into the base programming language if they are popular enough. For instance, the pipe operator was first introduced by the Tidyverse, but proved so popular that it was incorporated into base R.</p>
+<p>As we continue down through a programming language, there are also different stylistic options for how to write the code. For example, in R white space is optional, but most style guides - like the <a href="https://style.tidyverse.org/">Tidyverse style guide</a> - advise including it to make code easier to read. The Tidyverse style guide also advises things like using snake case (<code>example_object_name</code>) to name objects - like dataframes and their columns - over alternative styles like camel case (<code>exampleObjectName</code>). Again, neither is clearly better in all circumstances than the other, but having a convention for how to name objects does help add consistency to the code you write.</p>
+<p>That then - finally - brings us to the code we used to download the files. Across our examples, we have included the URL - i.e.&nbsp;the web address - directly inside the <code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code> function. This is often the easiest option, which keeps code compact and avoids creating objects that are not strictly needed.</p>
+<p>However, we could actually create objects taht store the URL values before passing these as arguments to <code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">simd_url</span> <span class="op">&lt;-</span> <span class="st">"https://maps.gov.scot/ATOM/shapefiles/SG_SIMD_2020.zip"</span></span>
+<span><span class="va">greenspace_url</span> <span class="op">&lt;-</span> <span class="st">"https://api.os.uk/downloads/v1/products/OpenGreenspace/downloads?area=NS&amp;format=ESRI%C2%AE+Shapefile&amp;redirect"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="va">simd_url</span>, <span class="st">"data/simd_2020.zip"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="va">greenspace_url</span>, <span class="st">"data/greenspace_ns.zip"</span>, mode <span class="op">=</span> <span class="st">"wb"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>That obviously though creates objects we only use once, but are now left cluttering our R environment despite never using them again. If we were to repeatedly reuse those URLs for other purposes, it may make more practical sense to have objects for them to simplify the rest of our code. Similarly, code examples sometimes break code down like the above as - depending on what is being explained - it can help make it easier for beginners to see and understand how code works. The above, for example, could potentially be used to explain to beginners how an object can store a text string and be used anywhere you could normally write a string of text. By shortening the code between the <code>()</code> for <code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code> it can also make it easier to see what arguments get passed to it - especially if working with extremely long URLs.</p>
+<p>That code which achieves the same end result - like downloading a couple of files - can be written in different ways is a strength of programming languages. It does though add to sense of confusion when first learning to code. When starting out, the most important thing is that your code ‘works’ and reliably does what you need it to. Whilst there may be ‘better’ ways to write some code - especially to remove any repetitive aspects - at the end of the day it doesn’t matter as long as the end result is what you need and accurate. As you continue with R you’ll build a sense of when and how to use different structures and patterns for your code. Indeed, coding is like writing, where you may need to write out an initial ‘draft’ of your code, then go back through it ‘revising’ (or to use coding term ‘refactoring’) it. Some of those changes may be about what is practical, making the code run more efficiently, improving readability, or simply just come down to stylistic preferences.</p>
+</div>
+</div>
+</div>
+</section></section><section id="packages" class="level2"><h2 class="anchored" data-anchor-id="packages">Packages</h2>
 <p>Then load packages (first installing any where need to):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor">janitor</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>sf lets us work with spatial data.</p>
-<p>We can then read in the spatial data for Glasgow and use the quntile SIMD measure (1 = most deprived, 5 = least deprived).</p>
+<ul>
+<li>
+<code>sf</code> lets us work with spatial data, and once read into R its objects are data frames with an additional column named <code>geometry</code> which stores the row’s shape data. By storing the data read in within R’s usual data frame structure, it means that we can use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>, and all the rest of the functions we normally use with this data too.
+<ul>
+<li>As wee note, when loading in data <code>sf</code> will print out version information about the software being used. That is just regular standard messaging it always includes and not an error.</li>
+</ul>
+</li>
+<li>
+<code>janitor</code> gives us our every useful <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names()</a></code> function to convert all data frame column names into <code>snake_case</code>.</li>
+<li>
+<code>readxl</code> is part of the tidyverse but as not all data analysis projects will be working with Excel files needs to be loaded separately. We are only loading it in this example merely to read in data from an optional file. It is not needed for directly working with the spatial data we are using.</li>
+</ul></section><section id="spatial-data" class="level2"><h2 class="anchored" data-anchor-id="spatial-data">Spatial Data</h2>
+<p>Base R has a nice little function <code><a href="https://rdrr.io/r/base/list.files.html">list.files()</a></code> which can use in the Console to view files in a folder - saving you from needing to use the Files tab to manually browser through the folders. Either way is perfectly fine. One benefit of the function is it makes it easy to also include code on this page that will list all the files for me:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">simd_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"data/simd_2020/SG_SIMD_2020.shp"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">LAName</span> <span class="op">==</span> <span class="st">"Glasgow City"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>quintile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">Quintilev2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"data/simd_2020"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "SG_SIMD_2020.CPG"                      
+[2] "SG_SIMD_2020.dbf"                      
+[3] "SG_SIMD_2020.prj"                      
+[4] "SG_SIMD_2020.sbn"                      
+[5] "SG_SIMD_2020.sbx"                      
+[6] "SG_SIMD_2020.shp"                      
+[7] "SG_SIMD_2020.shp.xml"                  
+[8] "SG_SIMD_2020.shx"                      
+[9] "SIMD2020v2 - GIS files - glossary.xlsx"</code></pre>
 </div>
-<p>And now our parks data:</p>
+</div>
+<p>Having this collection of files is common when working with <strong>shapefiles</strong> which for each dataset are a collection of files with the same name but different endings, which also need to be kept in the same folder. The one’s important for us:</p>
+<ul>
+<li>
+<code>.shp</code> - the main file with the shapes</li>
+<li>
+<code>.shx</code> - an index of where each shape starts in the <code>.shp</code> file</li>
+<li>
+<code>.dbf</code> - a table with a row for each shape and columns for any variables (name, SIMD rank, etc)</li>
+<li>
+<code>.prj</code> - the coordinate system being used. Shapes are stored as a list of points. For example, for a square what the coordinates for it would be the points where each corner is. There are though different ways - i.e.&nbsp;systems - to represent coordinates. The coordinate system then gives specific meaning for how to interpret and use the coordinates in the data. For our data, this is metres on the British National Grid.</li>
+</ul>
+<p>Thankfully, despite the number of files, with R we just need to read in only the <code>.shp</code> files. This is a standard convention used across software when working with spatial data, where opening/reading a <code>.shp</code> file will also automatically read in data from the <code>.shx</code>, <code>.dbf</code>, and <code>prj</code> files - and why each datasets files need to have the same name before the <code>.</code> endings and all be in the same folder.</p>
+</section><section id="simd-data" class="level2"><h2 class="anchored" data-anchor-id="simd-data">SIMD data</h2>
+<p>Reading in the <code>.shp</code> SIMD file then also gives us access to information like the SIMD quintiles (1 = most deprived, 5 = least deprived) for each ‘shape’ - i.e.&nbsp;each SIMD data zone.</p>
+<p>We <strong>could</strong> read in, do initial tidy up of names, filter, and create a factor variable for the SIMD quintiles all together as so -</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">parks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"data/greenspace/NS_GreenspaceSite.shp"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`function`</span> <span class="op">==</span> <span class="st">"Public Park Or Garden"</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">distName1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">simd_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"data/simd_2020/SG_SIMD_2020.shp"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">la_name</span> <span class="op">==</span> <span class="st">"Glasgow City"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>quintile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">quintilev2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>However</strong>, to get a better sense of the data, let’s go through things bit by bit:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">simd_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"data/simd_2020/SG_SIMD_2020.shp"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>
+<code><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf()</a></code> reads our <code>.shp</code> file - bringing in all the other info from the <code>.shx</code>, <code>.dbf</code>, and <code>prj</code> files - as a data frame (i.e.&nbsp;a ‘tibble’ of rows and columns).</li>
+<li>
+<code><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names()</a></code> cleans up the worst of the mess in the column names, turning <code>LAName</code> to <code>la_name</code>, <code>Quintilev2</code> to <code>quintilev2</code> and so on.</li>
+</ul>
+<section id="exploring-simd-data" class="level3"><h3 class="anchored" data-anchor-id="exploring-simd-data">Exploring SIMD Data</h3>
+<p>To get basic idea of what the <code>simd_all</code> data frame contains, we can simply run a line of code with just the code name:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">simd_all</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 6976 features and 51 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 5513 ymin: 530252.8 xmax: 470323 ymax: 1220302
+Projected CRS: OSGB36 / British National Grid
+# A tibble: 6,976 × 52
+   data_zone dz_name        la_name sape2017 wape2017 rankv2 quintilev2 decilev2
+   &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+ 1 S01006506 Culter - 01    Aberde…      894      580   4691          4        7
+ 2 S01006507 Culter - 02    Aberde…      793      470   4862          4        7
+ 3 S01006508 Culter - 03    Aberde…      624      461   5686          5        9
+ 4 S01006509 Culter - 04    Aberde…      537      307   4332          4        7
+ 5 S01006510 Culter - 05    Aberde…      663      415   3913          3        6
+ 6 S01006511 Culter - 06    Aberde…      759      453   6253          5        9
+ 7 S01006512 Culter - 07    Aberde…      539      345   5692          5        9
+ 8 S01006513 Cults, Bields… Aberde…      788      406   6177          5        9
+ 9 S01006514 Cults, Bields… Aberde…     1123      709   6715          5       10
+10 S01006515 Cults, Bields… Aberde…      816      529   6363          5       10
+# ℹ 6,966 more rows
+# ℹ 44 more variables: vigintilv2 &lt;dbl&gt;, percentv2 &lt;dbl&gt;, inc_rate &lt;chr&gt;,
+#   inc_num_dep &lt;dbl&gt;, inc_rankv2 &lt;dbl&gt;, emp_rate &lt;chr&gt;, emp_num_dep &lt;dbl&gt;,
+#   emp_rank &lt;dbl&gt;, hlth_cif &lt;dbl&gt;, hlth_alc_sr &lt;dbl&gt;, hlth_drug_sr &lt;dbl&gt;,
+#   hlth_smr &lt;dbl&gt;, hlth_dprs_pc &lt;chr&gt;, hlth_lbwt_pc &lt;chr&gt;, hlth_emerg_s &lt;dbl&gt;,
+#   hlth_rank &lt;dbl&gt;, edu_attend &lt;chr&gt;, edu_attain &lt;dbl&gt;, edu_no_quals &lt;dbl&gt;,
+#   edu_partici &lt;chr&gt;, edu_univer &lt;chr&gt;, edu_rank &lt;dbl&gt;, g_acc_petrol &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+<p>In R, we can do this with any object, where exactly what gets printed out varies based on the type of object. For our <code>simd_all</code> object though we can see:</p>
+<ul>
+<li>It contains 6,976 “features” (rows), one for each data zone, and 51 “fields” (columns/variables) not counting the additional <code>geomtry</code> with the shape gap.</li>
+<li>The geometry type is <code>MULTIPOLYGON</code>, meaning areas can be more than one part - say a park has a main road going right through the centre of it and decided the road should not be part of the shape data for the park, then you can store the ‘single’ park as two shapes, one either side of the road.</li>
+<li>The “Projected CRS” is the coordinate system being used - where can see our coordinate grid is the British National Grid.</li>
+</ul>
+<p>And can use ggplot’s <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf()</a></code> to see how the shape data (the map of the data zones) can be combined with regular data - like the SIMD quintiles - to create a map:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">simd_all</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">quintilev2</span><span class="op">)</span>, colour <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here:</p>
+<ul>
+<li>
+<code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf()</a></code> is the ggplot layer for drawing <code>sf</code> data.</li>
+<li>We use <code>aes(fill = quntilev2)</code> to colour data zones by ther SIMD quintile (it isn’t the nicest map here with everything in shades of blue as we have yet to coerce <code>quintilev2</code> into a factor variable, but we’ll return later to how can fix that - at present though R is treating it as a continuous variable which is why it uses single shade of lightest to darkest rather than different colours for each category)</li>
+<li>We also add in <code>colour = NA</code> to not draw in the outlines for data zones. Pending on the data the outlines can map the plot too messy / result in it being hard to easily see some smaller zones.</li>
+</ul></section><section id="the-data-frame-variables" class="level3"><h3 class="anchored" data-anchor-id="the-data-frame-variables">The Data Frame Variables</h3>
+<p>It is good practice to read data documentation to understand what is being measured, how data was collected, and so on. You can find relevant <a href="https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/#supportingdocuments">SIMD documentation</a> online.</p>
+<p>The zip file we downloaded though also includes a nice wee glossary - which is not sufficient on its own - but is useful to get key info and can be good to get quick reminders rather than constantly switching between RStudio and a browser.</p>
+<p>Let’s then read in this glossary, which is provided as an Excel file:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">glossary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"data/simd_2020/SIMD2020v2 - GIS files - glossary.xlsx"</span><span class="op">)</span></span>
+<span><span class="va">glossary</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 48 × 4
+   ...1         `Indicator label` `Indicator type` Description                  
+   &lt;chr&gt;        &lt;chr&gt;             &lt;chr&gt;            &lt;chr&gt;                        
+ 1 Geography    DataZone          Code             2011 data zone               
+ 2 &lt;NA&gt;         LAName            Name             Council area name            
+ 3 Population   SAPE2017          Count            2017 NRS small area populati…
+ 4 &lt;NA&gt;         WAPE2017          Count            2017 NRS small area populati…
+ 5 Overall SIMD Rankv2            Rank             Rank                         
+ 6 &lt;NA&gt;         Quintilev2        Quantile         Quintile                     
+ 7 &lt;NA&gt;         Decilev2          Quantile         Decile                       
+ 8 &lt;NA&gt;         Vigintilv2        Quantile         Vigintile                    
+ 9 &lt;NA&gt;         Percentv2         Quantile         Percentile                   
+10 Income       IncRate           Percentage       Percentage of people who are…
+# ℹ 38 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>The <code>...1</code> is just due to the Excel file’s top-left cell being empty. It’s column though marks where each group begins. For example, the Geograph group contains DataZone and LAName.</li>
+<li>We can see in rest of the columns the name for each indicator (how they appear before we ran <code>clean_name()</code>), its type (which is why this can be a handy reference when checking what need to <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>), and short description - in this case, some a little bit too short, but similar glossaries in other datasets can include slightly longer descriptions.</li>
+</ul></section><section id="creating-glasgow-subset" class="level3"><h3 class="anchored" data-anchor-id="creating-glasgow-subset">Creating Glasgow subset</h3>
+<p>We can use two common Tidyverse functions to keep only the map data we need and coerce our main variable of interest, the SIMD quintiles:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">simd_map</span> <span class="op">&lt;-</span> <span class="va">simd_all</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">la_name</span> <span class="op">==</span> <span class="st">"Glasgow City"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>quintile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">quintilev2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>We <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> to keep only rows where the Local Authority name (the <code>la_name</code> column) is “Glasgow City”, using <code>==</code> with two equals signs. As opposed to the regular <code>=</code> which assigns a value, using <code>==</code> is R’s “equal’s to” operator. What filter then does is go through each row and checks is the value in the <code>la_name</code> column a match to “Glasgow City”, returning either <code>TRUE</code> or <code>FALSE</code>, where only rows that returned <code>TRUE</code> are kept.</li>
+<li>Then <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> let’s us turn quintile into a <code><a href="https://rdrr.io/r/base/factor.html">factor()</a></code>. Despite the values being 1-5, we should still convert it to a factor so R does not treat the 1-5 as a continuous variable (like temperature), but instead ordinal categories (like gold, silver, bronze). We use <code>quintile =</code> to create this as a new column with a better name than the original <code>quintilev2</code>. This is entirely optional and we could have written <code>quintilev2 = factor(quintilev2)</code> and then kept referring to <code>quintilev2</code> in code below. I like to rename variables though to things that are easier to remember and read.</li>
+</ul>
+<p>Now we have a factor variable with each quintile treated as a category we can use relevant ggplot functions to produce a nicer looking map.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">simd_map</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">quintile</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>We have not included <code>colour = NA</code> this time, just so you can also see how the map looks if do include border colours.</li>
+<li>As we now have categories, we have different colours rather than light - dark scale of single colour.</li>
+<li>We are also using <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d()</a></code> which uses colours which are more accessible for common forms of colour blindness - <strong>and</strong>, in my view, actually look bit nicer too. There are a range of palettes which are all listed on page you’ll go to if click the link for <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d()</a></code>.</li>
+</ul></section></section><section id="greenspace-data" class="level2"><h2 class="anchored" data-anchor-id="greenspace-data">Greenspace Data</h2>
+<p>Again with our OS Open Greenspace data we <strong>could</strong> load it in, clean the names, filter it to keep only named parks, and create a hectares column that is most human readible than the datasets metres squared:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">parks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"data/greenspace/NS_GreenspaceSite.shp"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`function`</span> <span class="op">==</span> <span class="st">"Public Park Or Garden"</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">dist_name1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>hectares <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10000</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>However</strong>, let’s go through this bit by bit whilst exploring the data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">greenspaces</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"data/greenspace/NS_GreenspaceSite.shp"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>So -</p>
+<ul>
+<li>We again read in our data using <code><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf()</a></code> and only need to read in the file ending <code>.shp</code>.</li>
+<li>Janitor’s <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names()</a></code> then goes through renaming columns like <code>distName1</code> all into snake case <code>dist_name1</code>.</li>
+</ul>
+<section id="exploring-the-greenspace-dat" class="level3"><h3 class="anchored" data-anchor-id="exploring-the-greenspace-dat">Exploring the greenspace dat</h3>
+<p>At present our data includes every kind of site in the NS tile, not just Glasgow. However, that will get addressed later when we link our two datasets.</p>
+<p>Let’s first then have a llok at our datasets variables:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">greenspaces</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 7,483
+Columns: 7
+$ id         &lt;chr&gt; "5A80AAE2-62B6-5B9B-E063-CF00A60A07BA", "5A80AC21-0A0F-5B9B…
+$ `function` &lt;chr&gt; "Religious Grounds", "Play Space", "Public Park Or Garden",…
+$ dist_name1 &lt;chr&gt; "St Thomas' Roman Catholic Church", NA, "Foulshiels Park", …
+$ dist_name2 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ dist_name3 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ dist_name4 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ geometry   &lt;MULTIPOLYGON [m]&gt; MULTIPOLYGON (((299502.8 66..., MULTIPOLYGON (…</code></pre>
+</div>
+</div>
+<ul>
+<li>
+<code><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse()</a></code> is lovely little utility function which gives us a quick ‘glimpse’ into our data.</li>
+<li>It opens first with the number of rows (7,483) and columns (7) in our data set.</li>
+<li>Then it lists each column in turn with it’s name, data type (R reads most of these in as character data - <code>&lt;chr&gt;</code>), and values of first few rows.</li>
+<li>
+<code>function</code> has back-ticks around it as it is a ‘reserved’ word used by R. Whenever an object name is the same as a reserved word we just need to place back-ticks around it whenever we use it, and thankfully functions like <code><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse()</a></code> will also include back-ticks in their output to let us know too. (You will rarely run into such situations in practice.)</li>
+<li>Can also see our geometry is <code>MULTIPOLYGON</code> and in <code>[m]</code> metres squared.</li>
+</ul>
+<p>As we can see, the <code>function</code> column lists what ‘function’ each greenspace plays. There are few different ways to view all values used, but let’s do it via <code><a href="https://dplyr.tidyverse.org/reference/count.html">count()</a></code> so can also see how many there are of each type:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">greenspaces</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">`function`</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   `function`                                 n
+   &lt;chr&gt;                                  &lt;int&gt;
+ 1 Allotments Or Community Growing Spaces   134
+ 2 Bowling Green                            454
+ 3 Cemetery                                 315
+ 4 Golf Course                              187
+ 5 Other Sports Facility                    775
+ 6 Play Space                              2769
+ 7 Playing Field                            779
+ 8 Public Park Or Garden                   1253
+ 9 Religious Grounds                        668
+10 Tennis Court                             149</code></pre>
+</div>
+</div>
+<ul>
+<li>We use <code>st_drop_gemotry()</code> just to initially turn the object with our data into a data frame <em>without</em> any spatial data. If we did not drop this data first, when doing a <code><a href="https://dplyr.tidyverse.org/reference/count.html">count()</a></code> R would still give the same numbers but it will take longer due to how it processes the spatial data. Here it only adds ~1 second to how long the code takes to run, but that quickly adds up if have a lot of code and becomes more serious issue as well as the amount of data we are working with increases.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/count.html">count()</a></code> then for <code>function</code> (with back-ticks) then shows us all the different types of green spaces our data contains.</li>
+</ul></section><section id="creating-subset-for-named-parks" class="level3"><h3 class="anchored" data-anchor-id="creating-subset-for-named-parks">Creating subset for named parks</h3>
+<p>We can then use the information we learnt from looking at the <code>function</code> variable to filter our data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">parks</span> <span class="op">&lt;-</span> <span class="va">greenspaces</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`function`</span> <span class="op">==</span> <span class="st">"Public Park Or Garden"</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">dist_name1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>hectares <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10000</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
-<li>We <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> for the data we want.</li>
-<li>“function” is already a word used by R (for when creating functions) so we need to place inside backticks so R knows it is a name within our data</li>
-<li>Sadly not all parks / gardens are named. For our example, we are going to assume we only want to look at ones that have a name in the data so also <code>!is.na(distName1)</code>. (In practice you would want to do some further exploration of those without names and any reasons why they do not have names).</li>
-<li>(optional) Each park’s rea is in metres squared so can concert to hectares.</li>
-</ul>
-<p>Again, for our purposes, we are going to turn each park into a point on a map (why will become clear further down) rather than drawing its exact shape. We will also use <code>st_join</code> to join our park and SIMD data together.</p>
+<li>We <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> for the data we want, with the function also letting us specify multiple conditions.</li>
+<li>Our first condition looks for rows where <code>function</code> (again with back-ticks) is equal to (<code>==</code>) “Public Park Or Garden” (ensuring to match the capitaliation).</li>
+<li>Our second condition using <code>!is.na()</code>. <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code> checks whether a value is ‘not available’, <code>NA</code>. The <code>!</code> is the ‘not’ operator. Normally, <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code> would return <code>TRUE</code> if the value is <code>NA</code>. By adding <code>!</code> we inverse that behaviour, returning <code>TRUE</code> for all values that are <strong>not</strong> <code>NA</code>. This then makes it easy to find all rows where <code>dist_name1</code> has a name listed for the park / garden.</li>
+<li>Sadly not all parks / gardens are named. For our example, just to keep things easier, we are going to assume we only want to look at ones that have a name in the data. In practice you would want to do some further exploration of those without names and any reasons why they do not have names. The <a href="https://docs.os.uk/os-downloads/products/land-and-terrain-portfolio/os-open-greenspace/os-open-greenspace-overview/product-details">OS documentation</a> says names are filled in “where they can be sourced from relevant existing data holdings”“, so”only a limited number of records”. This makes the data slightly messy as it is the phrasing suggests they try to source names from multiple sources rather than this being for example the “official” name. As can also see there is also <code>dist_name2</code>, <code>dist_name3</code>, and <code>dist_name4</code> which are used if a greenspace is known under different names too.</li>
+<li>(Optional) as each park’s area is in square metres we can also create an additional column that converts that to hectares instead. We first need to use <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_area()</a></code> to get the area from the shape data which is stored in the <code>geometry</code> column. That returns the data with a <code>[m^2]</code> (metres squared) label, so we also need to wrap it with <code><a href="https://rdrr.io/r/base/numeric.html">as.numeric()</a></code> so R returns it as a plain number before we then <code>/ 10000</code>.</li>
+</ul></section><section id="viewing-the-named-parks" class="level3"><h3 class="anchored" data-anchor-id="viewing-the-named-parks">Viewing the named parks</h3>
+<p>Let’s visualise both of our datasets together:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">glasgow_parks</span> <span class="op">&lt;-</span> <span class="va">parks</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">simd_map</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">parks</span>, fill <span class="op">=</span> <span class="st">"darkgreen"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It’s not the nicest of maps, but helps us get better sense of the data:</p>
+<ul>
+<li>With <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> we add <code>+</code> layers together in the order that we list then. (<strong>NOTE</strong>, it is incredibly - and painfully - easy to forget to add each <code>+</code> at the end of each line before the next layer, or conversely adding a <code>+</code> on the very final layer which will result in an error as R then expects another line of code with another layer after it. If you run into errors running <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> code then, the best first thing to check is that the <code>+</code>s are all correct.)</li>
+<li>So, we first add our SIMD map that we filtered to only include Glasgow and use <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf()</a></code> with just our <code>data = simd_map</code>. That draws the outlines of all of Glasgow City’s SIMD data zone with no colour filling the spaces.</li>
+<li>We can then use <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf()</a></code> again to draw our <code>data = parks</code> ontop of the SIMD data and also <code>fill = "darkgreen"</code> just to make it (slightly) easier to distinguish parks from SIMD data zones.</li>
+</ul>
+<p>As can see it’s a bit hard to read as our <code>parks</code> data still covers the whole NZ tile and not just Glasgow City. We can lazily fix that when we join our datasets - hence why not including it as its own separate step during this initial loading and cleaning of the data.</p>
+</section></section><section id="joining-our-datasets" class="level2"><h2 class="anchored" data-anchor-id="joining-our-datasets">Joining our datasets</h2>
+<p>When joining datasets we need some form of shared information between them that makes sense. That will vary based on the type of data and can sometimes be incredibly simple or require a few steps first.</p>
+<p>Thankfully as our spatial data both using the British Nation Grid for their coordinate system, they can easily be joined.</p>
+<p>To confirm that though we can direct compare the two:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">parks</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">simd_map</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<ul>
+<li>
+<code><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs()</a></code> is a function to grab an object’s coordinate reference system.</li>
+<li>Here then we are asking “is the coordinate system for the parks data the same as the coordinate system for the simd_gap data”.</li>
+<li>As they both use the same coordinate system this line of code returns <code>TRUE</code>.</li>
+</ul>
+<p>Again, four our purposes, we are going to assume we want to turn each park into a point on a map - which will become clearer further down - rather than drawing its exact shape. Depending on your analysis you might not want to do that.</p>
+<p>We can then turn our parks into points and join the data with the simd_map:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">glasgow_parks</span> <span class="op">&lt;-</span> <span class="va">parks</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_point_on_surface</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join</a></span><span class="op">(</span><span class="va">simd_map</span>, left <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
-<code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_point_on_surface()</a></code> handles the conversion to a point which is guaranteed to be within the area of the original surface. Another option would be <code>sf_centroid()</code> but an uneven spaced park could have a dot outside of itself using it.</li>
+<code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_point_on_surface()</a></code> converts a shape to a single point and ensures that point is drawn something within the original shape’s surface. Image you had an oddly crescent shaped park, another option like <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_centroid()</a></code> that adds a point in the ‘centre’ of the area could actually draw the point outside the crescent. Similarly, a park split in two by a main road going through it could get a point drawn on the road and not within an area belonging to the park proper.</li>
+<li>Don’t worry about the Warning message, it is basically just saying all the existing columns (the park name, function, hectares) are being copied over too as attributes of the points being created.</li>
 <li>
-<code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join()</a></code> joins by location - where here each point gets columns added for the SIMD data zone it falls into</li>
-<li>
-<code>left = FALSE</code> drops points that do not fall into a data zone, which as we have already only selected Glasgow City data zones for SIMD, means we only keep points for parks and gardens in Glasgow City.</li>
+<code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join()</a></code> let’s us join our parks data with the simd_map data, which R can handle directly given they both use the same coordinate system. What this means is the new <code>glasgow_parks</code> object we are creating will have columns from both the <code>parks</code> <em>and</em> <code>simd_map</code> data. The SIMD columns will add values based on which SIMD data zone each of the points we are creating falls into. This then means each of our parks now has a SIMD quintile value. (A park could be in 2+ different data zones, so converting first to points also removes that as an issue. If not wanting to covert to points there are various ways to handle it via extra steps. There is no ‘correct’ single way to do it, options would include: averaging the qunitiles of the data zones the park lies across, weighting the quintiles by how much of the park is in each data zone, going with the data zone that the park’s entrance is in, and so on. As with most things, what is key is justifying the decision based on what your analysis is doing.)</li>
+<li>Importantly, we use <code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join()</a></code> rather than <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code> or similar as you will see in our other examples for how to join different datasets. Functions like <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code> requires each data frame to have a column with shared values, like say both of them have a column <code>name</code> with each person’s name being the same in both data frames. The shape of our parks and SIMD data zones though are not the same. <code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join()</a></code> though let’s us join them by the shared coordinate system instead.</li>
+<li>We also pass <code>left = FALSE</code> as an argument. By default, <code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join()</a></code> keeps all rows in our original <code>parks</code> data frame. <code>left = FALSE</code> drops any rows where the point calculated for the park does not match any of the data zones in the <code>simd_map</code> data. As we have filtered the <code>simd_map</code> to only include the data zones for Glasgow City, this means we can simultaneously join our two data frames and drop all parks which are not within the Glasgow City region.</li>
 </ul>
-<p>(Converting to points first makes this easy as do not have to worry about parks that span data zones, it’s now based on where the point was calculated to only - again there are pros and cons of this, but it helps keep things more simple and straight forward for our example.)</p>
-<p>So let’s turn our spatial data into a regular data frame and check how many parks are in each SIMD quintile:</p>
+<section id="visualising-a-single-park" class="level3"><h3 class="anchored" data-anchor-id="visualising-a-single-park">Visualising a single park</h3>
+<p>Just to help make clearer why we are converting parks to single point and the type of things we would have to consider if we did not, let’s take a look at Kelvingrove park.</p>
+<p>First let’s create the objects we will need:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">park_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">glasgow_parks</span><span class="op">)</span></span>
-<span><span class="va">park_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">quintile</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">kelvingrove</span> <span class="op">&lt;-</span> <span class="va">parks</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">dist_name1</span> <span class="op">==</span> <span class="st">"Kelvingrove Park"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">kelvingrove_data_zones</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_filter</a></span><span class="op">(</span><span class="va">simd_map</span>, <span class="va">kelvingrove</span><span class="op">)</span></span>
+<span><span class="va">kelvingrove_point</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_point_on_surface</a></span><span class="op">(</span><span class="va">kelvingrove</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We now have three objects:</p>
+<ul>
+<li>
+<code>kelvingrove</code> which includes our parks data just for Kelvingrove Park.</li>
+<li>
+<code>kelvingrove_data_zones</code> is our SIMD data with just the data zones that overlap with our parks data for Kelvingrove Park. The <code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_filter()</a></code> function takes our <code>simd_map</code> as its first argument and our <code>kelvingrove</code> object as the second for what we are filtering for. It then goes through all the <code>simd_map</code> data and checks for shapes would overlap with out <code>kelvingrove</code> shapes if drawn on a map.</li>
+<li>
+<code>kelvingrove_point</code> uses <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_point_on_surface()</a></code> so in addition to our <code>kelvingrove</code> with the shape data for drawing Kelvingrove Park on a park, we have another object which simply has a single point that lies within the area the Kelvingrove Park shape covers.</li>
+</ul>
+<p>Actually drawing a map will make this clearer:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">kelvingrove_data_zones</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">dz_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">kelvingrove</span>, fill <span class="op">=</span> <span class="cn">NA</span>, colour <span class="op">=</span> <span class="st">"black"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">kelvingrove_point</span>, colour <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Our first layer draws our <code>kelvingrove_data_zones</code> with the SIMD data zones which overlapped with the area covered by Kelvingrove Park. We are adding in <code>fill = dz_name</code> to give each SIMD data zone a different colour and make it easier to see how many Kelvingrove’s area falls into.</li>
+<li>Our next layer is our <code>kelvingrove</code> shape data with the area Kelvingrove covers which we do not fill in so can still see the SIMD zones underneath and use thicker line for the outline to make it distinct. As can also see Kelvingrove Park is stored as multiple shapes given there are roads and paths which divide it up. This is why our greenspace data is multipolygon as each greenspace is not necessarily a single continuous area.</li>
+<li>Our final layer is the <code>kelvingrove_point</code> with just a dot that lies wtihin the area of Kelvingrove Park.</li>
+</ul>
+<p>So, as can see from the above map, Kelvingrove crosses six different SIMD data zones, with most of it in Hillhead, and a few - like “Woodlands - 03” - only a slither of the park falls into. As noted above, our code assigns to each of our parks the SIMD quintile (the overall deprivation measure) based on where the point is. For Kelvingrove Park then that will be Hillhead. One alternative option could have been to calculate which data zone most of the park falls into - which here would again have been Hillhead, but not necessarily the case for all parks. Again, as noted above, there are various other options too - none of which is ‘correct’ in all situations. It is always what makes sense in relation to your analysis. For us, we merely wanted a straight forward option, but we can still justify it as the point is create roughly at the calculated centre of each park, where would also need to note the limitation that it is a rough measure compared to doing additional calculations such as which data zone most of the park falls into, weighting each data zone’s quintile by % of the park in its area, and so on.</p>
+</section><section id="looking-at-our-joined-data-frame" class="level3"><h3 class="anchored" data-anchor-id="looking-at-our-joined-data-frame">Looking at our joined data frame</h3>
+<p>Let’s take a glimpse at our <code>glasgow_parks</code> data frame that joined our <code>parks</code> and <code>simd_map</code> data frames:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">glasgow_parks</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 76
+Columns: 60
+$ id            &lt;chr&gt; "5A80AA97-1C32-5B9B-E063-CF00A60A07BA", "5A80AAC8-0383-5…
+$ `function`    &lt;chr&gt; "Public Park Or Garden", "Public Park Or Garden", "Publi…
+$ dist_name1    &lt;chr&gt; "Blairtummock Park", "Crosshill Park", "Garrowhill Park"…
+$ dist_name2    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+$ dist_name3    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+$ dist_name4    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+$ geometry      &lt;POINT [m]&gt; POINT (267693.7 665450.6), POINT (268198.9 664023.…
+$ hectares      &lt;dbl&gt; 21.96923789, 0.68216271, 4.47814759, 0.31171470, 3.99007…
+$ data_zone     &lt;chr&gt; "S01010122", "S01010089", "S01010099", "S01010081", "S01…
+$ dz_name       &lt;chr&gt; "North Barlanark and Easterhouse South - 05", "Bailliest…
+$ la_name       &lt;chr&gt; "Glasgow City", "Glasgow City", "Glasgow City", "Glasgow…
+$ sape2017      &lt;dbl&gt; 511, 694, 680, 638, 599, 726, 834, 627, 903, 1067, 620, …
+$ wape2017      &lt;dbl&gt; 373, 477, 438, 386, 418, 483, 591, 396, 552, 668, 472, 6…
+$ rankv2        &lt;dbl&gt; 5, 1376, 5603, 5238, 4264, 16, 2378, 831, 759, 242, 1520…
+$ quintilev2    &lt;dbl&gt; 1, 1, 5, 4, 4, 1, 2, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2,…
+$ decilev2      &lt;dbl&gt; 1, 2, 9, 8, 7, 1, 4, 2, 2, 1, 3, 1, 3, 3, 1, 4, 1, 3, 4,…
+$ vigintilv2    &lt;dbl&gt; 1, 4, 17, 16, 13, 1, 7, 3, 3, 1, 5, 1, 5, 6, 2, 7, 1, 5,…
+$ percentv2     &lt;dbl&gt; 1, 20, 81, 76, 62, 1, 35, 12, 11, 4, 22, 4, 23, 29, 10, …
+$ inc_rate      &lt;chr&gt; "46%", "18%", "5%", "6%", "5%", "44%", "14%", "25%", "29…
+$ inc_num_dep   &lt;dbl&gt; 233, 123, 32, 38, 31, 319, 117, 157, 262, 368, 111, 368,…
+$ inc_rankv2    &lt;dbl&gt; 17.0, 1777.0, 5133.0, 4623.0, 4933.0, 31.0, 2434.0, 849.…
+$ emp_rate      &lt;chr&gt; "37%", "16%", "3%", "4%", "4%", "33%", "11%", "17%", "20…
+$ emp_num_dep   &lt;dbl&gt; 135, 74, 15, 17, 19, 157, 62, 66, 108, 143, 65, 143, 65,…
+$ emp_rank      &lt;dbl&gt; 15.0, 1306.0, 5545.5, 4839.0, 4858.0, 41.0, 2539.0, 1083…
+$ hlth_cif      &lt;dbl&gt; 305, 175, 60, 95, 85, 290, 160, 205, 200, 225, 155, 225,…
+$ hlth_alc_sr   &lt;dbl&gt; 399, 162, 52, 61, 46, 327, 105, 101, 243, 240, 108, 240,…
+$ hlth_drug_sr  &lt;dbl&gt; 397, 202, 24, 0, 26, 182, 89, 210, 119, 93, 151, 93, 159…
+$ hlth_smr      &lt;dbl&gt; 182, 129, 67, 63, 101, 172, 127, 145, 119, 206, 144, 206…
+$ hlth_dprs_pc  &lt;chr&gt; "35%", "27%", "14%", "17%", "17%", "33%", "22%", "26%", …
+$ hlth_lbwt_pc  &lt;chr&gt; "0%", "16%", "4%", "0%", "0%", "8%", "14%", "6%", "6%", …
+$ hlth_emerg_s  &lt;dbl&gt; 203, 159, 83, 97, 96, 222, 145, 161, 150, 190, 133, 190,…
+$ hlth_rank     &lt;dbl&gt; 9, 620, 5014, 3897, 3778, 13, 1246, 482, 477, 270, 1383,…
+$ edu_attend    &lt;chr&gt; "64%", "69%", "93%", "85%", "83%", "62%", "82%", "76%", …
+$ edu_attain    &lt;dbl&gt; 4.59, 5.81, 6.12, 6.17, 5.85, 4.81, 5.73, 4.89, 5.73, 4.…
+$ edu_no_quals  &lt;dbl&gt; 278, 167, 86, 105, 103, 271, 133, 209, 158, 264, 197, 26…
+$ edu_partici   &lt;chr&gt; "4%", "0%", "0%", "1%", "3%", "7%", "0%", "4%", "3%", "9…
+$ edu_univer    &lt;chr&gt; "2%", "9%", "13%", "14%", "9%", "1%", "13%", "6%", "6%",…
+$ edu_rank      &lt;dbl&gt; 54, 2358, 5824, 4732, 3681, 38, 3782, 906, 2463, 198, 18…
+$ g_acc_petrol  &lt;dbl&gt; 2.72, 1.39, 3.17, 1.14, 4.31, 2.60, 2.33, 3.47, 1.44, 3.…
+$ g_acc_dtgp    &lt;dbl&gt; 2.22, 3.22, 3.61, 2.36, 5.07, 1.35, 1.07, 1.88, 1.24, 2.…
+$ g_acc_dt_post &lt;dbl&gt; 2.13, 1.58, 2.84, 3.40, 5.20, 2.30, 1.25, 1.59, 2.13, 1.…
+$ g_acc_dt_psch &lt;dbl&gt; 3.50, 3.09, 2.26, 2.72, 3.00, 3.68, 2.82, 2.09, 1.93, 2.…
+$ g_acc_dt_ssch &lt;dbl&gt; 3.91, 4.83, 3.17, 4.53, 4.94, 4.02, 6.74, 7.75, 3.33, 4.…
+$ g_acc_dt_ret  &lt;dbl&gt; 2.41, 5.86, 6.98, 4.39, 6.03, 2.23, 3.13, 3.97, 3.12, 5.…
+$ g_acc_ptgp    &lt;dbl&gt; 5.04, 10.15, 8.64, 6.50, 13.65, 2.87, 3.64, 7.53, 3.10, …
+$ g_acc_pt_post &lt;dbl&gt; 5.57, 5.08, 6.94, 9.60, 15.82, 5.25, 3.59, 5.87, 6.78, 4…
+$ g_acc_pt_ret  &lt;dbl&gt; 6.18, 15.99, 15.30, 11.24, 18.10, 4.87, 9.26, 15.55, 7.4…
+$ g_acc_brdbnd  &lt;chr&gt; "3%", "0%", "0%", "0%", "0%", "0%", "13%", "14%", "0%", …
+$ g_acc_rank    &lt;dbl&gt; 5325, 3938, 2807, 4664, 982, 6494, 5763, 3840, 6758, 316…
+$ crime_count   &lt;dbl&gt; 75, 29, 11, 4, 8, 60, 45, 21, 33, 86, 50, 86, 53, 47, 93…
+$ crime_rate    &lt;dbl&gt; 1475, 420, 163, 63, 134, 830, 542, 337, 367, 810, 810, 8…
+$ crime_rank    &lt;dbl&gt; 85.0, 1386.0, 3976.0, 5903.0, 4483.0, 335.0, 862.0, 1925…
+$ house_num_oc  &lt;dbl&gt; 105, 154, 65, 54, 77, 192, 97, 158, 217, 196, 121, 196, …
+$ house_num_nc  &lt;dbl&gt; 14, 37, 3, 4, 6, 13, 22, 10, 22, 21, 15, 21, 47, 56, 52,…
+$ house_o_crat  &lt;chr&gt; "25%", "23%", "9%", "8%", "12%", "25%", "12%", "26%", "2…
+$ house_n_crat  &lt;chr&gt; "3%", "5%", "0%", "1%", "1%", "2%", "3%", "2%", "2%", "2…
+$ house_rank    &lt;dbl&gt; 447.5, 452.0, 3790.0, 4397.0, 2709.0, 546.0, 2159.0, 480…
+$ shape_leng    &lt;dbl&gt; 4359.121, 3518.517, 2256.429, 2664.249, 2164.388, 2940.4…
+$ shape_area    &lt;dbl&gt; 365710.7, 186342.3, 174275.7, 199694.0, 186764.4, 336413…
+$ quintile      &lt;fct&gt; 1, 1, 5, 4, 4, 1, 2, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2,…</code></pre>
+</div>
+</div>
+<ul>
+<li>As can see the columns from our original two datasets are now included together in this single data frame.</li>
+<li>The original <code>parks</code> columns are shown first and then the <code>simd_map</code> ones given we joined <code>simd_map</code> to our <code>parks</code> data frame.</li>
+</ul>
+<p>As each of our parks now has a SIMD quintile based on which SIMD data zone the calculated point for it fell into, we can also see how many parks are in each quintile:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">glasgow_parks_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">glasgow_parks</span><span class="op">)</span></span>
+<span><span class="va">glasgow_parks_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">quintile</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
   quintile     n
@@ -641,103 +1190,173 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5 5            9</code></pre>
 </div>
 </div>
-<p>For our purposes, let’s also assume we were interested in parks in most deprived, middle, and least deprived quintiles:</p>
+<ul>
+<li>We again use <code>st_drop_geomtry()</code> to create a copy of our data frame <em>without</em> any of the shape data, which is faster to work with when using functions like <code><a href="https://dplyr.tidyverse.org/reference/count.html">count()</a></code>. We are now also saving this as <code>glasgow_parks_df</code> as we might want to reuse this data frame for creating various tables - including descriptive stats tables for our methods and/or findings.</li>
+<li>We can then use this new data frame object to get a count of how many parks are in each quintile.</li>
+</ul>
+<p>As we do have spatial data though, we can also visualise the parks and their SIMD quintile:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">park_df</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">simd_map</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">glasgow_parks</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">quintile</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Our first layer uses <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf()</a></code> with our <code>simd_map</code> of the SIMD data zones for Glasgow City. We use no fill as we just want the outlines for this particular plot.</li>
+<li>Next we use <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf()</a></code> again to draw dots for our <code>glasgow_parks</code> and we colour these by the SIMD <code>quintile</code> they fall into.</li>
+<li>We again use <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d()</a></code> to use a colour blind friendly colour palette - and wee remind you can click the link for <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d()</a></code> to open a page with other available options.</li>
+</ul>
+<p>Further in we will do a different map colour coding the SIMD data zones and drawing all our dots in the same colour. Again there is no ‘correct’ version in all situations. Here we are doing plot with the dots coloured as (1) it is slightly more useful to see the parks by the quintile of their calculated point and (2) it is also an excuse to include another ggplot variant. What you’ll notice across each of the plots is we are largely using the same small set of functions and arguments, but with different options. Which plot to use in any write-up would be based on what is important for your analysis, interpretation, and argument.</p>
+</section><section id="selecting-a-sample" class="level3"><h3 class="anchored" data-anchor-id="selecting-a-sample">Selecting a sample</h3>
+<p>For our purposes, let’s assume we were interested in parks in most deprived (1), middle (3), and least deprived (5) quintiles:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">glasgow_parks_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">quintile</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span></span>
-<span>    <span class="va">quintile</span>, simd_rank <span class="op">=</span> <span class="va">Rankv2</span>, park <span class="op">=</span> <span class="va">distName1</span>, <span class="va">hectares</span>, <span class="va">DZName</span></span>
+<span>    park <span class="op">=</span> <span class="va">dist_name1</span>, <span class="va">hectares</span>, <span class="va">quintile</span>, simd_rank <span class="op">=</span> <span class="va">rankv2</span>, <span class="va">dz_name</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">quintile</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">hectares</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 45 × 5
-   quintile simd_rank park                      hectares DZName                 
-   &lt;fct&gt;        &lt;dbl&gt; &lt;chr&gt;                        &lt;dbl&gt; &lt;chr&gt;                  
- 1 1              242 Hogganfield Park            58.7   Riddrie and Hogganfiel…
- 2 1                5 Blairtummock Park           22.0   North Barlanark and Ea…
- 3 1              182 Ruchill Park                18.0   Ruchill - 02           
- 4 1               99 Cowlairs Park               15.6   Cowlairs and Port Dund…
- 5 1              674 Elder Park                  12.9   Govan and Linthouse - …
- 6 1               99 Sighthill Park              11.5   Cowlairs and Port Dund…
- 7 1               16 Auchinlea Park              11.5   Garthamlock, Auchinlea…
- 8 1              486 Maryhill Park                8.90  Summerston North - 02  
- 9 1              759 Sandyhills Park              6.21  Shettleston North - 01 
-10 1              678 Glenconner Park              5.74  Sighthill - 01         
-11 1              242 Croftcroighn Park            4.48  Riddrie and Hogganfiel…
-12 1              401 Festival Park                4.34  Ibrox East and Cessnoc…
-13 1               28 Drumchapel Park              3.85  Drumry East - 04       
-14 1              654 Auldhouse Park               2.98  Pollokshaws - 06       
-15 1             1314 Milton Park                  2.16  Milton East - 05       
-16 1             1019 Blawarthill                  2.12  Yoker South - 06       
-17 1              154 Helensea Park                1.98  Braidfauld - 07        
-18 1              441 Govanhill Park               1.59  Govanhill West - 06    
-19 1              167 The Old School Park          0.926 Keppochhill - 03       
-20 1              831 Buckingham Park              0.817 Carmyle and Mount Vern…
-21 1               14 Ruchill Allotment            0.799 Possil Park - 04       
-22 1              111 Shawhill Park                0.682 Pollokshaws - 03       
-23 1             1376 Crosshill Park               0.682 Baillieston East - 02  
-24 1              275 St Nicholas Garden           0.528 City Centre East - 04  
-25 1              167 The Back Garden              0.170 Keppochhill - 03       
-26 1             1354 Woodside Community Garden    0.159 Firhill - 03           
-27 1              430 Milton Community Garden      0.152 Milton East - 01       
-28 1              430 Milton Memorial Garden       0.101 Milton East - 01       
-29 1              914 Kingsway Community Garden    0.101 Scotstoun North and Ea…
-30 3             3306 Glasgow Green               49.3   Calton and Gallowgate …
-31 3             3747 Queen's Park                45.1   Battlefield - 06       
-32 3             3810 King's Park                 27.9   Kingspark South - 01   
-33 3             3309 Gorbals New Park             0.837 Gorbals and Hutchesont…
-34 3             3530 Barrowland Park              0.572 Calton and Gallowgate …
-35 3             3128 Thornwood Community Park     0.392 Glasgow Harbour and Pa…
-36 3             3400 Maxwell Square               0.357 Pollokshields East - 05
-37 5             6171 Kelvingrove Park            25.0   Hillhead - 04          
-38 5             5703 Victoria Park               20.1   Victoria Park - 02     
-39 5             6814 Newlands Park                5.48  Newlands - 04          
-40 5             5603 Garrowhill Park              4.48  Garrowhill West - 06   
-41 5             5981 Yorkhill Park                2.50  Finnieston and Kelvinh…
-42 5             5869 North Kelvin Meadow          1.44  Ruchill - 08           
-43 5             6747 Old Station Park             0.685 Dowanhill - 01         
-44 5             6783 Naseby Avenue Open Space     0.635 Broomhill - 05         
-45 5             5961 The Green                    0.404 Carmunnock South - 01  </code></pre>
+   park                      hectares quintile simd_rank dz_name                
+   &lt;chr&gt;                        &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt; &lt;chr&gt;                  
+ 1 Hogganfield Park            58.7   1              242 Riddrie and Hogganfiel…
+ 2 Blairtummock Park           22.0   1                5 North Barlanark and Ea…
+ 3 Ruchill Park                18.0   1              182 Ruchill - 02           
+ 4 Cowlairs Park               15.6   1               99 Cowlairs and Port Dund…
+ 5 Elder Park                  12.9   1              674 Govan and Linthouse - …
+ 6 Sighthill Park              11.5   1               99 Cowlairs and Port Dund…
+ 7 Auchinlea Park              11.5   1               16 Garthamlock, Auchinlea…
+ 8 Maryhill Park                8.90  1              486 Summerston North - 02  
+ 9 Sandyhills Park              6.21  1              759 Shettleston North - 01 
+10 Glenconner Park              5.74  1              678 Sighthill - 01         
+11 Croftcroighn Park            4.48  1              242 Riddrie and Hogganfiel…
+12 Festival Park                4.34  1              401 Ibrox East and Cessnoc…
+13 Drumchapel Park              3.85  1               28 Drumry East - 04       
+14 Auldhouse Park               2.98  1              654 Pollokshaws - 06       
+15 Milton Park                  2.16  1             1314 Milton East - 05       
+16 Blawarthill                  2.12  1             1019 Yoker South - 06       
+17 Helensea Park                1.98  1              154 Braidfauld - 07        
+18 Govanhill Park               1.59  1              441 Govanhill West - 06    
+19 The Old School Park          0.926 1              167 Keppochhill - 03       
+20 Buckingham Park              0.817 1              831 Carmyle and Mount Vern…
+21 Ruchill Allotment            0.799 1               14 Possil Park - 04       
+22 Shawhill Park                0.682 1              111 Pollokshaws - 03       
+23 Crosshill Park               0.682 1             1376 Baillieston East - 02  
+24 St Nicholas Garden           0.528 1              275 City Centre East - 04  
+25 The Back Garden              0.170 1              167 Keppochhill - 03       
+26 Woodside Community Garden    0.159 1             1354 Firhill - 03           
+27 Milton Community Garden      0.152 1              430 Milton East - 01       
+28 Milton Memorial Garden       0.101 1              430 Milton East - 01       
+29 Kingsway Community Garden    0.101 1              914 Scotstoun North and Ea…
+30 Glasgow Green               49.3   3             3306 Calton and Gallowgate …
+31 Queen's Park                45.1   3             3747 Battlefield - 06       
+32 King's Park                 27.9   3             3810 Kingspark South - 01   
+33 Gorbals New Park             0.837 3             3309 Gorbals and Hutchesont…
+34 Barrowland Park              0.572 3             3530 Calton and Gallowgate …
+35 Thornwood Community Park     0.392 3             3128 Glasgow Harbour and Pa…
+36 Maxwell Square               0.357 3             3400 Pollokshields East - 05
+37 Kelvingrove Park            25.0   5             6171 Hillhead - 04          
+38 Victoria Park               20.1   5             5703 Victoria Park - 02     
+39 Newlands Park                5.48  5             6814 Newlands - 04          
+40 Garrowhill Park              4.48  5             5603 Garrowhill West - 06   
+41 Yorkhill Park                2.50  5             5981 Finnieston and Kelvinh…
+42 North Kelvin Meadow          1.44  5             5869 Ruchill - 08           
+43 Old Station Park             0.685 5             6747 Dowanhill - 01         
+44 Naseby Avenue Open Space     0.635 5             6783 Broomhill - 05         
+45 The Green                    0.404 5             5961 Carmunnock South - 01  </code></pre>
 </div>
 </div>
-<p>From this we could then select our qualitative sample. Let’s go with three of similar size, with one from each quintile of interest:</p>
+<ul>
+<li>We are using the <code>glasgow_parks_df</code> data frame we created earlier which does not contain our spatial shape data, making it faster for R to work with for what we are doing here.</li>
+<li>We <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> to only keep any row (i.e park) whose quintile column has the value of 1, 3, or 5.</li>
+<li>We <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> our columns of interest: the park’s name, how many hectares the park covers, the SIMD quintile of the data zone its calculated point falls into, where that SIMD data zone is in the overall ranking of data zones, and the name of that SIMD data zone. Note, with <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> we can specify the columns in any order we like, which is the order they will be placed in in the data frame object returned by the function. We can also “new_name = current_name” if we also want to give any column a better name.</li>
+<li>We then <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> our rows first by the quintile it falls into and then - in descending <code><a href="https://dplyr.tidyverse.org/reference/desc.html">desc()</a></code> order - its size in hectares.</li>
+<li>Finally, we use <code>print(n = Inf)</code> so our code returns all rows. Without this final line the code would only return the first ten rows.</li>
+</ul>
+<p>We can then use this information to select our qualitative sample. Let’s assume we want three larger parks that are of similar size with one from each quintile of interest to us. (In practice, how to make sampling decisions will vary based on what is important for your research questions).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="va">glasgow_parks</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">distName1</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ruchill Park"</span>, <span class="st">"King's Park"</span>, <span class="st">"Victoria Park"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="va">glasgow_parks</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">dist_name1</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ruchill Park"</span>, <span class="st">"King's Park"</span>, <span class="st">"Victoria Park"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Not only have we used R to help with our qualitative sampling, we can also use it to create a map for our Methods chapter/section:</p>
+<ul>
+<li>We create a new <code>sample</code> object which will be a data frame with only the rows from <code>glasgow_parks</code> for our choosen parks.</li>
+<li>We use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> and look for parks whose <code>dist_name1</code> (i.e.&nbsp;the name the park is known by) matches the name of our three chosen parks. (Again being careful that the capitalisation, spelling, etc match how it appears in our <code>glasgow_parks</code> data frame).</li>
+</ul></section></section><section id="mapping-our-sample" class="level2"><h2 class="anchored" data-anchor-id="mapping-our-sample">Mapping our sample</h2>
+<p>We have then create quite a few objects, which we can use together to create a map that could potentially be the type of thing to include in our Methods chapter/section when discussing our sample.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">park_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">simd_map</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">quintile</span><span class="op">)</span>, colour <span class="op">=</span> <span class="cn">NA</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">glasgow_parks</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sample</span>, colour <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"SIMD 2020 quintiles"</span>,</span>
 <span>       caption <span class="op">=</span> <span class="st">"Red: chosen parks. Black: other named parks."</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">park_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>This is all standard ggplot but with some tweaks to make the map easier to read for our purposes:</p>
+<p>We are including <code>park_map &lt;-</code> as we are going to save this plot as a reuseable object. The next section will show why this can be useful. However, for the moment, the one key different this introduces compared to our other plots is because we are now storing the result of our ggplot code to an object, our code will not display it when run. As a reminder, if you do not assign the output of code back to an object, R will assume you want to display the output. If you assign it to an object, R assumes you do not want to immediately display it. So, to also see our graph we need to include the object we created - <code>park_map</code> - on a line by itself at the end. R will then return the information that object contains - which in our case is the plot we are creating.</p>
+<p>The rest is standard ggplot with some tweaks to make the map easier to read for our purposes:</p>
 <ul>
 <li>
 <code>colour = NA</code> removes zone outlines</li>
 <li>
 <code>alpha = 0.5</code> lightens the area colours to make the dots easier to see</li>
+<li>we again use <code><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_d()</a></code> to have a nicer looking colour palette used for the fill colours</li>
 <li>our first <code>gemo_sf()</code> draws every park in black</li>
 <li>our second draws our sample in red and slightly larger size</li>
 <li>
 <code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void()</a></code> removes a lot of extras like background, grid, axis labels, etc - which is all fine here as we want a map which clearly shows the SIMD quintiles, all parks, and our sampled parks.</li>
 </ul>
+<p>Each ggplot layer is drawn in the order they are listed. Our SIMD data zones is the ‘background’ layer so we draw it first. We then draw in dots for all the parks as next layer. Whilst that includes our sample - meaning the plot without an additional layer would have black dots for them too, we can then simply draw a layer with red dots for our sample last, resulting in the red dots for them being drawn ontop of the black dots.</p>
+<p>Why go with this plot with the SIMD data zones coloured in over the earlier one we created with the points for the parks coloured by the SIMD quintiles? Either could be fine depending on what is useful for your analysis. Here though it helps get a sense not just of which quintile the park itself is in, but whether it is surrounded by data zones in same quintiles or if the park has data zones in different quintiles on different sides of it.</p>
+<p>Again for our purposes and to keep this example fairly simple we just wanted to sample larger parks of similar sizes from our three quintiles of interest. Pending on your research question though, our sampling criteria may be more appropriate. For example, it may instead make more sense to sample parks that cross data zones in different quintiles.</p>
+<section id="adding-the-green" class="level3"><h3 class="anchored" data-anchor-id="adding-the-green">Adding ‘The Green’</h3>
+<p>During our in-person session, a park simply named ‘The Green’ was spotted when we created the list of all the Glasgow parks above. If you’ve been in Glasgow for a while, you might as first assume that is “Glasgow Green”, but our list of parks already has a row for it too. So where is this “The Green”?</p>
+<p>We can simply take our previous <code>park_map</code> object we created and add another layer to it!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">the_green</span> <span class="op">&lt;-</span> <span class="va">glasgow_parks</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">dist_name1</span> <span class="op">==</span> <span class="st">"The Green"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">park_map</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">the_green</span>, colour <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is again another wonderful thing about ggplot. Since we can (1) create plots in layers and (2) store plots as objects, it means if we want to create a few plots that share the same initial base layers, we can save it as an object and then for each plot reuse that object and add in the additional layers for it.</p>
+<p>It is also possible to over-write existing layers. Our original plot had a caption, which is now inaccurate, so we could instead use this code to add in the layer for The Green and update the caption:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">park_map</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">the_green</span>, colour <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Red: chosen parks. Blue: The Green. Black: other named parks."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="sampling-glasgow-parks_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1150,8 +1769,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="../week10/multiple-regression.html" class="pagination-link" aria-label="Households without a car">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Households without a car</span>
+      <a href="../week10/other-simd.html" class="pagination-link" aria-label="Other SIMD linkable datasets">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Other SIMD linkable datasets</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

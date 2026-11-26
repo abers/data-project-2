@@ -66,6 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../week10/rcityviews.html" rel="next">
 <link href="../week10/sampling-glasgow-parks.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -436,6 +437,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../week10/other-simd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Other SIMD linkable datasets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../week10/sampling-glasgow-parks.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Sampling Glasgow Parks</span></a>
   </div>
@@ -444,6 +451,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../week10/holyrood.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Holyrood debates</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../week10/rcityviews.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glasgow City Views</span></a>
   </div>
 </li>
       </ul>
@@ -566,20 +579,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li>
+<a href="#scottish-parliament-data" id="toc-scottish-parliament-data" class="nav-link active" data-scroll-target="#scottish-parliament-data">Scottish Parliament Data</a>
+  <ul class="collapse">
+<li><a href="#downloading-the-data" id="toc-downloading-the-data" class="nav-link" data-scroll-target="#downloading-the-data">Downloading the data</a></li>
+  </ul>
+</li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li>
+<a href="#json-data" id="toc-json-data" class="nav-link" data-scroll-target="#json-data">JSON Data</a>
+  <ul class="collapse">
+<li><a href="#bill-json-data" id="toc-bill-json-data" class="nav-link" data-scroll-target="#bill-json-data">Bill JSON Data</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#joining-data-frames" id="toc-joining-data-frames" class="nav-link" data-scroll-target="#joining-data-frames">Joining data frames</a>
+  <ul class="collapse">
+<li><a href="#vote-json-data" id="toc-vote-json-data" class="nav-link" data-scroll-target="#vote-json-data">Vote JSON data</a></li>
+  <li><a href="#subsetting-our-votes" id="toc-subsetting-our-votes" class="nav-link" data-scroll-target="#subsetting-our-votes">Subsetting our votes</a></li>
+  </ul>
+</li>
+  <li><a href="#classifying-votes" id="toc-classifying-votes" class="nav-link" data-scroll-target="#classifying-votes">Classifying votes</a></li>
+  <li>
+<a href="#selecting-two-debates" id="toc-selecting-two-debates" class="nav-link" data-scroll-target="#selecting-two-debates">Selecting two debates</a>
+  <ul class="collapse">
+<li><a href="#a-table-for-our-selected-debates" id="toc-a-table-for-our-selected-debates" class="nav-link" data-scroll-target="#a-table-for-our-selected-debates">A table for our selected debates</a></li>
+  <li><a href="#how-did-parties-vote-in-our-sampled-debates" id="toc-how-did-parties-vote-in-our-sampled-debates" class="nav-link" data-scroll-target="#how-did-parties-vote-in-our-sampled-debates">How did parties vote in our sampled debates</a></li>
+  </ul>
+</li>
+  <li><a href="#downloading-the-debates" id="toc-downloading-the-debates" class="nav-link" data-scroll-target="#downloading-the-debates">Downloading the debates</a></li>
+  <li><a href="#extracting-text-from-html" id="toc-extracting-text-from-html" class="nav-link" data-scroll-target="#extracting-text-from-html">Extracting Text from HTML</a></li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content"><p>(Sorry this page is terse due to time. Let me know if anything unclear and I’ll move this up on my priority list of pages to flesh out more)</p>
+<main class="content quarto-banner-title-block" id="quarto-document-content"><p>Say we were interested in analysing Scottish Parliament debates, and - in particular - interested in comparing the final debates for bills where the final vote had an overwhelming majority in support from MSPs or not. We can link together different data available from the official Scottish Parliament website to identify data of interest and create a data set could use for quantitative and/or qualitative analysis. For our purposes, we will just select one debate of each kind, but what is covered can easily scale to match however many debate transcripts you want to analyse.</p>
+<section id="scottish-parliament-data" class="level2"><h2 class="anchored" data-anchor-id="scottish-parliament-data">Scottish Parliament Data</h2>
+<p>The code to directly download the data we are using is included further below. The following steps are just so you can see how the web addresses used were found.</p>
+<ol type="1">
+<li>Go to the <a href="https://data.parliament.scot/#/home">Scottish Parliament open data</a> site.</li>
+<li>Select ‘Datasets’ from the row at the top. Each dataset appears in a box with its name; a one-sentence description; and a ‘Schema Info’ button. Clicking that button for any dataset will show more data for it. On the left-hand side there is also a ‘Filter Datasets’ box with a ‘Select’ button.</li>
+<li>Click the ‘Select’ button on in the left-hand side ‘Filter Datasets’ box. We are interested in, “Bills: Bill Title”, “Bills: Bill Stage”, “Bills: Bill Stage Type”, and “MSPs: Vote on Motions (Beta) 2025”. (Annoyingly the filter doesn’t work that well so even after selecting an option you may still need to scroll down in the list to find it.)</li>
+<li>On the right-hand side of the box for each dataset there is an organe “JSON” button. For each dataset of interest, right-click it and select ‘Copy link address’.</li>
+</ol>
+<p>Note, we are using 2025 data given (1) we don’t have a full year of data for 2026 (2) there was an election in 2026.</p>
+<section id="downloading-the-data" class="level3"><h3 class="anchored" data-anchor-id="downloading-the-data">Downloading the data</h3>
 <p>Grab data needed:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">"data/holyrood"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>timeout <span class="op">=</span> <span class="fl">600</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://data.parliament.scot/api/votesmotion?year=2025"</span>, <span class="st">"data/holyrood/votes_2025.json"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># bill data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://data.parliament.scot/api/bills/json"</span>, <span class="st">"data/holyrood/bills.json"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://data.parliament.scot/api/billstages/json"</span>, <span class="st">"data/holyrood/billstages.json"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://data.parliament.scot/api/billstagetypes/json"</span>, <span class="st">"data/holyrood/billstagetypes.json"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://data.parliament.scot/api/billstagetypes/json"</span>, <span class="st">"data/holyrood/billstagetypes.json"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># vote data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://data.parliament.scot/api/votesmotion?year=2025"</span>, <span class="st">"data/holyrood/votes_2025.json"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<ul>
+<li>
+<code><a href="https://rdrr.io/r/base/files2.html">dir.create()</a></code> creates a directory for us, where <code>recursive = TRUE</code> means if there is not an existing <code>data</code> subfolder it will be created too. If we did not already have a <code>data</code> subfolder, R would return an error.</li>
+<li>As we are download data which could take a while on a slow internet connection we set <code>options(timeout = 600)</code>. By default R will give downloads 60 seconds and cancel them if not finished in that time. This line then let’s us increase that timeout.</li>
+<li>We then use <code>download_file()</code> using the web addresses for each dataset of interest.</li>
+</ul></section></section><section id="packages" class="level2"><h2 class="anchored" data-anchor-id="packages">Packages</h2>
 <p>Load packages needed (install any that haven’t already):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
@@ -588,53 +654,336 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://httr2.r-lib.org">httr2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvest.tidyverse.org/">rvest</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Load data and get stage 3 (final stage):</p>
+<ul>
+<li>We will use <code>jsonlite</code> to work with the JSON data we downloaded.</li>
+<li>We also load <code>httr2</code> for requesting web pages to download and <code>rvest</code> for reading content from the web pages. Both come from the tidyverse but as most data analysis projects will not be downloading and reading webpages we need to load these separate to the main <code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code>
+</li>
+<li>We also have <code>janitor</code> for its ever useful <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names()</a></code> function.</li>
+</ul></section><section id="json-data" class="level2"><h2 class="anchored" data-anchor-id="json-data">JSON Data</h2>
+<p><code>jsonlite</code> provides two key functions, <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON()</a></code> and <code>read_JSON()</code>. Across examples, we have used <code>read_data_type()</code> style functions. Here, we are instead going to use the <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON()</a></code>. The structure of JSON data raises questions of how to convert it into an R data frame. What would seem like the obvious choice, <code>read_JSON()</code> creates issues though for some of our data. <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON()</a></code> is similar but uses different defaults. It is <code>read_json(DATA, simplifyVector = TRUE)</code>, where <code>simplifyVector</code> creates individual columns for things that regular <code>read_JSON()</code> would keep within a single column.</p>
+<p>This is the JSON - with some added lines breaks to make it easier to read - looks in our <code>billstagetypes.json</code> file that we downloaded:</p>
+<pre><code>[{"ID":1,"Name":"Introduced","BillTypeID":1,"Sequence":0},
+{"ID":2,"Name":"Stage 1","BillTypeID":1,"Sequence":1},
+...</code></pre>
+<p>So what happens if we use each function to read in that data?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bills</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/bills.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">stages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/billstages.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">stage_types</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/billstagetypes.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">stage_3</span> <span class="op">&lt;-</span> <span class="va">stages</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">stage_types</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">bill_stage_type_id</span> <span class="op">==</span> <span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">bills</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">bill_id</span> <span class="op">==</span> <span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/billstagetypes.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID       Name BillTypeID Sequence
+1  1 Introduced          1        0
+2  2    Stage 1          1        1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/read_json.html">read_json</a></span><span class="op">(</span><span class="st">"data/holyrood/billstagetypes.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[[1]]$ID
+[1] 1
+
+[[1]]$Name
+[1] "Introduced"
+
+[[1]]$BillTypeID
+[1] 1
+
+[[1]]$Sequence
+[1] 0
+
+
+[[2]]
+[[2]]$ID
+[1] 2
+
+[[2]]$Name
+[1] "Stage 1"
+
+[[2]]$BillTypeID
+[1] 1
+
+[[2]]$Sequence
+[1] 1</code></pre>
+</div>
+</div>
+<ul>
+<li>As we are not assigning the data we are reading in to an object (<code>object_name &lt;- ...</code>) R instead prints out the data being read in, which is what is displayed above.</li>
+<li>Here, the <code>|&gt; head(2)</code> simply restricts this print out to just the first two records rather than usual default cap of 10.</li>
+</ul>
+<p>As can see <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON()</a></code> returns the read data as a data frame of rows and columns - similar to how we are used to working with other data across the programme. <code><a href="https://rdrr.io/pkg/jsonlite/man/read_json.html">read_json()</a></code> on the other hand has output that is less clear, but instead of reading the data in as a data frame it is reading it as a list. Because there are no proper columns, all of our usual functions like <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> don’t play nicely with it. Hence, we will be using <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON()</a></code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Within RStudio you can also get a more visual overview of the difference with:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/billstagetypes.json"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/read_json.html">read_json</a></span><span class="op">(</span><span class="st">"data/holyrood/billstagetypes.json"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>What you will notice though, is whilst <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON()</a></code> gives us a data frame that is easier to work with, it is easier to get an understanding of the main structure of the JSON using <code><a href="https://rdrr.io/r/utils/View.html">View()</a></code> and <code><a href="https://rdrr.io/pkg/jsonlite/man/read_json.html">read_json()</a></code>. We will cover other ways to approach that below.</p>
+</div>
+</div>
+<section id="bill-json-data" class="level3"><h3 class="anchored" data-anchor-id="bill-json-data">Bill JSON Data</h3>
+<p>Let’s then load in the JSON files directly related to the bills that went through the Scottish Parliament:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bills</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/bills.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">bill_stages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/billstages.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">bill_stage_types</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/billstagetypes.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We use <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON()</a></code> to create each as a data frame, with <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names()</a></code> to turn column names like <code>BillStageTypeID</code> into snake case <code>bill_stage_type_id</code>.</p>
+<ul>
+<li>
+<code>bills.json</code> contains a list of bill titles.</li>
+<li>
+<code>billstages.json</code> is a list of stages each bill has been in.</li>
+<li>
+<code>billstagestypes.json</code> is a list of the stage types.</li>
+</ul>
+<p>This may seem ridiculous, but this is common when working with some forms of web data - especially when vast amounts of data are potentially involved. By splitting things into different files we can reduce the amount of data that gets stored. Indeed, as will soon see, <code>billstagestypes.json</code> has two main columns, <code>id</code> and <code>name</code>. That’s it. <code>billstages.json</code> refers to each bill stage by its <code>bill_type_id</code>. Why not just store the stage name directly instead of going through an ID number? Numbers take less space to store than characters - especially a string of characters. For a handful of values the difference in storage doesn’t matter, but becomes one when working with large volumes of data. Thus for repetitive data we create IDs that take up less storage space and a separate file which matches IDs with their full values - in this case the bill stage type ID with its name.</p>
+<p>Let’s then take a <code><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse()</a></code> at each:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">bills</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 472
+Columns: 7
+$ id                       &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14…
+$ reference                &lt;chr&gt; "SP Bill 1", "SP Bill 2", "SP Bill 3", "SP Bi…
+$ short_name               &lt;chr&gt; "Mental Health (Public Safety and Appeals) (S…
+$ full_name                &lt;chr&gt; "Mental Health (Public Safety and Appeals) (S…
+$ bill_type_id             &lt;int&gt; 1, 1, 2, 1, 1, 1, 3, 1, 1, 2, 2, 1, 2, 1, 2, …
+$ person_id                &lt;int&gt; 2077, 2052, 2225, 2077, 2077, 2205, 2052, 207…
+$ third_party_organisation &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">bill_stages</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1,758
+Columns: 4
+$ id                 &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, …
+$ bill_id            &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, …
+$ bill_stage_type_id &lt;int&gt; 1, 2, 3, 4, 1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 1, …
+$ stage_date         &lt;chr&gt; "1999-08-31T00:00:00", "1999-09-02T00:00:00", "1999…</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">bill_stage_types</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 34
+Columns: 4
+$ id           &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17…
+$ name         &lt;chr&gt; "Introduced", "Stage 1", "Stage 2", "Stage 3", "Introduce…
+$ bill_type_id &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, …
+$ sequence     &lt;int&gt; 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, …</code></pre>
+</div>
+</div>
+<p><code><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse()</a></code> let’s use get an overview of the number of rows and column a data frame contains followed by a list of its columns with their name, data type, and first few rows of data.</p>
+<p>As can see:</p>
+<ul>
+<li>Our <code>bills</code> object has an <code>id</code> column.</li>
+<li>Our <code>bill_stages</code> object has a <code>bills_id</code> column. The IDs stored in that column match with those in the <code>bills</code> data frame. Each unique ID number only appears once in the <code>id</code> column of <code>bills</code> (i.e.&nbsp;<code>bills$id</code>), as if two bills had the same ID number we would not know which is which. In the <code>bills_id</code> column of the <code>bill_stages</code> data frame (i.e.&nbsp;<code>bill_stages$bill_id</code>) though the same bill ID can appear multiple times. Indeed, the value <code>1</code> appears in the first four rows for <code>bill_id</code>, that is because a row is created in <code>bill_stages</code> for each stage the bill went through.</li>
+<li>Something that can cause confusion is each of our data frames has an <code>id</code> column. The <code>id</code> in each data frame refers to the objects of that data frame. For instance, <code>id</code> in the <code>bills</code> data frame is the bill id; <code>id</code> in the <code>bill_stages</code> data frame is the bill stage id; and so on. However, where a column is referencing an id from another set of data it is in the format <code>other_data_id</code> - such as <code>bill_type_id</code> for the column storing the bill type id.</li>
+</ul>
+<p>Threading it together. We know the names of the bills that have gone through the Scottish Parliament using <code>bills</code>; we know what stages each went through using <code>bill_stages</code>; and, we know which stage each <code>bill_stage_type_id</code> is referring to made it to using <code>bill_stages_types</code>. Obviously, as bills, stages, and stage types are being referred to by numbers, if we were to manually cross-check across these files we would quickly develop a migrane trying to keep track of it all. <strong>Thankfully</strong>, all of these <code>id</code> and <code>other_data_id</code> columns can be used to join the data in our JSON files together.</p>
+</section></section><section id="joining-data-frames" class="level2"><h2 class="anchored" data-anchor-id="joining-data-frames">Joining data frames</h2>
+<p>Let’s create a <code>sp_bills</code> object (using ‘sp’ for Scottish Parliament) that holds the linked data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sp_bills</span> <span class="op">&lt;-</span> <span class="va">bill_stages</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">bill_stage_types</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">bill_stage_type_id</span> <span class="op">==</span> <span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">bills</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">bill_id</span> <span class="op">==</span> <span class="va">id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>We start with <code>bill_stages</code> as it includes the data of each stage <strong>and</strong> also has <code>bill_id</code> and <code>bill_stage_type_id</code> columns can use to join the data.</li>
+<li>We <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code> to join our <code>bill_stage_types</code> data with the <code>bill_stages</code> data, with <code>by =  join_by()</code> used to say which two columns to match up. Here we are saying that the <code>bill_stage_type_id</code> column in the <code>bill_stages</code> data should be matched with the <code>id</code> column in the <code>bill_stage_types</code> data.</li>
+<li>We then do the same again now linking our <code>bills</code> data using the <code>bill_id</code> column in the <code>bill_stages</code> data to match the <code>id</code> column in the <code>bills</code> data.</li>
+</ul>
+<p>We now have a data frame with data from the three JSON files. You can use <code>glimpse(sp_bills)</code> or <code>View(sp_bills)</code> to take a look at it, which for sake of space, I’ll avoid including the output of here.</p>
+<p>What you’ll notice though is we now have a lot of rows and columns. As we used <code>bill_stages</code> as our starting point, each row is representing a stage each bill went through. There is now a <code>name</code> column with the proper stage name for each row that was created when joining the <code>bill_stage_types</code> data.</p>
+<p>Now then, we can more easily subset the data with just the information we are most interested in. As noted at the top, let’s say we want all bills that made it to a final stage 3 vote:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">stage_3_bills</span> <span class="op">&lt;-</span> <span class="va">sp_bills</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Stage 3"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>bill <span class="op">=</span> <span class="va">full_name</span>, date <span class="op">=</span> <span class="va">stage_date</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>bill <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="va">bill</span><span class="op">)</span>, date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The votes file is one MSP vote per row, we flatten it to turn nested columns into ordinary ones:</p>
+<ul>
+<li>We can <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> using the <code>name</code> column for any row that has the value “Stage 3” which came from the <code>bill_stage_types</code> data.</li>
+<li>We can then <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> to pick and rename the columns we want, here keeping <code>full_name</code> which originally came from the <code>bills</code> data and <code>stage_date</code> which came from the <code>bill_stages</code> data. We rename these bill and date respectively, which is optional, but shortens the names abit whilst keeping it understandable what they are.</li>
+<li>We next use <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> to do some further tidying and typing of our data. An annoying issue is that some the names for the bills include random extra white space. The “Welfare of Dogs (Scotland) Bill”, for example, is actually stored as “Welfare of Dogs (Scotland) Bill”. We can then use <code><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish()</a></code> to remove any white spaces at the start or end of a string. Our date column is also not read in as a date type, so we can quickly fix that with <code><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_date()</a></code>.</li>
+</ul>
+<p>And that’s it. We have joined data from the three JSON files and created a data frame of bills that made it to stage 3 with the name of each bill and the date is was at stage 3.</p>
+<section id="vote-json-data" class="level3"><h3 class="anchored" data-anchor-id="vote-json-data">Vote JSON data</h3>
+<p>Next then we want to get data about the final votes at stage 3. We can do this with the other JSON file we downloaded:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">votes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/votes_2025.json"</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">final_votes</span> <span class="op">&lt;-</span> <span class="va">votes</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>bill <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="va">motion_title</span><span class="op">)</span>, date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_date</a></span><span class="op">(</span><span class="va">time_start</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join</a></span><span class="op">(</span><span class="va">stage_3</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">bill</span>, <span class="va">date</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">votes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/votes_2025.json"</span>, flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Now let’s categories by whether parties voted Yes cross-party or along party lines (we are using 10% as are cut-off, which was just arbitary number that seemed OK for purposes of this example).</p>
+<p>Unlike the bill JSON files, the votes file has ‘nested’ JSON. Each JSON record holds multiple smaller records of its own - if converting to data frames it would be like a column in a table containing another table. We can use <code>flatten = TRUE</code> to turn each of those fields into a regular column without nesting.</p>
+<p>If we didn’t use <code>flatten = TRUE</code> this is how our data would look:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">kinds</span> <span class="op">&lt;-</span> <span class="va">final_votes</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">detail_vote_msp</span> <span class="op">!=</span> <span class="st">"Not Voted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>share_for <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">detail_vote_msp</span> <span class="op">==</span> <span class="st">"Yes"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">bill</span>, <span class="va">motion_reference</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>kind <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">share_for</span> <span class="op">&gt;=</span> <span class="fl">0.9</span> <span class="op">|</span> <span class="va">share_for</span> <span class="op">&lt;=</span> <span class="fl">0.1</span>, <span class="st">"Cross-party"</span>, <span class="st">"Party lines"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">share_for</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">kinds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="st">"data/holyrood/votes_2025.json"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>         date
-1  2025-10-07
-2  2025-06-17
-3  2025-06-10
-4  2025-01-23
-5  2025-12-16
-6  2025-01-15
-7  2025-12-16
-8  2025-11-27
-9  2025-05-20
-10 2025-09-30
-11 2025-11-05
-12 2025-09-17
-13 2025-06-25
-14 2025-02-25
-                                                                                    bill
+<pre><code>'data.frame':   0 obs. of  6 variables:
+ $ ID                : chr 
+ $ Detail            :'data.frame': 0 obs. of  14 variables:
+  ..$ ID                : int 
+  ..$ MotionAgendaItemID: int 
+  ..$ AgendaID          : int 
+  ..$ Decision          : chr 
+  ..$ DecisionID        : int 
+  ..$ VoteMSP           : chr 
+  ..$ VoteResult        : chr 
+  ..$ VoteFor           : int 
+  ..$ VoteAgainst       : int 
+  ..$ VoteCasting       : logi 
+  ..$ MSPSharesParty    : chr 
+  ..$ Reference         : chr 
+  ..$ BackupAgendaItemID: int 
+  ..$ VoteDescription   : chr 
+ $ Motion            :'data.frame': 0 obs. of  3 variables:
+  ..$ Title    : chr 
+  ..$ Reference: chr 
+  ..$ ID       : int 
+ $ Person            :'data.frame': 0 obs. of  6 variables:
+  ..$ ID                : int 
+  ..$ ParliamentaryName : chr 
+  ..$ DisplayName       : chr 
+  ..$ PartyAbbreviation : chr 
+  ..$ PartyName         : chr 
+  ..$ ConstituencyRegion: chr 
+ $ Time              :'data.frame': 0 obs. of  4 variables:
+  ..$ Start            : chr 
+  ..$ End              : chr 
+  ..$ ParliamentaryYear: logi 
+  ..$ Session          : chr 
+ $ UpdatedElasticDate: chr </code></pre>
+</div>
+</div>
+<p>As can see, the file has records for <code>ID</code>, <code>Detail</code>, <code>Motion</code>, etc but ‘nested’ within some of these are further records. <code>Detail</code> for example has nested within it <code>ID</code>, <code>MotionAgendaItemID</code>, and so on. <code>flatten = TRUE</code> converts each into a column like <code>Detail.ID</code>, <code>Detail.MotionAgendaItemID</code>, etc. Then our use of janitor’s <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html">clean_names()</a></code> further tidy’s that up into <code>detail_id</code>, <code>detail_motion_agenda_item_id</code>, etc.</p>
+<p>We can then take a <code><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse()</a></code> as how our data frame created with <code>flatten = TRUE</code> looks instead:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">votes</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 33,618
+Columns: 29
+$ id                           &lt;chr&gt; "M2615E397P734VM606887", "M16177E387P723V…
+$ updated_elastic_date         &lt;chr&gt; "2026-10-16T11:30:19.7413396+00:00", "202…
+$ detail_id                    &lt;int&gt; 606887, 606812, 606803, 606893, 606895, 6…
+$ detail_motion_agenda_item_id &lt;int&gt; 7974, 7974, 7974, 7974, 7974, 7974, 7974,…
+$ detail_agenda_id             &lt;int&gt; 4363, 4363, 4363, 4363, 4363, 4363, 4363,…
+$ detail_decision              &lt;chr&gt; "Division", "Division", "Division", "Divi…
+$ detail_decision_id           &lt;int&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…
+$ detail_vote_msp              &lt;chr&gt; "Yes", "Yes", "Yes", "Yes", "Yes", "Not V…
+$ detail_vote_result           &lt;chr&gt; "Carried", "Carried", "Carried", "Carried…
+$ detail_vote_for              &lt;int&gt; 119, 119, 119, 119, 119, 119, 119, 119, 1…
+$ detail_vote_against          &lt;int&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…
+$ detail_vote_casting          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ detail_msp_shares_party      &lt;chr&gt; "No", "No", "No", "No", "No", "No", "No",…
+$ detail_reference             &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ detail_backup_agenda_item_id &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ detail_vote_description      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ motion_title                 &lt;chr&gt; "Dog Theft (Scotland) Bill", "Dog Theft (…
+$ motion_reference             &lt;chr&gt; "S6M-20167", "S6M-20167", "S6M-20167", "S…
+$ motion_id                    &lt;int&gt; 63787, 63787, 63787, 63787, 63787, 63787,…
+$ person_id                    &lt;int&gt; 2615, 16177, 4940, 2641, 5868, 1783, 2633…
+$ person_parliamentary_name    &lt;chr&gt; "Adam, George", "Adam, Karen", "Adamson, …
+$ person_display_name          &lt;chr&gt; "George Adam", "Karen Adam", "Clare Adams…
+$ person_party_abbreviation    &lt;chr&gt; "SNP", "SNP", "SNP", "SNP", "SNP", "Lab",…
+$ person_party_name            &lt;chr&gt; "Scottish National Party", "Scottish Nati…
+$ person_constituency_region   &lt;chr&gt; "Paisley", "Banffshire and Buchan Coast",…
+$ time_start                   &lt;chr&gt; "2025-12-16T14:00:00", "2025-12-16T14:00:…
+$ time_end                     &lt;chr&gt; "2025-12-16T14:00:00", "2025-12-16T14:00:…
+$ time_parliamentary_year      &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ time_session                 &lt;chr&gt; "S6", "S6", "S6", "S6", "S6", "S6", "S6",…</code></pre>
+</div>
+</div>
+<p>The downside of <code>flatten = TRUE</code> is we have a lot of repetitive naming - 14 columns all have names that begin with <code>detail</code>. If you use <code>View(votes)</code> you will also see there is a lot of repetitive values in some columns. Both of these issues though we will deal with that as we go - and having this single unnested data frame is far easier to work with for doing so.</p>
+<p>The key columns of interest to us:</p>
+<ul>
+<li>
+<code>motion_title</code> for the bill name</li>
+<li>
+<code>motion_reference</code> the unique catalogue ID the Scottish Parliament uses for motions</li>
+<li>
+<code>time_start</code> to identify which vote</li>
+<li>
+<code>detail_vote_for</code> and <code>detail_vote_against</code> for the vote totals (and also example of two very repetitive columns in our data frame)</li>
+<li>
+<code>detail_vote_msp</code> with how the MSP voted and all the <code>person_</code> columns with details about them.</li>
+<li>
+<code>person_id</code> is the unique MSP’s ID number - and also gets used on the debate transcript pages that we will download later - which will prove useful.</li>
+</ul></section><section id="subsetting-our-votes" class="level3"><h3 class="anchored" data-anchor-id="subsetting-our-votes">Subsetting our votes</h3>
+<p>Whilst we downloaded a votes file with just the votes in 2025, it includes votes on all motions, so for some of our bills that includes votes on them at other stages.</p>
+<p>We can then filter our votes data and do some tidying too:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">stage_3_votes</span> <span class="op">&lt;-</span> <span class="va">votes</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>bill <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="va">motion_title</span><span class="op">)</span>, date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_date</a></span><span class="op">(</span><span class="va">time_start</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join</a></span><span class="op">(</span><span class="va">stage_3_bills</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">bill</span>, <span class="va">date</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> to create a new column <code>bill</code> from the current <code>votes</code> column named <code>motion_title</code> (technically ‘motions’ is a broader category than just bills, but that becomes a non-issue after the <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join()</a></code>), also using <code><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish()</a></code> again to remove any unwanted empty spaces at the beginning or end of the bill name. We also create a date column with the <code>time.start</code> date converted <code><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_date()</a></code> type.</p>
+<p>We already created <code>bill</code> and <code>date</code> columns in our <code>stage_3_bills</code> data frame using the bill JSON files. So, what we have created with <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> is to similar named columns from our <code>votes</code> data frame that contains the same information. We can now then use <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join()</a></code> to join our <code>stage_3_bills</code> data using those columns. Though <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join()</a></code> actually only keeps or drops rows - no columns from <code>stage_3_bills</code> will get addedto our new <code>stage_3_votes</code> data frame. Instead, <code>stage_3_bills</code> ends up working like a filter. We are using <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">semi_join()</a></code> to effectively filter our data. Our full code is equivalent to saying: “create a <code>stage_3_votes</code> data frame with the columns for the <code>votes</code>, but only the rows from <code>votes</code> where the values in the <code>bill</code> and <code>date</code> columns match those in the <code>stage_3_bills</code> data frame”.</p>
+<p>The result? Our <code>stage_3_votes</code> data frame now only includes rows for votes on bills at stage 3. If you <code>glimpse(stage_3_votes)</code> you’ll see it’s still not the tidyiest of data, but for how we are using it, it’s perfectly fine.</p>
+</section></section><section id="classifying-votes" class="level2"><h2 class="anchored" data-anchor-id="classifying-votes">Classifying votes</h2>
+<p>We can now categorise votes by whether there was an overwhelming majority in favour of a bill or not. We are using a 10% cut-off for this, which is a completely arbitrary but seemed fine for having a simple example. (Note, originally I had the categories of “Cross-Party” and “Party-Lines” which this 10% cut-off is not that reliable for, so I’ve changed it now to more accurate ‘Overwhelming Majority’ TRUE / FALSE)</p>
+<p>(There are plenty of other ways could identify bills, such as % of governing party voting No to identify bills where there was a backbench rebellion. Indeed, if instead looking at bills across stages rather than just the final stage, another option could be finding bills where there was initial strong opposition with backbench rebellion at Stage 1, but by Stage 3 the majority of the party voted Yes and compare the debates at each stage.)</p>
+<p>Let’s first see how votes are recorded in the <code>detail_vote_msp</code> column - which has the record of how each MSP voted in each vote:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">stage_3_votes</span>, <span class="va">detail_vote_msp</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  detail_vote_msp
+1             Yes
+2       Not Voted
+3              No
+4         Abstain</code></pre>
+</div>
+</div>
+<p><code><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct()</a></code> let’s use see all the distinct values for a column (<code>detail_vote_msp</code>) of a data frame (<code>stage_3_votes</code>). As can see there is Abstain, No, Not Voted, and Yes.</p>
+<p>What is the difference between Abstain and Not Voted? An Abstain is a deliberate intentional vote. Not Voted means a vote was not cast, which can happen for various reasons. The Presiding Officer of the Scottish Parliament is also an MSP and they only vote if it is to break a tie. In the Scottish Parliament, proxy voting is possible, where one MSP can cast the vote on behalf of another who cannot make it in person - such as parental leave, health issues, bereavement, etc. This reduces Not Voted compared to Westminster. However, there can still be reasons for Not Voted, such as informal pairing, where say a Conservative MSP was unable to make a vote at too short notice to have a proxy vote approved, then the SNP may agree for one of their MSPs to note vote too. As Not Voted though can be for various reasons, for us we can treat it as missing data.</p>
+<p>Let’s then (1) only keep intentional deliberate votes (2) get counts for each vote (3) use those counts to classify the stage 3 bills. We could do all that as a continuous chain of pipes, but to make it easier to understand we’ll divide the code up into those three logical chunks.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 1. only keep intentional deliberate votes</span></span>
+<span><span class="va">voted</span> <span class="op">&lt;-</span> <span class="va">stage_3_votes</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">detail_vote_msp</span> <span class="op">!=</span> <span class="st">"Not Voted"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>So we simply filter to remove any rows where the value for how the MSP voted is “Not Voted”. (<code>!=</code> means ‘where not equal to’)</p>
+<p>Next -</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 2. get counts for each vote</span></span>
+<span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="va">voted</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span></span>
+<span>    msps_voting <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    msps_yes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">detail_vote_msp</span> <span class="op">==</span> <span class="st">"Yes"</span><span class="op">)</span>,</span>
+<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">bill</span>, <span class="va">date</span>, <span class="va">motion_reference</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> is used to aggregate rows together into totals.</li>
+<li>We use <code>.by</code> to say we want to group our existing rows. The <code>c(bill, date, motion_reference)</code> means any row where the value for those columns is the same will be grouped together with totals calculated. This effectively groups our rows so we have one row for each bill.</li>
+<li>
+<code>msps_voting</code> creates a new column with <code>= n()</code> meaning “the count for the number of rows that are being grouped together”. As our <code>voted</code> data has a row for each Stage 3 vote cast by an MSP and we are now grouping our rows by each bill, <code><a href="https://dplyr.tidyverse.org/reference/context.html">n()</a></code> gives us the number of MSPs who voted at the stage 3 vote for that bill.</li>
+<li>We create another new column <code>msps_yes</code> which has the <code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code> of how many MSPs voted yes. So, again, inside the <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> function, R is first taking our current <code>voted</code> rows and grouping them by each bill, so this <code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code> function is creating the total number of Yes votes for each bill.</li>
+</ul>
+<p>For sake of space, I won’t print it on the page, but you can run <code>counts</code> in the Console to see how the data looks that should hopefully help make clearer what <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> is doing.</p>
+<p>Now that for each bill at stage 3 we have the number of MSPs who voted and the number who voted yes, we can -</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 3. classify the stage 3 bills</span></span>
+<span><span class="va">majorities</span> <span class="op">&lt;-</span> <span class="va">counts</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>share_for <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">msps_yes</span> <span class="op">/</span> <span class="va">msps_voting</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>overwhelming_majority <span class="op">=</span> <span class="va">share_for</span> <span class="op">&gt;=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">share_for</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>Our first <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> creates a column named <code>share_for</code> with a calcuated value of the percentage (i.e.&nbsp;the ‘share’) of MSPs who voted ‘for’ the bill. We do that by taking the number of Yes votes and divide by the number of MSPs who voted. We wrap this in a <code><a href="https://rdrr.io/r/base/Round.html">round()</a></code> function with <code>2</code> as the second argument to round the calculation to two decimal places.</li>
+<li>Our second <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> creates a column named <code>overwhelming_majority</code>. The expression <code>share_for &gt;= 0.9</code> returns <code>TRUE</code> if the value of <code>share_for</code> is 0.9 (i.e.&nbsp;90%) or more, if not it returns <code>FALSE</code>.</li>
+<li>We then use <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> to sort our rows by <code>share_for</code> with <code><a href="https://dplyr.tidyverse.org/reference/desc.html">desc()</a></code> for descending order. In other words, ordered by % of MSPs who votes Yes.</li>
+</ul>
+<p>Let’s look at the data then:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">majorities</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                                    bill
 1  Criminal Justice Modernisation and Abusive Domestic Behaviour Reviews (Scotland) Bill
 2                                                                Scottish Languages Bill
 3                                                            Care Reform (Scotland) Bill
@@ -649,63 +998,145 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 12                                Victims, Witnesses, and Justice Reform (Scotland) Bill
 13                                                             Education (Scotland) Bill
 14                                                        Budget (Scotland) (No. 4) Bill
-   motion_reference share_for        kind
-1         S6M-19221      1.00 Cross-party
-2         S6M-17966      1.00 Cross-party
-3         S6M-17858      1.00 Cross-party
-4         S6M-16120      1.00 Cross-party
-5         S6M-20138      0.99 Cross-party
-6         S6M-16093      0.99 Cross-party
-7         S6M-20167      0.98 Cross-party
-8         S6M-19948      0.78 Party lines
-9         S6M-17584      0.77 Party lines
-10        S6M-18992      0.76 Party lines
-11        S6M-19421      0.70 Party lines
-12        S6M-18883      0.60 Party lines
-13        S6M-18059      0.59 Party lines
-14        S6M-16562      0.59 Party lines</code></pre>
+         date motion_reference msps_voting msps_yes share_for
+1  2025-10-07        S6M-19221         115      115      1.00
+2  2025-06-17        S6M-17966         112      112      1.00
+3  2025-06-10        S6M-17858         116      116      1.00
+4  2025-01-23        S6M-16120         114      114      1.00
+5  2025-12-16        S6M-20138         121      120      0.99
+6  2025-01-15        S6M-16093         117      116      0.99
+7  2025-12-16        S6M-20167         121      119      0.98
+8  2025-11-27        S6M-19948         108       84      0.78
+9  2025-05-20        S6M-17584         114       88      0.77
+10 2025-09-30        S6M-18992         117       89      0.76
+11 2025-11-05        S6M-19421         122       85      0.70
+12 2025-09-17        S6M-18883         118       71      0.60
+13 2025-06-25        S6M-18059         116       69      0.59
+14 2025-02-25        S6M-16562         123       73      0.59
+   overwhelming_majority
+1                   TRUE
+2                   TRUE
+3                   TRUE
+4                   TRUE
+5                   TRUE
+6                   TRUE
+7                   TRUE
+8                  FALSE
+9                  FALSE
+10                 FALSE
+11                 FALSE
+12                 FALSE
+13                 FALSE
+14                 FALSE</code></pre>
 </div>
 </div>
-<p>let’s pick one of each:</p>
+</section><section id="selecting-two-debates" class="level2"><h2 class="anchored" data-anchor-id="selecting-two-debates">Selecting two debates</h2>
+<p>Let’s say for our two debates we then decided to pick “Schools (Residential Outdoor Education) (Scotland) Bill” (99% votes Yes) and “Victims, Witnesses, and Justice Reform (Scotland) Bill” (60% votes Yes). How do we go from identifying two of interest to actually having data for them?</p>
+<ol type="1">
+<li>Go to the Scottish Parliament’s <a href="https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament">Official Report</a> search page.</li>
+<li>In <strong>Search by keyword</strong>, type in the bill’s title, and can use quotations marks around it to search for exact matches only, i.e.&nbsp;<code>"Victims, Witnesses, and Justice Reform (Scotland) Bill"</code>. If get no results though double check for any differences between the title in the data and what you typed in the saerch box.</li>
+<li>For <code>Select a time period</code> set both <strong>Start date</strong> and <strong>End date</strong> to the value in the <code>date</code> column of our <code>majorities</code> data frame. (For the “Victims, Witnesses, …” bill that was <code>2025-09-17</code> - so we set the <strong>Start date</strong> and <strong>End date</strong> to 17/09/2025)</li>
+<li>For <strong>Select which types of business to include</strong> untick everything except “Debates”.</li>
+<li>That should hopefully be enough info to narrow the search results, so hit “Search”. (In my experience sadly just searching by the bill’s name was not enough to clearly identify the final debate. However, with the above there should only be one search result now with the same name as the bill.)</li>
+<li>Find the search result with the same title as your bill of interest (it should be the only search result with the title of the bill), right-click on the title and select ‘Copy link address’.</li>
+<li>That will give you a link like <code>https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament/meeting-of-parliament-17-09-2025?meeting=16579&amp;iob=141525</code>, everything up to the <code>meeting-of-parliament...</code> is the same for each link, we all we need for each bill is that end part.</li>
+</ol>
+<p>(We could use R to automate searching the Scottish Parliament website to grab these URLs too - but that would be another ~20 lines of code. As we are only interested in a small sample, it’s fine to grab the URLs manually - despite how poorly designed the Scottish Parliament’s Official Report search interface is. However, if interested in doing quantitative text analysis on larger number of bills - where that Official Report search interface will quickly become tedious - let me know and I will add a seperate page with how can automate getting the debate URLs.)</p>
+<section id="a-table-for-our-selected-debates" class="level3"><h3 class="anchored" data-anchor-id="a-table-for-our-selected-debates">A table for our selected debates</h3>
+<p>After we have done that for both bills we are interested in, we can create a simple tibble (i.e.&nbsp;a table) with some key info:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">debates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">debates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
 <span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"schools"</span>, <span class="st">"victims"</span><span class="op">)</span>,</span>
 <span>  bill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Schools (Residential Outdoor Education) (Scotland) Bill"</span>,</span>
 <span>           <span class="st">"Victims, Witnesses, and Justice Reform (Scotland) Bill"</span><span class="op">)</span>,</span>
 <span>  page <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"meeting-of-parliament-16-12-2025?meeting=16755&amp;iob=143101"</span>,</span>
-<span>           <span class="st">"meeting-of-parliament-17-09-2025?meeting=16579&amp;iob=141525"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">final_votes</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">bill</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">debates</span><span class="op">$</span><span class="va">bill</span>, <span class="va">detail_vote_msp</span> <span class="op">!=</span> <span class="st">"Not Voted"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">bill</span>, vote <span class="op">=</span> <span class="va">detail_vote_msp</span>, party <span class="op">=</span> <span class="va">person_party_abbreviation</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">party</span>, values_from <span class="op">=</span> <span class="va">n</span>, values_fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 10
-  bill                    vote    Ind   Con Green    LD   Lab Reform   SNP  Alba
-  &lt;chr&gt;                   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt;
-1 Schools (Residential O… Abst…     1     0     0     0     0      0     0     0
-2 Schools (Residential O… Yes       4    26     7     5    19      1    58     0
-3 Victims, Witnesses, an… Abst…     1     0     0     0     0      0     0     0
-4 Victims, Witnesses, an… No        1    25     0     0    20      0     0     0
-5 Victims, Witnesses, an… Yes       1     0     7     5     0      1    56     1</code></pre>
+<span>           <span class="st">"meeting-of-parliament-17-09-2025?meeting=16579&amp;iob=141525"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-<p>pivot_wider() give one row per bill and vote, one column per part</p>
-<p>some vote pages can move (though seems very rare), but can search on the Parliament page if so</p>
-<p>let’s use this to create dataset for quals analysis</p>
+<p>Here: - <strong>file</strong> we use for name we will use later on for files we create for each debate - <strong>bill</strong> is its full title, matching how it appears in our existing data frames - <strong>page</strong> is the end section of the web addresses that we got through the Official Report search interface</p>
+</section><section id="how-did-parties-vote-in-our-sampled-debates" class="level3"><h3 class="anchored" data-anchor-id="how-did-parties-vote-in-our-sampled-debates">How did parties vote in our sampled debates</h3>
+<p>Let’s see then what the votes looked like for our sampled debate:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">"data/final_debates"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voted</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">bill</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">debates</span><span class="op">$</span><span class="va">bill</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html">tabyl</a></span><span class="op">(</span><span class="va">person_party_abbreviation</span>, <span class="va">detail_vote_msp</span>, <span class="va">bill</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$`Schools (Residential Outdoor Education) (Scotland) Bill`
+ person_party_abbreviation Abstain No Yes
+                      Alba       0  0   0
+                       Con       0  0  26
+                     Green       0  0   7
+                       Ind       1  0   4
+                       Lab       0  0  19
+                        LD       0  0   5
+                    Reform       0  0   1
+                       SNP       0  0  58
+
+$`Victims, Witnesses, and Justice Reform (Scotland) Bill`
+ person_party_abbreviation Abstain No Yes
+                      Alba       0  0   1
+                       Con       0 25   0
+                     Green       0  0   7
+                       Ind       1  1   1
+                       Lab       0 20   0
+                        LD       0  0   5
+                    Reform       0  0   1
+                       SNP       0  0  56</code></pre>
+</div>
+</div>
+<ul>
+<li>We reuse the <code>voted</code> object created earlier that removes rows with “Not Voted”.</li>
+<li>We <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> to only include rows when the name in the <code>bill</code> column for <code>voted</code> (i.e.&nbsp;<code>voted$bill</code>) matches one of our two selected bills as named in the <code>bill</code> column of the <code>debates</code> table we made (and hence why we need to ensure the names of the bills we use match our existing data!)</li>
+<li>We can then use <code>janitor</code>’s <code>tably()</code> function to create a table for each row with <code>person_party_abbreviation</code> for the short name of the political party, <code>detail_vote_msp</code> for the tally of votes by Astain; Yes; and No, and <code>bill</code> to say we want a table of votes for each bill.</li>
+</ul></section></section><section id="downloading-the-debates" class="level2"><h2 class="anchored" data-anchor-id="downloading-the-debates">Downloading the debates</h2>
+<p>We can also use the <code>debates</code> table we created to download copies of the debate transcripts.</p>
+<p>We could construct everything we need in the for loop in a later code chunk, but just to help make the code easier to understand, let’s first setup an object for the folder path and file names to use:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">html_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"data/final_debates/"</span>, <span class="va">debates</span><span class="op">$</span><span class="va">file</span>, <span class="st">".html"</span><span class="op">)</span></span>
+<span><span class="va">html_files</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "data/final_debates/schools.html" "data/final_debates/victims.html"</code></pre>
+</div>
+</div>
+<p>Tidyverse’s <code><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c()</a></code> is very similar to base R’s <code><a href="https://rdrr.io/r/base/paste.html">paste0()</a></code> that we used in other examples. The main difference is that <code><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c()</a></code> has better handling for any missing values. For the code we are writing here that is not a problem, but included it as within online resources you will see either of the two functions used for similar things. Main thing to remember is they are largely interchangeable <em>unless</em> the data you are working with has - or may have - missing values.</p>
+<p>We then give <code><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c()</a></code> the start of our folder and file path - “data/final_debates/” - followed by <code>debates$file</code> which is the column in the wee table we created which contains the file names we want to use and then <code>".html"</code> as we will be creating HTML files. As we have two rows in our <code>debates$file</code> column, <code><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c()</a></code> returns two files name.</p>
+<p>Next, we can setup our ‘base URL’ - the common starting text used for each web address - and a user agent:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">base_url</span> <span class="op">&lt;-</span> <span class="st">"https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament/"</span></span>
+<span><span class="va">user_agent</span> <span class="op">&lt;-</span> <span class="st">"NAME (EMAIL)"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Remember to replace “NAME (EMAIL)” with your actual name and email address. Why are we creating one when we didn’t when running our <code><a href="https://rdrr.io/r/utils/download.file.html">download.file()</a></code> code? We don’t need to setup user agent information for every website, but it is considered polite, especially when moving to using things like for loops to download pages. Whilst we are just grabbing two pages, you could scale this to dozens - or even hundreds - of pages. Including user agent information then would let the websites we are requesting pages from know who to contact if something goes wrong with our code. With much more complex code it can be easy to accidentally start sending 100+ requests per second.</p>
+<p>We can now create our folder to use and use a for loop to download copies of the pages:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">"data/final_debates"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">debates</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://httr2.r-lib.org/reference/request.html">request</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament/"</span>, <span class="va">debates</span><span class="op">$</span><span class="va">page</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://httr2.r-lib.org/reference/req_user_agent.html">req_user_agent</a></span><span class="op">(</span><span class="st">"NAME (EMAIL)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://httr2.r-lib.org/reference/req_perform.html">req_perform</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"data/final_debates/"</span>, <span class="va">debates</span><span class="op">$</span><span class="va">file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">".html"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://httr2.r-lib.org/reference/request.html">request</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">base_url</span>, <span class="va">debates</span><span class="op">$</span><span class="va">page</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://httr2.r-lib.org/reference/req_user_agent.html">req_user_agent</a></span><span class="op">(</span><span class="va">user_agent</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://httr2.r-lib.org/reference/req_perform.html">req_perform</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">html_files</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html">Sys.sleep</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Ensure to add your name + email in the above!!!</p>
+<p>First, let’s explain for loops:</p>
+<ul>
+<li>The <code>for (X in Y:Z) {}</code> is how we create a for loop. Our loop will run the same number of times as the value of <code>Y</code>. So, if our <code>Y</code> was 1 and <code>Z</code> was 10, the code in our for loop would repeat 10 times.</li>
+<li>Why repeat code multiple times? Well our <code>X</code> being is the name we wish to give our iterator. Say we had 10 things to loop through (1:10), the first time the loop runs, our <code>X</code> will be 1, then the next it will be 2, and so on until it completes all 10 loops. This mean whilst our code is the same, the value for <code>X</code> is different in each loop. (Note if our code was <code>X in 5:14</code>, our code would still run 10 times, but the value of <code>X</code> in the first loop would start as 5)</li>
+<li>If we have an object, such as a list or a table, we can then include code such as <code>list[X]</code> or <code>table$column_name[X]</code>. Say our table and column was <code>item$prices</code>, the first time the loop runs, <code>item$prices[1]</code> would get the value of the first row of the prices column. The next loop would be <code>item$prices[2]</code>, grabbing the value of the second row instead. And so on.</li>
+</ul>
+<p>Returning then to our for loop:</p>
+<ul>
+<li>We say we want to <code>i in 1:nrow(debates)</code>.</li>
+<li>
+<code>i</code> is a common name you’ll often see get used for <code>X</code>.</li>
+<li>We use <code>1:nrow(debates)</code> to say “from 1 to the number of rows in our <code>debates</code> table”. For us that is <code>2</code>, but if we had 5 items in our <code>debates</code> table it would return <code>1:5</code> instead. So this for loop adapts to match our data.</li>
+<li>Within the loop itself, we setup our <code><a href="https://httr2.r-lib.org/reference/request.html">request()</a></code> but combining the strings (<code><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c()</a></code>) of <code>base_url</code> with <code>debates$page[i]</code>.</li>
+<li>We specify our <code><a href="https://httr2.r-lib.org/reference/req_user_agent.html">req_user_agent()</a></code> to use is the string contained in the <code>user_agent</code> object we create.</li>
+<li>Now we have constructed our request, we perform it (<code><a href="https://httr2.r-lib.org/reference/req_perform.html">req_perform()</a></code>) with an argument for where to say the file, which we get using the <code>html_files</code> object we created.</li>
+<li>Finally, I’ve included <code>Sys.sleep(5)</code> which simply waits 5 seconds - i.e.&nbsp;“sleeps” - before continuing. This is useful to space our requests to the same sites. Most websites usually specify any such spacing and it is usually something like 1 second rather than 5, but for two debates this makes it wait noticeable when running the code. (The Scottish Parliament website is also a site that is probably fine to not wait at all unless downloading hundreds of pages at a time.)</li>
+</ul></section><section id="extracting-text-from-html" class="level2"><h2 class="anchored" data-anchor-id="extracting-text-from-html">Extracting Text from HTML</h2>
+<p>(I have draft text and code that also breaks-down and steps through all of the below in a more detailed and accessible way - as well as include optional extras like creating Word documents of the transcripts instead of plain-text files. However, due to time available, I will need to finish that later - and will let you know once it’s updated.)</p>
 <p>You’ll notice the HTML files are hard to read, so let’s extract the text:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">debates</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">page</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"data/final_debates/"</span>, <span class="va">debates</span><span class="op">$</span><span class="va">file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">".html"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_element.html">html_elements</a></span><span class="op">(</span><span class="va">page</span>, <span class="st">"div.rich-text strong, div.rich-text p"</span><span class="op">)</span></span>
@@ -727,7 +1158,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>(Note, the above looks like it works - but I have not had time to do a line-by-line check. Please let me know if spot any issues - especially if it doesn’t work with other transcripts than the two used for this example)</p>
 <p>We have the sys.sleep() to space out our requests.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>words <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_count.html">str_count</a></span><span class="op">(</span><span class="va">text</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/modifiers.html">boundary</a></span><span class="op">(</span><span class="st">"word"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>words <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_count.html">str_count</a></span><span class="op">(</span><span class="va">text</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/modifiers.html">boundary</a></span><span class="op">(</span><span class="st">"word"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">debate_lengths</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>words <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">words</span><span class="op">)</span>, contributions <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, speakers <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html">n_distinct</a></span><span class="op">(</span><span class="va">person_id</span><span class="op">)</span>, .by <span class="op">=</span> <span class="va">bill</span><span class="op">)</span></span>
@@ -735,7 +1166,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>and -</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">msp_votes</span> <span class="op">&lt;-</span> <span class="va">final_votes</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">msp_votes</span> <span class="op">&lt;-</span> <span class="va">final_votes</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">bill</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">debates</span><span class="op">$</span><span class="va">bill</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">bill</span>, <span class="va">person_id</span>, name <span class="op">=</span> <span class="va">person_display_name</span>, party <span class="op">=</span> <span class="va">person_party_abbreviation</span>,</span>
 <span>         constituency_region <span class="op">=</span> <span class="va">person_constituency_region</span>, vote <span class="op">=</span> <span class="va">detail_vote_msp</span><span class="op">)</span></span>
@@ -744,7 +1175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>contributions <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, words <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">words</span><span class="op">)</span>, .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">bill</span>, <span class="va">person_id</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">msp_votes</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">bill</span>, <span class="va">person_id</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">debate_info</span> <span class="op">&lt;-</span> <span class="va">debates</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">kinds</span>, by <span class="op">=</span> <span class="st">"bill"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">debate_lengths</span>, by <span class="op">=</span> <span class="st">"bill"</span><span class="op">)</span></span>
+<span><span class="va">debate_info</span> <span class="op">&lt;-</span> <span class="va">debates</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">majorities</span>, by <span class="op">=</span> <span class="st">"bill"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">debate_lengths</span>, by <span class="op">=</span> <span class="st">"bill"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">debate_info</span>, <span class="st">"data/final_debates/debates.csv"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">speakers</span>, <span class="st">"data/final_debates/speakers.csv"</span><span class="op">)</span></span>
@@ -752,8 +1183,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1171,6 +1601,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../week10/rcityviews.html" class="pagination-link" aria-label="Glasgow City Views">
+        <span class="nav-page-text">Glasgow City Views</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
