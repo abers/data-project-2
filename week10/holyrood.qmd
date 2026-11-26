@@ -5,7 +5,20 @@ execute:
   message: false
 ---
 
-(Sorry this page is terse due to time. Let me know if anything unclear and I'll move this up on my priority list of pages to flesh out more)
+Say we were interested in analysing Scottish Parliament debates, and - in particular - interested in comparing the final debates for bills where the final vote had an overwhelming majority in support from MSPs or not. We can link together different data available from the official Scottish Parliament website to identify data of interest and create a data set could use for quantitative and/or qualitative analysis. For our purposes, we will just select one debate of each kind, but what is covered can easily scale to match however many debate transcripts you want to analyse.
+
+## Scottish Parliament Data
+
+The code to directly download the data we are using is included further below. The following steps are just so you can see how the web addresses used were found.
+
+1. Go to the [Scottish Parliament open data](https://data.parliament.scot/#/home) site.
+2. Select 'Datasets' from the row at the top. Each dataset appears in a box with its name; a one-sentence description; and a 'Schema Info' button. Clicking that button for any dataset will show more data for it. On the left-hand side there is also a 'Filter Datasets' box with a 'Select' button.
+3. Click the 'Select' button on in the left-hand side 'Filter Datasets' box. We are interested in, "Bills: Bill Title", "Bills: Bill Stage", "Bills: Bill Stage Type", and "MSPs: Vote on Motions (Beta) 2025". (Annoyingly the filter doesn't work that well so even after selecting an option you may still need to scroll down in the list to find it.)
+4. On the right-hand side of the box for each dataset there is an organe "JSON" button. For each dataset of interest, right-click it and select 'Copy link address'.
+
+Note, we are using 2025 data given (1) we don't have a full year of data for 2026 (2) there was an election in 2026.
+
+### Downloading the data
 
 Grab data needed:
 
@@ -14,11 +27,21 @@ Grab data needed:
 
 dir.create("data/holyrood", recursive = TRUE)
 options(timeout = 600)
-download.file("https://data.parliament.scot/api/votesmotion?year=2025", "data/holyrood/votes_2025.json")
+
+# bill data
 download.file("https://data.parliament.scot/api/bills/json", "data/holyrood/bills.json")
 download.file("https://data.parliament.scot/api/billstages/json", "data/holyrood/billstages.json")
 download.file("https://data.parliament.scot/api/billstagetypes/json", "data/holyrood/billstagetypes.json")
+
+# vote data
+download.file("https://data.parliament.scot/api/votesmotion?year=2025", "data/holyrood/votes_2025.json")
 ```
+
+- `dir.create()` creates a directory for us, where `recursive = TRUE` means if there is not an existing `data` subfolder it will be created too. If we did not already have a `data` subfolder, R would return an error.
+- As we are download data which could take a while on a slow internet connection we set `options(timeout = 600)`. By default R will give downloads 60 seconds and cancel them if not finished in that time. This line then let's us increase that timeout.
+- We then use `download_file()` using the web addresses for each dataset of interest.
+
+## Packages
 
 Load packages needed (install any that haven't already):
 
@@ -30,44 +53,259 @@ library(httr2)
 library(rvest)
 ```
 
-Load data and get stage 3 (final stage):
+- We will use `jsonlite` to work with the JSON data we downloaded.
+- We also load `httr2` for requesting web pages to download and `rvest` for reading content from the web pages. Both come from the tidyverse but as most data analysis projects will not be downloading and reading webpages we need to load these separate to the main `library(tidyverse)`
+- We also have `janitor` for its ever useful `clean_names()` function.
+
+## JSON Data
+
+`jsonlite` provides two key functions, `fromJSON()` and `read_JSON()`. Across examples, we have used `read_data_type()` style functions. Here, we are instead going to use the `fromJSON()`. The structure of JSON data raises questions of how to convert it into an R data frame. What would seem like the obvious choice, `read_JSON()` creates issues though for some of our data. `fromJSON()` is similar but uses different defaults. It is  `read_json(DATA, simplifyVector = TRUE)`, where `simplifyVector` creates individual columns for things that regular `read_JSON()` would keep within a single column.
+
+This is the JSON - with some added lines breaks to make it easier to read - looks in our `billstagetypes.json` file that we downloaded:
+
+```
+[{"ID":1,"Name":"Introduced","BillTypeID":1,"Sequence":0},
+{"ID":2,"Name":"Stage 1","BillTypeID":1,"Sequence":1},
+...
+```
+
+So what happens if we use each function to read in that data?
+
+```{r}
+fromJSON("data/holyrood/billstagetypes.json") |> head(2)
+
+read_json("data/holyrood/billstagetypes.json") |> head(2)
+```
+
+- As we are not assigning the data we are reading in to an object (`object_name <- ...`) R instead prints out the data being read in, which is what is displayed above.
+- Here, the `|> head(2)` simply restricts this print out to just the first two records rather than usual default cap of 10.
+
+As can see `fromJSON()` returns the read data as a data frame of rows and columns - similar to how we are used to working with other data across the programme. `read_json()` on the other hand has output that is less clear, but instead of reading the data in as a data frame it is reading it as a list. Because there are no proper columns, all of our usual functions like `filter()` don't play nicely with it. Hence, we will be using `fromJSON()`.
+
+::: {.callout-note}
+Within RStudio you can also get a more visual overview of the difference with:
+
+```{r}
+#| eval: false
+
+View(fromJSON("data/holyrood/billstagetypes.json"))
+```
+
+And:
+
+```{r}
+#| eval: false
+
+View(read_json("data/holyrood/billstagetypes.json"))
+```
+
+What you will notice though, is whilst `fromJSON()` gives us a data frame that is easier to work with, it is easier to get an understanding of the main structure of the JSON using `View()` and `read_json()`. We will cover other ways to approach that below.
+:::
+
+### Bill JSON Data
+
+Let's then load in the JSON files directly related to the bills that went through the Scottish Parliament:
 
 ```{r}
 bills <- fromJSON("data/holyrood/bills.json") |> clean_names()
-stages <- fromJSON("data/holyrood/billstages.json") |> clean_names()
-stage_types <- fromJSON("data/holyrood/billstagetypes.json") |> clean_names()
+bill_stages <- fromJSON("data/holyrood/billstages.json") |> clean_names()
+bill_stage_types <- fromJSON("data/holyrood/billstagetypes.json") |> clean_names()
+```
 
-stage_3 <- stages |>
-  left_join(stage_types, by = join_by(bill_stage_type_id == id)) |>
-  left_join(bills, by = join_by(bill_id == id)) |>
+We use `fromJSON()` to create each as a data frame, with `clean_names()` to turn column names like `BillStageTypeID` into snake case `bill_stage_type_id`.
+
+- `bills.json` contains a list of bill titles.
+- `billstages.json` is a list of stages each bill has been in.
+- `billstagestypes.json` is a list of the stage types.
+
+This may seem ridiculous, but this is common when working with some forms of web data - especially when vast amounts of data are potentially involved. By splitting things into different files we can reduce the amount of data that gets stored. Indeed, as will soon see, `billstagestypes.json` has two main columns, `id` and `name`. That's it. `billstages.json` refers to each bill stage by its `bill_type_id`. Why not just store the stage name directly instead of going through an ID number? Numbers take less space to store than characters - especially a string of characters. For a handful of values the difference in storage doesn't matter, but becomes one when working with large volumes of data. Thus for repetitive data we create IDs that take up less storage space and a separate file which matches IDs with their full values - in this case the bill stage type ID with its name.
+
+Let's then take a `glimpse()` at each:
+
+```{r}
+glimpse(bills)
+glimpse(bill_stages)
+glimpse(bill_stage_types)
+```
+
+`glimpse()` let's use get an overview of the number of rows and column a data frame contains followed by a list of its columns with their name, data type, and first few rows of data.
+
+As can see:
+
+- Our `bills` object has an `id` column.
+- Our `bill_stages` object has a `bills_id` column. The IDs stored in that column match with those in the `bills` data frame. Each unique ID number only appears once in the `id` column of `bills` (i.e. `bills$id`), as if two bills had the same ID number we would not know which is which. In the `bills_id` column of the `bill_stages` data frame (i.e. `bill_stages$bill_id`) though the same bill ID can appear multiple times. Indeed, the value `1` appears in the first four rows for `bill_id`, that is because a row is created in `bill_stages` for each stage the bill went through.
+- Something that can cause confusion is each of our data frames has an `id` column. The `id` in each data frame refers to the objects of that data frame. For instance, `id` in the `bills` data frame is the bill id; `id` in the `bill_stages` data frame is the bill stage id; and so on. However, where a column is referencing an id from another set of data it is in the format `other_data_id` - such as `bill_type_id` for the column storing the bill type id.
+
+Threading it together. We know the names of the bills that have gone through the Scottish Parliament using `bills`; we know what stages each went through using `bill_stages`; and, we know which stage each `bill_stage_type_id` is referring to made it to using `bill_stages_types`. Obviously, as bills, stages, and stage types are being referred to by numbers, if we were to manually cross-check across these files we would quickly develop a migrane trying to keep track of it all. **Thankfully**, all of these `id` and `other_data_id` columns can be used to join the data in our JSON files together.
+
+## Joining data frames
+
+Let's create a `sp_bills` object (using 'sp' for Scottish Parliament) that holds the linked data:
+
+```{r}
+sp_bills <- bill_stages |>
+  left_join(bill_stage_types, by = join_by(bill_stage_type_id == id)) |>
+  left_join(bills, by = join_by(bill_id == id))
+```
+
+- We start with `bill_stages` as it includes the data of each stage **and** also has `bill_id` and `bill_stage_type_id` columns can use to join the data.
+- We `left_join()` to join our `bill_stage_types` data with the `bill_stages` data, with `by =  join_by()` used to say which two columns to match up. Here we are saying that the `bill_stage_type_id` column in the `bill_stages` data should be matched with the `id` column in the `bill_stage_types` data.
+- We then do the same again now linking our `bills` data using the `bill_id` column in the `bill_stages` data to match the `id` column in the `bills` data.
+
+We now have a data frame with data from the three JSON files. You can use `glimpse(sp_bills)` or `View(sp_bills)` to take a look at it, which for sake of space, I'll avoid including the output of here.
+
+What you'll notice though is we now have a lot of rows and columns. As we used `bill_stages` as our starting point, each row is representing a stage each bill went through. There is now a `name` column with the proper stage name for each row that was created when joining the `bill_stage_types` data.
+
+Now then, we can more easily subset the data with just the information we are most interested in. As noted at the top, let's say we want all bills that made it to a final stage 3 vote:
+
+```{r}
+stage_3_bills <- sp_bills |>
   filter(name == "Stage 3") |>
   select(bill = full_name, date = stage_date) |>
   mutate(bill = str_squish(bill), date = as_date(date))
 ```
 
-The votes file is one MSP vote per row, we flatten it to turn nested columns into ordinary ones:
+- We can `filter()` using the `name` column for any row that has the value "Stage 3" which came from the `bill_stage_types` data.
+- We can then `select()` to pick and rename the columns we want, here keeping `full_name` which originally came from the `bills` data and `stage_date` which came from the `bill_stages` data. We rename these bill and date respectively, which is optional, but shortens the names abit whilst keeping it understandable what they are.
+- We next use `mutate()` to do some further tidying and typing of our data. An annoying issue is that some the names for the bills include random extra white space. The "Welfare of Dogs (Scotland) Bill", for example, is actually stored as "Welfare of Dogs (Scotland) Bill ". We can then use `str_squish()` to remove any white spaces at the start or end of a string. Our date column is also not read in as a date type, so we can quickly fix that with `as_date()`.
+
+And that's it. We have joined data from the three JSON files and created a data frame of bills that made it to stage 3 with the name of each bill and the date is was at stage 3.
+
+### Vote JSON data
+
+Next then we want to get data about the final votes at stage 3. We can do this with the other JSON file we downloaded:
 
 ```{r}
 votes <- fromJSON("data/holyrood/votes_2025.json", flatten = TRUE) |> clean_names()
-
-final_votes <- votes |>
-  mutate(bill = str_squish(motion_title), date = as_date(time_start)) |>
-  semi_join(stage_3, by = join_by(bill, date))
 ```
 
-Now let's categories by whether parties voted Yes cross-party or along party lines (we are using 10% as are cut-off, which was just arbitary number that seemed OK for purposes of this example).
+Unlike the bill JSON files, the votes file has 'nested' JSON. Each JSON record holds multiple smaller records of its own - if converting to data frames it would be like a column in a table containing another table. We can use `flatten = TRUE` to turn each of those fields into a regular column without nesting.
+
+If we didn't use `flatten = TRUE` this is how our data would look:
 
 ```{r}
-kinds <- final_votes |>
-  filter(detail_vote_msp != "Not Voted") |>
-  summarise(share_for = round(mean(detail_vote_msp == "Yes"), 2), .by = c(date, bill, motion_reference)) |>
-  mutate(kind = if_else(share_for >= 0.9 | share_for <= 0.1, "Cross-party", "Party lines")) |>
-  arrange(desc(share_for))
-
-kinds
+fromJSON("data/holyrood/votes_2025.json") |> head(0) |> str()
 ```
 
-let's pick one of each:
+As can see, the file has records for `ID`, `Detail`, `Motion`, etc but 'nested' within some of these are further records. `Detail` for example has nested within it `ID`, `MotionAgendaItemID`, and so on. `flatten = TRUE` converts each into a column like `Detail.ID`, `Detail.MotionAgendaItemID`, etc. Then our use of janitor's `clean_names()` further tidy's that up into `detail_id`, `detail_motion_agenda_item_id`, etc.
+
+We can then take a `glimpse()` as how our data frame created with `flatten = TRUE` looks instead:
+
+```{r}
+glimpse(votes)
+```
+
+The downside of `flatten = TRUE` is we have a lot of repetitive naming - 14 columns all have names that begin with `detail`. If you use `View(votes)` you will also see there is a lot of repetitive values in some columns. Both of these issues though we will deal with that as we go - and having this single unnested data frame is far easier to work with for doing so.
+
+The key columns of interest to us:
+
+- `motion_title` for the bill name
+- `motion_reference` the unique catalogue ID the Scottish Parliament uses for motions
+- `time_start` to identify which vote
+- `detail_vote_for` and `detail_vote_against` for the vote totals (and also example of two very repetitive columns in our data frame)
+- `detail_vote_msp` with how the MSP voted and all the `person_` columns with details about them.
+- `person_id` is the unique MSP's ID number - and also gets used on the debate transcript pages that we will download later - which will prove useful.
+
+### Subsetting our votes
+
+Whilst we downloaded a votes file with just the votes in 2025, it includes votes on all  motions, so for some of our bills that includes votes on them at other stages.
+
+We can then filter our votes data and do some tidying too:
+
+```{r}
+stage_3_votes <- votes |>
+  mutate(bill = str_squish(motion_title), date = as_date(time_start)) |>
+  semi_join(stage_3_bills, by = join_by(bill, date))
+```
+
+We `mutate()` to create a new column `bill` from the current `votes` column named `motion_title` (technically 'motions' is a broader category than just bills, but that becomes a non-issue after the `semi_join()`), also using `str_squish()` again to remove any unwanted empty spaces at the beginning or end of the bill name. We also create a date column with the `time.start` date converted `as_date()` type.
+
+We already created `bill` and `date` columns in our `stage_3_bills` data frame using the bill JSON files. So, what we have created with `mutate()` is to similar named columns from our `votes` data frame that contains the same information. We can now then use `semi_join()` to join our `stage_3_bills` data using those columns. Though `semi_join()` actually only keeps or drops rows - no columns from `stage_3_bills` will get addedto our new `stage_3_votes` data frame. Instead, `stage_3_bills` ends up working like a filter. We are using `semi_join()` to effectively filter our data. Our full code is equivalent to saying: "create a `stage_3_votes` data frame with the columns for the `votes`, but only the rows from `votes` where the values in the `bill` and `date` columns match those in the `stage_3_bills` data frame".
+
+The result? Our `stage_3_votes` data frame now only includes rows for votes on bills at stage 3. If you `glimpse(stage_3_votes)` you'll see it's still not the tidyiest of data, but for how we are using it, it's perfectly fine.
+
+## Classifying votes
+
+We can now categorise votes by whether there was an overwhelming majority in favour of a bill or not. We are using a 10% cut-off for this, which is a completely arbitrary but seemed fine for having a simple example. (Note, originally I  had the categories of "Cross-Party" and "Party-Lines" which this 10% cut-off is not that reliable for, so I've changed it now to more accurate 'Overwhelming Majority' TRUE / FALSE)
+
+(There are plenty of other ways could identify bills, such as % of governing party voting No to identify bills where there was a backbench rebellion. Indeed, if instead looking at bills across stages rather than just the final stage, another option could be finding bills where there was initial strong opposition with backbench rebellion at Stage 1, but by Stage 3 the majority of the party voted Yes and compare the debates at each stage.)
+
+Let's first see how votes are recorded in the `detail_vote_msp` column - which has the record of how each MSP voted in each vote:
+
+```{r}
+distinct(stage_3_votes, detail_vote_msp)
+```
+
+`distinct()` let's use see all the distinct values for a column (`detail_vote_msp`) of a data frame (`stage_3_votes`). As can see there is Abstain, No, Not Voted, and Yes.
+
+What is the difference between Abstain and Not Voted? An Abstain is a deliberate intentional vote. Not Voted means a vote was not cast, which can happen for various reasons. The Presiding Officer of the Scottish Parliament is also an MSP and they only vote if it is to break a tie. In the Scottish Parliament, proxy voting is possible, where one MSP can cast the vote on behalf of another who cannot make it in person - such as parental leave, health issues, bereavement, etc. This reduces Not Voted compared to Westminster. However, there can still be reasons for Not Voted, such as informal pairing, where say a Conservative MSP was unable to make a vote at too short notice to have a proxy vote approved, then the SNP may agree for one of their MSPs to note vote too. As Not Voted though can be for various reasons, for us we can treat it as missing data.
+
+Let's then (1) only keep intentional deliberate votes (2) get counts for each vote (3) use those counts to classify the stage 3 bills. We could do all that as a continuous chain of pipes, but to make it easier to understand we'll divide the code up into those three logical chunks.
+
+```{r}
+# 1. only keep intentional deliberate votes
+voted <- stage_3_votes |>
+  filter(detail_vote_msp != "Not Voted")
+```
+
+So we simply filter to remove any rows where the value for how the MSP voted is "Not Voted". (`!=` means 'where not equal to')
+
+Next -
+
+```{r}
+# 2. get counts for each vote
+counts <- voted |>
+  summarise(
+    msps_voting = n(),
+    msps_yes = sum(detail_vote_msp == "Yes"),
+    .by = c(bill, date, motion_reference)
+  )
+```
+
+- `summarise()` is used to aggregate rows together into totals.
+- We use `.by` to say we want to group our existing rows. The `c(bill, date, motion_reference)` means any row where the value for those columns is the same will be grouped together with totals calculated. This effectively groups our rows so we have one row for each bill.
+- `msps_voting` creates a new column with `= n()` meaning "the count for the number of rows that are being grouped together". As our `voted` data has a row for each Stage 3 vote cast by an MSP and we are now grouping our rows by each bill, `n()` gives us the number of MSPs who voted at the stage 3 vote for that bill.
+- We create another new column `msps_yes` which has the `sum()` of how many MSPs voted yes. So, again, inside the `summarise()` function, R is first taking our current `voted` rows and grouping them by each bill, so this `sum()` function is creating the total number of Yes votes for each bill.
+
+For sake of space, I won't print it on the page, but you can run `counts` in the Console to see how the data looks that should hopefully help make clearer what `summarise()` is doing.
+
+Now that for each bill at stage 3 we have the number of MSPs who voted and the number who voted yes, we can -
+
+```{r}
+# 3. classify the stage 3 bills
+majorities <- counts |>
+  mutate(share_for = round(msps_yes / msps_voting, 2)) |>
+  mutate(overwhelming_majority = share_for >= 0.9) |>
+  arrange(desc(share_for))
+```
+
+- Our first `mutate()` creates a column named `share_for` with a calcuated value of the percentage (i.e. the 'share') of MSPs who voted 'for' the bill. We do that by taking the number of Yes votes and divide by the number of MSPs who voted. We wrap this in a `round()` function with `2` as the second argument to round the calculation to two decimal places.
+- Our second `mutate()` creates a column named `overwhelming_majority`. The expression `share_for >= 0.9` returns `TRUE` if the value of `share_for` is 0.9 (i.e. 90%) or more, if not it returns `FALSE`.
+- We then use `arrange()` to sort our rows by `share_for` with `desc()` for descending order. In other words, ordered by % of MSPs who votes Yes.
+
+Let's look at the data then:
+
+```{r}
+majorities
+```
+
+## Selecting two debates
+
+Let's say for our two debates we then decided to pick "Schools (Residential Outdoor Education) (Scotland) Bill" (99% votes Yes) and "Victims, Witnesses, and Justice Reform (Scotland) Bill" (60% votes Yes). How do we go from identifying two of interest to actually having data for them?
+
+1. Go to the Scottish Parliament's [Official Report](https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament) search page.
+2. In **Search by keyword**, type in the bill's title, and can use quotations marks around it to search for exact matches only, i.e. `"Victims, Witnesses, and Justice Reform (Scotland) Bill"`. If get no results though double check for any differences between the title in the data and what you typed in the saerch box.
+3. For `Select a time period` set both **Start date** and **End date** to the value in the `date` column of our `majorities` data frame. (For the "Victims, Witnesses, ..." bill that was `2025-09-17` - so we set the **Start date** and **End date** to 17/09/2025)
+4. For **Select which types of business to include** untick everything except "Debates".
+5. That should hopefully be enough info to narrow the search results, so hit "Search". (In my experience sadly just searching by the bill's name was not enough to clearly identify the final debate. However, with the above there should only be one search result now with the same name as the bill.)
+6. Find the search result with the same title as your bill of interest (it should be the only search result with the title of the bill), right-click on the title and select 'Copy link address'.
+7. That will give you a link like `https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament/meeting-of-parliament-17-09-2025?meeting=16579&iob=141525`, everything up to the `meeting-of-parliament...` is the same for each link, we all we need for each bill is that end part.
+
+(We could use R to automate searching the Scottish Parliament website to grab these URLs too - but that would be another ~20 lines of code. As we are only interested in a small sample, it's fine to grab the URLs manually - despite how poorly designed the Scottish Parliament's Official Report search interface is. However, if interested in doing quantitative text analysis on larger number of bills - where that Official Report search interface will quickly become tedious - let me know and I will add a seperate page with how can automate getting the debate URLs.)
+
+### A table for our selected debates
+
+After we have done that for both bills we are interested in, we can create a simple tibble (i.e. a table) with some key info:
 
 ```{r}
 debates <- tibble(
@@ -76,32 +314,85 @@ debates <- tibble(
            "Victims, Witnesses, and Justice Reform (Scotland) Bill"),
   page = c("meeting-of-parliament-16-12-2025?meeting=16755&iob=143101",
            "meeting-of-parliament-17-09-2025?meeting=16579&iob=141525"))
-
-final_votes |>
-  filter(bill %in% debates$bill, detail_vote_msp != "Not Voted") |>
-  count(bill, vote = detail_vote_msp, party = person_party_abbreviation) |>
-  pivot_wider(names_from = party, values_from = n, values_fill = 0)
 ```
 
-pivot_wider() give one row per bill and vote, one column per part
+Here:
+- **file** we use for name we will use later on for files we create for each debate
+- **bill** is its full title, matching how it appears in our existing data frames
+- **page** is the end section of the web addresses that we got through the Official Report search interface
 
-some vote pages can move (though seems very rare), but can search on the Parliament page if so
+### How did parties vote in our sampled debates
 
-let's use this to create dataset for quals analysis
+Let's see then what the votes looked like for our sampled debate:
+
+```{r}
+voted |>
+  filter(bill %in% debates$bill) |>
+  tabyl(person_party_abbreviation, detail_vote_msp, bill)
+```
+
+- We reuse the `voted` object created earlier that removes rows with "Not Voted".
+- We `filter()` to only include rows when the name in the `bill` column for `voted` (i.e. `voted$bill`) matches one of our two selected bills as named in the `bill` column of the `debates` table we made (and hence why we need to ensure the names of the bills we use match our existing data!)
+- We can then use `janitor`'s `tably()` function to create a table for each row with `person_party_abbreviation` for the short name of the  political party, `detail_vote_msp` for the tally of votes by Astain; Yes; and No, and `bill` to say we want a table of votes for each bill.
+
+## Downloading the debates
+
+We can also use the `debates` table we created to download copies of the debate transcripts.
+
+We could construct everything we need in the for loop in a later code chunk, but just to help make the code easier to understand, let's first setup an object for the folder path and file names to use:
+
+```{r}
+html_files <- str_c("data/final_debates/", debates$file, ".html")
+html_files
+```
+
+Tidyverse's `str_c()` is very similar to base R's `paste0()` that we used in other examples. The main difference is that `str_c()` has better handling for any missing values. For the code we are writing here that is not a problem, but included it as within online resources you will see either of the two functions used for similar things. Main thing to remember is they are largely interchangeable *unless* the data you are working with has - or may have - missing values.
+
+We then give `str_c()` the start of our folder and file path - "data/final_debates/" - followed by `debates$file` which is the column in the wee table we created which contains the file names we want to use and then `".html"` as we will be creating HTML files. As we have two rows in our `debates$file` column, `str_c()` returns two files name.
+
+Next, we can setup our 'base URL' - the common starting text used for each web address - and a user agent:
+
+```{r}
+base_url <- "https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament/"
+user_agent <- "NAME (EMAIL)"
+```
+
+Remember to replace "NAME (EMAIL)" with your actual name and email address. Why are we creating one when we didn't when running our `download.file()` code? We don't need to setup user agent information for every website, but it is considered polite, especially when moving to using things like for loops to download pages. Whilst we are just grabbing two pages, you could scale this to dozens - or even hundreds - of pages. Including user agent information then would let the websites we are requesting pages from know who to contact if something goes wrong with our code. With much more complex code it can be easy to accidentally start sending 100+ requests per second.
+
+We can now create our folder to use and use a for loop to download copies of the pages:
 
 ```{r}
 #| eval: false
 
 dir.create("data/final_debates")
+
 for (i in 1:nrow(debates)) {
-  request(str_c("https://www.parliament.scot/chamber-and-committees/official-report/search-what-was-said-in-parliament/", debates$page[i])) |>
-    req_user_agent("NAME (EMAIL)") |>
-    req_perform(path = str_c("data/final_debates/", debates$file[i], ".html"))
+  request(str_c(base_url, debates$page[i])) |>
+    req_user_agent(user_agent) |>
+    req_perform(path = html_files[i])
   Sys.sleep(5)
 }
 ```
 
-Ensure to add your name + email in the above!!!
+First, let's explain for loops:
+
+- The `for (X in Y:Z) {}` is how we create a for loop. Our loop will run the same number of times as the value of `Y`. So, if our `Y` was 1 and `Z` was 10, the code in our for loop would repeat 10 times.
+- Why repeat code multiple times? Well our `X` being is the name we wish to give our iterator. Say we had 10 things to loop through (1:10), the first time the loop runs, our `X` will be 1, then the next it will be 2, and so on until it completes all 10 loops. This mean whilst our code is the same, the value for `X` is different in each loop. (Note if our code was `X in 5:14`, our code would still run 10 times, but the value of `X` in the first loop would start as 5)
+- If we have an object, such as a list or a table, we can then include code such as `list[X]` or `table$column_name[X]`. Say our table and column was `item$prices`, the first time the loop runs, `item$prices[1]` would get the value of the first row of the prices column. The next loop would be `item$prices[2]`, grabbing the value of the second row instead. And so on.
+
+Returning then to our for loop:
+
+- We say we want to `i in 1:nrow(debates)`.
+- `i` is a common name you'll often see get used for `X`.
+- We use `1:nrow(debates)` to say "from 1 to the number of rows in our `debates` table". For us that is `2`, but if we had 5 items in our `debates` table it would return `1:5` instead. So this for loop adapts to match our data.
+- Within the loop itself, we setup our `request()` but combining the strings (`str_c()`) of `base_url` with `debates$page[i]`.
+- We specify our `req_user_agent()` to use is the string contained in the `user_agent` object we create.
+- Now we have constructed our request, we perform it (`req_perform()`) with an argument for where to say the file, which we get using the `html_files` object we created.
+- Finally, I've included `Sys.sleep(5)` which simply waits 5 seconds - i.e. "sleeps" - before continuing. This is useful to space our requests to the same sites. Most websites usually specify any such spacing and it is usually something like 1 second rather than 5, but for two debates this makes it wait noticeable when running the code. (The Scottish Parliament website is also a site that is probably fine to not wait at all unless downloading hundreds of pages at a time.)
+
+## Extracting Text from HTML
+
+(I have draft text and code that also breaks-down and steps through all of the below in a more detailed and accessible way - as well as include optional extras like creating Word documents of the transcripts instead of plain-text files. However, due to time available, I will need to finish that later - and will let you know once it's updated.)
 
 You'll notice the HTML files are hard to read, so let's extract the text:
 
@@ -156,7 +447,7 @@ speakers <- speeches |>
   summarise(contributions = n(), words = sum(words), .by = c(bill, person_id)) |>
   left_join(msp_votes, by = join_by(bill, person_id))
 
-debate_info <- debates |> left_join(kinds, by = "bill") |> left_join(debate_lengths, by = "bill")
+debate_info <- debates |> left_join(majorities, by = "bill") |> left_join(debate_lengths, by = "bill")
 
 write_csv(debate_info, "data/final_debates/debates.csv")
 write_csv(speakers, "data/final_debates/speakers.csv")

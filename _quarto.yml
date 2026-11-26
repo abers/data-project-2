@@ -31,8 +31,10 @@ website:
         contents:
           - week10/linked-multiple.qmd
           - week10/multiple-regression.qmd
+          - week10/other-simd.qmd
           - week10/sampling-glasgow-parks.qmd
           - week10/holyrood.qmd
+          - week10/rcityviews.qmd
       - text: "---"
       - section: "[Slides]{.constell-group-green}"
         contents:
